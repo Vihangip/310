@@ -2,7 +2,7 @@ import {
 	IInsightFacade,
 	InsightDatasetKind,
 	InsightError,
-	InsightResult,
+	InsightResult, NotFoundError,
 	ResultTooLargeError
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
@@ -19,10 +19,12 @@ describe("InsightFacade", function () {
 
 	// Declare datasets used in tests. You should add more datasets like this!
 	let sections: string;
+	let badCoursesFolderSections: string; // JSON files are not in a courses folder
 
 	before(function () {
 		// This block runs once and loads the datasets.
 		sections = getContentFromArchives("pair.zip");
+		badCoursesFolderSections = getContentFromArchives("badCoursesFolderPair.zip");
 
 		// Just in case there is anything hanging around from a previous run of the test suite
 		clearDisk();
@@ -52,9 +54,63 @@ describe("InsightFacade", function () {
 		});
 
 		// This is a unit test. You should create more like this!
-		it ("should reject with  an empty dataset id", function() {
+		it ("should reject with an empty dataset id", function() {
 			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		// NEW TESTS ADDED BELOW:
+		it ("should successfully add a dataset", function() {
+			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.have.members(["ubc"]);
+		});
+
+		it ("should reject with dataset id with underscore (causes problems with ebnf?)", function() {
+			const result = facade.addDataset("ubc_courses", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with a nonexistent dataset (no zip file)", function() {
+			const result = facade.addDataset("ubc", "", InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with an invalid course (not in courses/)", function() {
+			const result = facade.addDataset("ubc", badCoursesFolderSections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should successfully remove a dataset", async function () {
+			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			const result = facade.removeDataset("ubc");
+			return expect(result).to.eventually.equal("ubc");
+		});
+
+		it ("should reject with an empty dataset id", function() {
+			const result = facade.removeDataset("");
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject because the course wasn't previously added", function() {
+			const result = facade.removeDataset("ubc");
+			return expect(result).to.eventually.be.rejectedWith(NotFoundError);
+		});
+
+		it ("should successfully list all datasets including new one", async function() {
+			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			const result = facade.listDatasets();
+			return expect(result).to.eventually.have.members(["ubc"]);
+		});
+
+		it ("should successfully report one dataset added", async function () {
+			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			const result = facade.listDatasets();
+			return expect(result).to.eventually.have.length(1);
+		});
+
+		it ("should successfully report no datasets added yet", function() {
+			const result = facade.listDatasets();
+			return expect(result).to.eventually.have.length(0);
 		});
 	});
 
