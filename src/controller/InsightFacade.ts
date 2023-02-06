@@ -6,6 +6,7 @@ import {
 	InsightResult,
 	NotFoundError
 } from "./IInsightFacade";
+import * as fs from "fs";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -13,12 +14,40 @@ import {
  *
  */
 export default class InsightFacade implements IInsightFacade {
+	// InsightDataset[] variable stores added datasets
+	private datasets: InsightDataset[];
+
+	// Set up InsightDataset[] variable
 	constructor() {
+		this.datasets = [];
 		console.log("InsightFacadeImpl::init()");
 	}
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		return Promise.reject("Not implemented.");
+		if (id.trim().length === 0 || id.includes("_")) {
+			return Promise.reject(new InsightError("Invalid id: only whitespace or contains underscore"));
+		}
+
+		if (this.datasets.find((dataset) => dataset.id === id) !== undefined) {
+			return Promise.reject(new InsightError("Invalid id: id already exists"));
+		}
+
+		// checking disk
+		if (fs.existsSync("./data/" + id + ".txt")) {
+			return Promise.reject(new InsightError("Invalid id: id already exists"));
+		}
+
+		fs.writeFileSync("./data/" + id + ".txt", content);
+		let newDataset: InsightDataset = {
+			id: id,
+			kind: kind,
+			numRows: 0
+		};
+		this.datasets.push(newDataset);
+
+		return Promise.reject("todo"); // todo
+
+		// return Promise.resolve(fs.readdir("./data"));
 	}
 
 	public removeDataset(id: string): Promise<string> {

@@ -56,6 +56,7 @@ describe("InsightFacade", function () {
 		// This is a unit test. You should create more like this!
 		it ("should reject with an empty dataset id", function() {
 			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
+			console.log(sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
@@ -67,6 +68,22 @@ describe("InsightFacade", function () {
 
 		it ("should reject with dataset id with underscore (causes problems with ebnf?)", function() {
 			const result = facade.addDataset("ubc_courses", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with a space dataset id", function() {
+			const result = facade.addDataset(" ", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with a tab dataset id", function() {
+			const result = facade.addDataset("	", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with a duplicate dataset id", function() {
+			facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
