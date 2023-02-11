@@ -4,7 +4,6 @@ export default class IsQueryValid {
 
 	private idString: string = "";
 
-
 	constructor() {
 		console.log("Checking if query is valid");
 	}
