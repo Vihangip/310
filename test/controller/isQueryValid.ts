@@ -4,6 +4,7 @@ export default class IsQueryValid {
 
 	private idString: string = "";
 
+
 	constructor() {
 		console.log("Checking if query is valid");
 	}
@@ -91,6 +92,7 @@ export default class IsQueryValid {
 			return this.isIDStringValid(idString) && this.isSFieldValid(sField);
 		}
 	}
+	//
 
 	public isIDStringValid(idString: string): boolean {
 		if (idString.includes("_") || idString.trim().length === 0) {
