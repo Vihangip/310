@@ -7,6 +7,7 @@ import {
 	NotFoundError
 } from "./IInsightFacade";
 import * as fs from "fs";
+import JSON = Mocha.reporters.JSON;
 
 /**
  * This is the main programmatic entry point for the project.
@@ -61,4 +62,5 @@ export default class InsightFacade implements IInsightFacade {
 	public listDatasets(): Promise<InsightDataset[]> {
 		return Promise.reject("Not implemented.");
 	}
+
 }
