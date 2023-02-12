@@ -7,7 +7,10 @@ import {
 	NotFoundError
 } from "./IInsightFacade";
 import * as fs from "fs";
-import JSON = Mocha.reporters.JSON;
+
+import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
+import JSZip from "jszip";
+
 
 /**
  * This is the main programmatic entry point for the project.
@@ -16,15 +19,48 @@ import JSON = Mocha.reporters.JSON;
  */
 export default class InsightFacade implements IInsightFacade {
 	// InsightDataset[] variable stores added datasets
-	private datasets: InsightDataset[];
+	private datasets: InsightDatasetExpanded[];
 
-	// Set up InsightDataset[] variable
+	// Set up InsightDatasetExpanded[] variable
 	constructor() {
 		this.datasets = [];
 		console.log("InsightFacadeImpl::init()");
 	}
 
+	private handleJSON(id: string, kind: InsightDatasetKind, z: JSZip) {
+		if (z !== null) {
+			let newDataset: InsightDatasetExpanded = {
+				id: id,
+				kind: kind,
+				numRows: 0,
+				sections: []
+			};
+			z.forEach(function (relativePath, file) {
+				file.async("string")
+					.then(function (fileString) {
+						let jsonified = JSON.parse(fileString);
+						let newSection: SectionFacade = {
+							audit: jsonified.audit,
+							avg: jsonified.avg,
+							dept: jsonified.dept,
+							fail: jsonified.fail,
+							id: jsonified.id,
+							instructor: jsonified.id,
+							pass: jsonified.pass,
+							title: jsonified.title,
+							uuid: jsonified.uuid,
+							year: jsonified.year
+						};
+						newDataset.sections.push(newSection);
+						newDataset.numRows++;
+					});
+			});
+			this.datasets.push(newDataset);
+		}
+	}
+
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		// verify that id is ok
 		if (id.trim().length === 0 || id.includes("_")) {
 			return Promise.reject(new InsightError("Invalid id: only whitespace or contains underscore"));
 		}
@@ -34,22 +70,28 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// checking disk
-		if (fs.existsSync("./data/" + id + ".txt")) {
+		if (fs.existsSync("./data/" + id)) {
 			return Promise.reject(new InsightError("Invalid id: id already exists"));
 		}
 
-		fs.writeFileSync("./data/" + id + ".txt", content);
-		let newDataset: InsightDataset = {
-			id: id,
-			kind: kind,
-			numRows: 0
-		};
-		this.datasets.push(newDataset);
+		// unzip, parse content
+		let zip = new JSZip();
+
+
+		zip.loadAsync(content, {base64: true})
+			.then((z) => {
+				this.handleJSON(id, kind, z);
+			});
+
+		// write to file TODO
+
+		/*
+		 fs.writeFileSync("./data/" + id + ".txt", content);
+		 */
 
 		return Promise.reject("todo"); // todo
-
-		// return Promise.resolve(fs.readdir("./data"));
 	}
+
 
 	public removeDataset(id: string): Promise<string> {
 		return Promise.reject("Not implemented.");

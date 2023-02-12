@@ -56,7 +56,6 @@ describe("InsightFacade", function () {
 		// This is a unit test. You should create more like this!
 		it ("should reject with an empty dataset id", function() {
 			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
-			console.log(sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
