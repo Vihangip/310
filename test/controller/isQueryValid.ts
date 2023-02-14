@@ -1,17 +1,19 @@
 
-
 export default class IsQueryValid {
-
-	private idString: string = "";
-
 
 	constructor() {
 		console.log("Checking if query is valid");
 	}
 
 	public isValid(query: any): boolean {
+		try {
+			const queryAsString: string  = JSON.stringify(query);
+			JSON.parse(queryAsString);
+		} catch (err) {
+			return false;
+		}
 
-		if (!query.includes("WHERE") || !query.includes("OPTIONS")) {
+		if (!("WHERE" in query) || !("OPTIONS" in query)){
 			return false;
 		}
 
@@ -19,30 +21,33 @@ export default class IsQueryValid {
 			return false; // more than BODY and OPTIONS
 		}
 
-		if (query.includes("WHERE")) {
+		if ("OPTIONS" in query) {
+			if(this.checkValidOptions(query["OPTIONS"])){
+				return this.checkValidFilter(query["WHERE"]);
+			}
+		}
+
+		if ("WHERE" in query) {
 			return this.checkValidFilter(query["WHERE"]);
 		}
 
-		if (query.includes("OPTIONS")) {
-			return this.checkValidOptions(query["OPTIONS"]);
-		}
 		return false;
 	}
 
 	public checkValidFilter(whereStatement: any): boolean {
-		if (whereStatement.includes("AND")) {
+		if ("AND" in whereStatement) {
 			return this.logicComparison(whereStatement["AND"]);
-		} else if (whereStatement.includes("OR")) {
+		} else if ("OR" in whereStatement) {
 			return this.logicComparison(whereStatement["OR"]);
-		} else if (whereStatement.includes("LT")) {
+		} else if ("LT" in whereStatement) {
 			return this.mComparison(whereStatement["LT"]);
-		} else if (whereStatement.includes("GT")) {
+		} else if ("GT" in whereStatement) {
 			return this.mComparison(whereStatement["GT"]);
-		} else if (whereStatement.includes("EQ")) {
+		} else if ("EQ" in whereStatement) {
 			return this.mComparison(whereStatement["EQ"]);
-		} else if (whereStatement.includes("IS")) {
+		} else if ("IS" in whereStatement) {
 			return this.sComparison(whereStatement["IS"]);
-		} else if (whereStatement.includes("NOT")) {
+		} else if ("NOT" in whereStatement) {
 			return this.checkValidFilter(whereStatement["NOT"]);
 		} else {
 			return false;
@@ -97,12 +102,14 @@ export default class IsQueryValid {
 	public isIDStringValid(idString: string): boolean {
 		if (idString.includes("_") || idString.trim().length === 0) {
 			return false;
-		} else if (this.idString === "" || this.idString === idString) {
-			this.idString = idString;
-			return true;
-		} else {
-			return false;
 		}
+		return true;
+		// } else if (this.idString === "" || this.idString === idString) {
+		// 	this.idString = idString;
+		// 	return true;
+		// } else {
+		// 	return false;
+		// }
 	}
 
 	public isMFieldValid(mField: string): boolean {
