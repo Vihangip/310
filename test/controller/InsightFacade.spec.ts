@@ -72,6 +72,22 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
+		it ("should reject with a space dataset id", function() {
+			const result = facade.addDataset(" ", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with a tab dataset id", function() {
+			const result = facade.addDataset("	", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject with a duplicate dataset id", function() {
+			facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
 		it ("should reject with a nonexistent dataset (no zip file)", function() {
 			const result = facade.addDataset("ubc", "", InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
