@@ -27,6 +27,7 @@ export default class InsightFacade implements IInsightFacade {
 		console.log("InsightFacadeImpl::init()");
 	}
 
+	// returns false if there is a duplicate id, true if nothing bad happened
 	private fileStringsToJSON(fileStrings: string[], id: string, kind: InsightDatasetKind) {
 		let newDataset: InsightDatasetExpanded = {
 			id: id,
@@ -64,7 +65,13 @@ export default class InsightFacade implements IInsightFacade {
 				//	});
 			}
 		}
+		for (let dataset of this.datasets) {
+			if (dataset.id === id) {
+				return false;
+			}
+		}
 		this.datasets.push(newDataset);
+		return true;
 	}
 
 	/*
@@ -100,8 +107,12 @@ export default class InsightFacade implements IInsightFacade {
 
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises).then((fileStrings) => {
-					this.fileStringsToJSON(fileStrings, id, kind);
-					resolve();
+					let allGood = this.fileStringsToJSON(fileStrings, id, kind);
+					if (allGood) {
+						resolve();
+					} else {
+						reject(new InsightError("Invalid id: id already exists"));
+					}
 				});
 			});
 		}
@@ -124,12 +135,6 @@ export default class InsightFacade implements IInsightFacade {
 		// verify that content is a string with length > 0
 		if (content.trim().length === 0) {
 			return Promise.reject(new InsightError("Invalid content: no content"));
-		}
-
-		for (let dataset of this.datasets) {
-			if (dataset.id === id) {
-				return Promise.reject(new InsightError("Invalid id: id already exists"));
-			}
 		}
 
 		// checking disk
