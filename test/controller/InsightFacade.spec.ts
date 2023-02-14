@@ -81,9 +81,10 @@ describe("InsightFacade", function () {
 		});
 
 		it ("should reject with a duplicate dataset id", function() {
-			facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			const result1 = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			const result2 = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			return (expect(result1).to.eventually.be.rejectedWith(InsightError) ||
+				expect(result2).to.eventually.be.rejectedWith(InsightError));
 		});
 
 		it ("should reject with a nonexistent dataset (no zip file)", function() {

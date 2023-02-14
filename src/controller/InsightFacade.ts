@@ -6,7 +6,7 @@ import {
 	InsightResult,
 	NotFoundError
 } from "./IInsightFacade";
-import * as fs from "fs";
+import * as fs from "fs-extra";
 
 import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
 import JSZip from "jszip";
@@ -27,7 +27,22 @@ export default class InsightFacade implements IInsightFacade {
 		console.log("InsightFacadeImpl::init()");
 	}
 
-	private handleJSON(id: string, kind: InsightDatasetKind, z: JSZip) {
+	/*
+	The zip file seems to be organized into:
+	courses
+		CPSC110
+			Section 101
+			Section 102
+			...
+		CPSC210
+			Section 101
+			Section 102
+			...
+		...
+	so here I am iterating over individual files
+	and then within those files iterating over sections.
+	 */
+	private async handleJSON(id: string, kind: InsightDatasetKind, z: JSZip) {
 		if (z !== null) {
 			let newDataset: InsightDatasetExpanded = {
 				id: id,
@@ -35,28 +50,62 @@ export default class InsightFacade implements IInsightFacade {
 				numRows: 0,
 				sections: []
 			};
-			z.forEach(function (relativePath, file) {
-				file.async("string")
-					.then(function (fileString) {
-						let jsonified = JSON.parse(fileString);
-						let newSection: SectionFacade = {
-							audit: jsonified.audit,
-							avg: jsonified.avg,
-							dept: jsonified.dept,
-							fail: jsonified.fail,
-							id: jsonified.id,
-							instructor: jsonified.id,
-							pass: jsonified.pass,
-							title: jsonified.title,
-							uuid: jsonified.uuid,
-							year: jsonified.year
-						};
-						newDataset.sections.push(newSection);
-						newDataset.numRows++;
-					});
+
+			let promises: Array<Promise<string>> = [];
+
+			z.forEach((relativePath, file) => {
+				// console.log(relativePath);
+				promises.push(file.async("string"));
 			});
-			this.datasets.push(newDataset);
+
+			return new Promise<void>((resolve, reject) => {
+				Promise.all(promises).then((fileStrings) => {
+					for (let fileString of fileStrings) {
+						if (fileString.trim().length === 0) {
+							continue;
+						}
+
+						let jsonified = JSON.parse(fileString);
+						for (let section of jsonified.result) {
+							// todo check if any of these are undefined
+							let newSection: SectionFacade = {
+								audit: section.Audit,
+								avg: section.Avg,
+								dept: section.Subject,
+								fail: section.Fail,
+								id: section.Course,
+								instructor: section.Professor,
+								pass: section.Pass,
+								title: section.Title,
+								uuid: section.id,
+								year: section.Year
+							};
+							newDataset.sections.push(newSection);
+							newDataset.numRows++;
+							// console.log(this.datasets[currIndex]);
+							// todo file persistence
+							// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
+							//	.catch((err) => {
+							//		console.error(err);
+							//	});
+						}
+					}
+
+
+					console.log(newDataset);
+					this.datasets.push(newDataset);
+					resolve();
+				});
+			});
 		}
+	}
+
+	private getDatasetIDs() {
+		let ids = [];
+		for (let dataset of this.datasets) {
+			ids.push(dataset.id);
+		}
+		return ids;
 	}
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -65,33 +114,37 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid id: only whitespace or contains underscore"));
 		}
 
-		if (this.datasets.find((dataset) => dataset.id === id) !== undefined) {
-			return Promise.reject(new InsightError("Invalid id: id already exists"));
+		// verify that content is a string with length > 0
+		if (content.trim().length === 0) {
+			return Promise.reject(new InsightError("Invalid content: no content"));
+		}
+
+		for (let dataset of this.datasets) {
+			if (dataset.id === id) {
+				return Promise.reject(new InsightError("Invalid id: id already exists"));
+			}
 		}
 
 		// checking disk
-		if (fs.existsSync("./data/" + id)) {
-			return Promise.reject(new InsightError("Invalid id: id already exists"));
-		}
+		return new Promise<string[]>((resolve, reject) => {
+			fs.pathExists("./data/" + id)
+				.then((exists) => {
+					if (exists) {
+						reject(new InsightError("Invalid id: id already exists"));
+					}
+					// unzip, parse content
+					let zip = new JSZip();
 
-		// unzip, parse content
-		let zip = new JSZip();
-
-
-		zip.loadAsync(content, {base64: true})
-			.then((z) => {
-				this.handleJSON(id, kind, z);
-			});
-
-		// write to file TODO
-
-		/*
-		 fs.writeFileSync("./data/" + id + ".txt", content);
-		 */
-
-		return Promise.reject("todo"); // todo
+					zip.loadAsync(content, {base64: true})
+						.then((z) => {
+							this.handleJSON(id, kind, z)
+								.then(() => {
+									resolve(this.getDatasetIDs());
+								});
+						});
+				});
+		});
 	}
-
 
 	public removeDataset(id: string): Promise<string> {
 		return Promise.reject("Not implemented.");
