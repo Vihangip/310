@@ -27,6 +27,46 @@ export default class InsightFacade implements IInsightFacade {
 		console.log("InsightFacadeImpl::init()");
 	}
 
+	private fileStringsToJSON(fileStrings: string[], id: string, kind: InsightDatasetKind) {
+		let newDataset: InsightDatasetExpanded = {
+			id: id,
+			kind: kind,
+			numRows: 0,
+			sections: []
+		};
+
+		for (let fileString of fileStrings) {
+			if (fileString.trim().length === 0) {
+				continue;
+			}
+
+			let jsonified = JSON.parse(fileString);
+			for (let section of jsonified.result) {
+				// todo check if any of these are undefined
+				let newSection: SectionFacade = {
+					audit: section.Audit,
+					avg: section.Avg,
+					dept: section.Subject,
+					fail: section.Fail,
+					id: section.Course,
+					instructor: section.Professor,
+					pass: section.Pass,
+					title: section.Title,
+					uuid: section.id,
+					year: section.Year
+				};
+				newDataset.sections.push(newSection);
+				newDataset.numRows++;
+				// todo file persistence
+				// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
+				//	.catch((err) => {
+				//		console.error(err);
+				//	});
+			}
+		}
+		this.datasets.push(newDataset);
+	}
+
 	/*
 	The zip file seems to be organized into:
 	courses
@@ -44,56 +84,23 @@ export default class InsightFacade implements IInsightFacade {
 	 */
 	private async handleJSON(id: string, kind: InsightDatasetKind, z: JSZip) {
 		if (z !== null) {
-			let newDataset: InsightDatasetExpanded = {
-				id: id,
-				kind: kind,
-				numRows: 0,
-				sections: []
-			};
-
 			let promises: Array<Promise<string>> = [];
 
-			z.forEach((relativePath, file) => {
-				// console.log(relativePath);
-				promises.push(file.async("string"));
+			let filteredFiles = z.filter(function (relativePath, file){
+				return relativePath.startsWith("courses/");
 			});
+
+			if (filteredFiles.length === 0) {
+				return Promise.reject(new InsightError("Invalid content: not within a courses folder"));
+			}
+
+			for (let file of filteredFiles) {
+				promises.push(file.async("string"));
+			}
 
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises).then((fileStrings) => {
-					for (let fileString of fileStrings) {
-						if (fileString.trim().length === 0) {
-							continue;
-						}
-
-						let jsonified = JSON.parse(fileString);
-						for (let section of jsonified.result) {
-							// todo check if any of these are undefined
-							let newSection: SectionFacade = {
-								audit: section.Audit,
-								avg: section.Avg,
-								dept: section.Subject,
-								fail: section.Fail,
-								id: section.Course,
-								instructor: section.Professor,
-								pass: section.Pass,
-								title: section.Title,
-								uuid: section.id,
-								year: section.Year
-							};
-							newDataset.sections.push(newSection);
-							newDataset.numRows++;
-							// console.log(this.datasets[currIndex]);
-							// todo file persistence
-							// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
-							//	.catch((err) => {
-							//		console.error(err);
-							//	});
-						}
-					}
-
-
-					console.log(newDataset);
-					this.datasets.push(newDataset);
+					this.fileStringsToJSON(fileStrings, id, kind);
 					resolve();
 				});
 			});
@@ -140,6 +147,9 @@ export default class InsightFacade implements IInsightFacade {
 							this.handleJSON(id, kind, z)
 								.then(() => {
 									resolve(this.getDatasetIDs());
+								})
+								.catch((err) => {
+									reject(err);
 								});
 						});
 				});
