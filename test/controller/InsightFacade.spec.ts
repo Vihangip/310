@@ -82,8 +82,8 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
-		it ("should reject with a duplicate dataset id", function() {
-			facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+		it ("should reject with a duplicate dataset id", async function() {
+			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});

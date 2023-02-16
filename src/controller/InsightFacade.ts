@@ -168,7 +168,20 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public removeDataset(id: string): Promise<string> {
-		return Promise.reject("Not implemented.");
+		// verify that id is ok
+		if (id.trim().length === 0 || id.includes("_")) {
+			return Promise.reject(new InsightError("Invalid id: only whitespace or contains underscore"));
+		}
+
+		for (let i = 0; i < this.datasets.length; i++) {
+			if (this.datasets[i].id === id) {
+				// you found it!
+				this.datasets.splice(i, i);
+				return Promise.resolve(id);
+			}
+		}
+
+		return Promise.reject(new NotFoundError("Invalid id: dataset does not exist"));
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
