@@ -1,8 +1,10 @@
 import {
 	IInsightFacade,
+	InsightDataset,
 	InsightDatasetKind,
 	InsightError,
-	InsightResult, NotFoundError,
+	InsightResult,
+	NotFoundError,
 	ResultTooLargeError
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
@@ -116,8 +118,13 @@ describe("InsightFacade", function () {
 
 		it ("should successfully list all datasets including new one", async function() {
 			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-			const result = facade.listDatasets();
-			return expect(result).to.eventually.have.members(["ubc"]);
+			const result = await facade.listDatasets();
+			const expectedResult: InsightDataset = {
+				id: "ubc",
+				kind: InsightDatasetKind.Sections,
+				numRows: 64612
+			};
+			expect(result).to.deep.equal([expectedResult]);
 		});
 
 		it ("should successfully report one dataset added", async function () {
