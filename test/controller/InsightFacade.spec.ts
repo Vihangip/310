@@ -155,7 +155,7 @@ describe("InsightFacade", function () {
 				],
 				ORDER: "sections_avg"
 			}});
-			return expect(result).to.be.true;
+			return expect(result[0]).to.be.true;
 
 		});
 
@@ -432,12 +432,19 @@ describe("InsightFacade", function () {
 			"./test/resources/queries",
 			{
 				assertOnResult: (actual, expected) => {
-					// TODO add an assertion!
+					// TODO: Complete this
+					console.log("here");
+					expect(actual).to.deep.equals(expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
 					error === "ResultTooLargeError" || error === "InsightError",
 				assertOnError: (actual, expected) => {
-					// TODO add an assertion!
+					// TODO: Complete this
+					if (expected === "ResultTooLargeError") {
+						expect(actual).to.be.instanceof(ResultTooLargeError);
+					} else {
+						expect(actual).to.be.instanceof(InsightError);
+					}
 				},
 			}
 		);

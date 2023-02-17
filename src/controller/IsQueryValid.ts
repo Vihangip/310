@@ -1,37 +1,42 @@
 
 export default class IsQueryValid {
 
+	private id: string = "";
 	constructor() {
 		console.log("Checking if query is valid");
 	}
 
-	public isValid(query: any): boolean {
+	public isValid(query: any): any[] {
 		try {
 			const queryAsString: string  = JSON.stringify(query);
 			JSON.parse(queryAsString);
 		} catch (err) {
-			return false;
+			return [false,0];
 		}
 
 		if (!("WHERE" in query) || !("OPTIONS" in query)){
-			return false;
+			return [false,0];
 		}
 
 		if (Object.keys(query).length > 2) {
-			return false; // more than BODY and OPTIONS
+			return [false,0]; // more than BODY and OPTIONS
 		}
 
 		if ("OPTIONS" in query) {
 			if(this.checkValidOptions(query["OPTIONS"])){
-				return this.checkValidFilter(query["WHERE"]);
+				if(this.checkValidFilter(query["WHERE"])){
+					return [true,this.id];
+				}
 			}
 		}
 
 		if ("WHERE" in query) {
-			return this.checkValidFilter(query["WHERE"]);
+			if(this.checkValidFilter(query["WHERE"])) {
+				return [true, this.id];
+			}
 		}
 
-		return false;
+		return [false,0];
 	}
 
 	public checkValidFilter(whereStatement: any): boolean {
@@ -99,7 +104,11 @@ export default class IsQueryValid {
 	//
 
 	public isIDStringValid(idString: string): boolean {
-		return !(idString.includes("_") || idString.trim().length === 0);
+		if(!(idString.includes("_") || idString.trim().length === 0)){
+			this.id = idString;
+			return true;
+		}
+		return false;
 	}
 
 	public isMFieldValid(mField: string): boolean {

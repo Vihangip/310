@@ -1,33 +1,26 @@
-import {ResultTooLargeError} from "./IInsightFacade";
-
+import {InsightResult, ResultTooLargeError} from "./IInsightFacade";
 export default class PerformQuery{
 	private maxNoOfResults: number  = 5000;
-
 	constructor() {
 		console.log("performing query...");
 	}
-
-	public performQuery(query: any, dataset: any[]): any {
+	public performQuery(query: any, dataset: any): Promise<InsightResult[]> {
 		let body = query["WHERE"];
 		let options = query["OPTIONS"];
 		let processedData: any[];
-
 		if(body === undefined) {
 			processedData = dataset;
 		} else {
 			processedData = this.processFilter(body,dataset);
 		}
-
 		if(processedData.length > this.maxNoOfResults) {
 			return Promise.reject(new ResultTooLargeError("Results are more than 5000"));
 		}
-
 		let columns: any = this.processCols(options,processedData);
-		return this.outputResults(options,columns);
-
+		let output: any[] = this.outputResults(options,columns);
+		return Promise.resolve(output);
 
 	}
-
 	public processFilter(whereStatement: any, dataset: any[]): any[] {
 		if ("AND" in whereStatement) {
 			return this.processAND(whereStatement["AND"],dataset);
@@ -51,89 +44,63 @@ export default class PerformQuery{
 			return this.processNOT(whereStatement,dataset);
 		}
 		return [];
-
 	}
-
 	public processAND(andStatement: any, dataset: any[]): any[] {
-		// let results: any[] = [];
-		// let temp: any[];
-		// andStatement.forEach((filter: any, index: number) => {
-		// 	temp = this.processFilter(filter,dataset);
-		// 	if(index === 0){
-		// 		results = temp;
-		// 	} else {
-		// 		results = results.filter((data) => temp.includes(data));
-		// 	}
-		// });
-		// return results;
-
 		let outputList: any[] =  [];
 		let andList: any[] = [];
 		let frequency: any[] = [];
-
 		for(let i = 0; i < Object.values(andStatement).length; i++) {
 			andList.push(this.processFilter(andStatement[i], dataset));
 		}
-
 		for(let element of andList) {
 			for(let subElement of element){
 				if(frequency[subElement["id"]]) {
 					frequency[subElement["id"]]++;
 				}
-
 				frequency[subElement["id"]] = 1;
-
 				if(frequency[subElement["id"]] === andList.length) {
 					outputList.push(subElement);
 				}
 			}
 		}
-
 		return outputList;
 	}
-
 	public processOR(orStatement: any, dataset: any[]): any[] {
-		// let results: any[] = [];
-		// let temp: any[];
-		// orStatement.forEach((filter: any) => {
-		// 	temp = this.processFilter(filter,dataset);
-		// 	results = [...new Set([...results,...temp])];
-		// });
-		// return results;
 		let outputList: any[] =  [];
 		let orList: any[] = [];
 		let frequency: any[] = [];
-
 		for(let i = 0; i < Object.values(orStatement).length; i++) {
 			orList.push(this.processFilter(orStatement[i], dataset));
 		}
-
 		for(let element of orList) {
 			for(let subElement of element){
 				if(!(frequency[subElement["id"]])) {
 					outputList.push(subElement);
 				}
-
 				frequency[subElement["id"]] = 1;
 			}
 		}
-
 		return outputList;
-
-
 	}
 
 	public processMComp(mStatement: any, dataset: any, comp: string): any[] {
-		// let mField: string = this.getKeyField(mStatement);
 		let outputList: any[] = [];
-
-		for(let index of Object.values(dataset) as any) {
-			let course: any = Object.values(index)[0];
-			for(let section of course){
-				let key = Object.keys(mStatement)[0]; // file?
-				let sectionValue = section[key];
+		let sectionList: any = Object.values(dataset)[3];
+		let courses: any[] = this.convertToCourses(sectionList);
+		for(let course of courses) {
+			for(let section of course) {
+				let wholeKey = Object.keys(mStatement)[0];
+				let words: string[] = wholeKey.split("_");
+				let field: string = words[1];
+				const sectionFields: any = {
+					avg: section.avg,
+					pass: section.pass,
+					fail: section.fail,
+					audit: section.audit,
+					year: section.year
+				};
+				let sectionValue = sectionFields[field];
 				let value: any = Object.values(mStatement)[0];
-
 				if(comp === "LT") {
 					if(sectionValue < value) {
 						outputList.push(section);
@@ -150,25 +117,48 @@ export default class PerformQuery{
 			}
 		}
 		return outputList;
-
 	}
 
+	public convertToCourses(sectionList: any[]): any[] {
+		let courseList: any = [];
+		let course: any = [];
+		let currCourseId: string = "";
+		for(let currSection of sectionList){
+			if(currCourseId === "" || currCourseId === currSection.id) { // same section
+				currCourseId = currSection.id;
+				course.push(currSection);
+			} else  {
+				courseList.push([...course]);
+				course.splice(0);
+				currCourseId = currSection.id;
+				course.push(currSection);
+			}
+		}
+		courseList.push([...course]);
+		return courseList;
+	}
 	public processSComp(sStatement: any, dataset: any): any[] {
 		let outputList: any[] = [];
-
-		for(let index of Object.values(dataset) as any) {
-			let course: any = Object.values(index)[0];
+		let sectionList: any = Object.values(dataset)[3];
+		let courses: any[] = this.convertToCourses(sectionList);
+		for(let course of courses) {
 			for (let section of course) {
-				let key = Object.keys(sStatement)[0]; // check here
-				let sectionValue = section[key];
-
+				let wholeKey = Object.keys(sStatement)[0];
+				let words: string[] = wholeKey.split("_");
+				let field: string = words[1];
+				const sectionFields: any = {
+					dept: section.dept,
+					id: section.id,
+					instructor: section.instructor,
+					title: section.title,
+					uuid: section.title
+				};
+				let sectionValue = sectionFields[field];
 				if(sectionValue.type !== "string") {
 					sectionValue = sectionValue.toString();
 				}
-
 				let match: string = Object.values(sStatement)[0] as string;
 				let input: string = "";
-
 				if(match.startsWith("*") && match.endsWith("*") && match.length >= 2) {
 					input = match.substring(1, match.length - 1);
 					if(sectionValue.includes(input)) {
@@ -191,56 +181,79 @@ export default class PerformQuery{
 		}
 		return outputList;
 	}
-
 	public processNOT(notStatement: any, dataset: any): any[] {
 		let outputList: any[];
-		let sections: any[] = [];
+		let sectionList: any = Object.values(dataset)[3];
+		let courses: any[] = this.convertToCourses(sectionList);
+		let sections: any = [];
 		let resultSections: any[] = this.processFilter(notStatement,dataset);
-
-		for(let index of Object.values(dataset) as any) {
-			let course: any = Object.values(index)[0];
+		for(let course of courses) {
 			for (let section of course) {
 				sections.push(section);
 			}
 		}
-		// sections = sections.filter(function (i) {
-		// 	outputList = resultSections.includes(i);
-		// });
-		outputList = sections.filter((data) => !resultSections.includes(data));
-
+		outputList = sections.filter((data: any) => !resultSections.includes(data));
 		return outputList;
 	}
-
-
 	private processCols(options: any, processedData: any[]): any[] {
 		let columns = options["COLUMNS"];
+		for(let k = 0; k < columns.length; k++){
+			let wholeKey = columns[k];
+			let words: string[] = wholeKey.split("_");
+			let field: string = words[1];
+			columns[k] = field;
+		}
 		 for(let section of processedData) {
 			 let secCols: string[] = Object.keys(section);
-
 			 for(let col of secCols) {
-				 if(!columns.includes(col)) {
+				 if (!columns.includes(col)) {
+					 delete section[col];
+				 } else {
+					 section["sections_" + col] = section[col];
 					 delete section[col];
 				 }
 			 }
 		 }
 		 return processedData;
 	}
-
-	// the logic for the sorting part of the following method was taken from this stackoverflow answer https://stackoverflow.com/a/21689268
-	private outputResults(options: any, columns: any) {
-		let ouputResults: any;
+	// the logic for the sorting part of the following method was taken from this stackoverflow answer
+	// https://stackoverflow.com/a/21689268
+	private outputResults(options: any, columns: any): any[] {
+		let ouputResults: any[];
 		let order = options["ORDER"];
 
 		if (order === undefined) {
 			return columns;
 		}
 
+		// let wholeKey = order;
+		// let words: string[] = wholeKey.split("_");
+		let field: string = order;
+
 		ouputResults = columns.sort((first: any,second: any) => {
-			if(first[order] > second[order]) {
+			const firstFields: any = {
+				sections_avg: first.sections_avg,
+				sections_pass: first.pass,
+				sections_fail: first.fail,
+				sections_audit: first.audit,
+				sections_year: first.year,
+				sections_dept: first.sections_dept
+			};
+
+			const secondFields: any = {
+				sections_avg: second.sections_avg,
+				sections_pass: second.pass,
+				sections_fail: second.fail,
+				sections_audit: second.audit,
+				sections_year: second.year,
+				sections_dept: second.sections_dept
+			};
+
+			if(firstFields[field] > secondFields[field]) {
 				return 1;
 			}
 
-			if(first[order] < second[order]) {
+			if(firstFields[field] < secondFields[field]) {
 				return -1;
 			}
 

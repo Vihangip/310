@@ -10,6 +10,8 @@ import * as fs from "fs-extra";
 
 import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
 import JSZip from "jszip";
+import IsQueryValid from "./IsQueryValid";
+import PerformQuery from "./PerformQuery";
 
 
 /**
@@ -172,7 +174,36 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		return Promise.reject("Not implemented.");
+		return new Promise<InsightResult[]>( (resolve, reject) => {
+			let queryValidator = new IsQueryValid();
+			let queryPerformer = new PerformQuery();
+			let validatorArray = queryValidator.isValid(query);
+			let validity = validatorArray[0];
+			let idString = validatorArray[1];
+
+			if (validity) {
+				let dataset = this.datasets[idString];
+				let queryData;
+				let queryResults;
+
+				try {
+					if (dataset === undefined) {
+						return reject(new NotFoundError("Dataset does not exist"));
+					} else {
+						queryData = JSON.parse(JSON.stringify(dataset));
+						queryResults = queryPerformer.performQuery(query, queryData);
+						resolve(queryResults);
+					}
+				} catch (Error) {
+					return reject(new InsightError("Unable to obtain query results"));
+				}
+
+			} else {
+				return reject(new InsightError("Invalid query"));
+			}
+
+		});
+
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
