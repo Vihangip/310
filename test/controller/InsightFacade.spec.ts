@@ -8,7 +8,7 @@ import {
 	ResultTooLargeError
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
-import IsQueryValid from "./isQueryValid";
+import IsQueryValid from "../../src/controller/IsQueryValid";
 
 import {folderTest} from "@ubccpsc310/folder-test";
 import {expect, use} from "chai";

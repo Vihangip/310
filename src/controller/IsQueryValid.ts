@@ -55,16 +55,15 @@ export default class IsQueryValid {
 	}
 
 	public logicComparison(logic: any): boolean {
-		if (!(Array.isArray(logic))) {
-			return false;
-		}
-
-		for (let statement of logic) {
-			if (!(this.checkValidFilter(statement))) {
-				return false;
+		if (Array.isArray(logic)) {
+			for (let statement of logic) {
+				if (!(this.checkValidFilter(statement))) {
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public mComparison(m: any): boolean {
@@ -100,16 +99,7 @@ export default class IsQueryValid {
 	//
 
 	public isIDStringValid(idString: string): boolean {
-		if (idString.includes("_") || idString.trim().length === 0) {
-			return false;
-		}
-		return true;
-		// } else if (this.idString === "" || this.idString === idString) {
-		// 	this.idString = idString;
-		// 	return true;
-		// } else {
-		// 	return false;
-		// }
+		return !(idString.includes("_") || idString.trim().length === 0);
 	}
 
 	public isMFieldValid(mField: string): boolean {
@@ -158,7 +148,7 @@ export default class IsQueryValid {
 		let orderKey: any = options["ORDER"];
 
 		if (this.isKeyValid(orderKey)) {
-			return !!columnKeyList.includes(orderKey);
+			return columnKeyList.includes(orderKey);
 		}
 		return false;
 	}
