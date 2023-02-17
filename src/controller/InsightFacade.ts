@@ -18,12 +18,12 @@ import JSZip from "jszip";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-	// InsightDataset[] variable stores added datasets
-	private datasets: InsightDatasetExpanded[];
+	// stores added datasets
+	private datasets: {[id: string]: InsightDatasetExpanded};
 
 	// Set up InsightDatasetExpanded[] variable
 	constructor() {
-		this.datasets = [];
+		this.datasets = {};
 		console.log("InsightFacadeImpl::init()");
 	}
 
@@ -111,25 +111,15 @@ export default class InsightFacade implements IInsightFacade {
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises).then((sectionArrays) => {
 					let newDataset = this.sectionArraysToDataset(sectionArrays, id, kind);
-
-					for (let dataset of this.datasets) {
-						if (dataset.id === id) {
-							reject(new InsightError("Invalid id: id already exists"));
-						}
+					if (id in this.datasets) {
+						reject(new InsightError("Invalid id: id already exists"));
+					} else {
+						this.datasets[id] = newDataset;
+						resolve();
 					}
-					this.datasets.push(newDataset);
-					resolve();
 				});
 			});
 		}
-	}
-
-	private getDatasetIDs() {
-		let ids = [];
-		for (let dataset of this.datasets) {
-			ids.push(dataset.id);
-		}
-		return ids;
 	}
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -157,7 +147,7 @@ export default class InsightFacade implements IInsightFacade {
 						.then((z) => {
 							this.handleJSON(id, kind, z)
 								.then(() => {
-									resolve(this.getDatasetIDs());
+									resolve(Object.keys(this.datasets));
 								})
 								.catch((err) => {
 									reject(err);
@@ -173,15 +163,12 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid id: only whitespace or contains underscore"));
 		}
 
-		for (let i = 0; i < this.datasets.length; i++) {
-			if (this.datasets[i].id === id) {
-				// you found it!
-				this.datasets.splice(i, i);
-				return Promise.resolve(id);
-			}
+		if (id in this.datasets) {
+			delete this.datasets[id];
+			return Promise.resolve(id);
+		} else {
+			return Promise.reject(new NotFoundError("Invalid id: dataset does not exist"));
 		}
-
-		return Promise.reject(new NotFoundError("Invalid id: dataset does not exist"));
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
@@ -190,11 +177,11 @@ export default class InsightFacade implements IInsightFacade {
 
 	public listDatasets(): Promise<InsightDataset[]> {
 		let smallerDatasets: InsightDataset[] = [];
-		for (let dataset of this.datasets) {
+		for (let datasetKey in this.datasets) {
 			let smallerDataset: InsightDataset = {
-				id: dataset.id,
-				kind: dataset.kind,
-				numRows: dataset.numRows
+				id: this.datasets[datasetKey].id,
+				kind: this.datasets[datasetKey].kind,
+				numRows: this.datasets[datasetKey].numRows
 			};
 			smallerDatasets.push(smallerDataset);
 		}
