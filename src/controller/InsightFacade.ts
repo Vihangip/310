@@ -27,51 +27,47 @@ export default class InsightFacade implements IInsightFacade {
 		console.log("InsightFacadeImpl::init()");
 	}
 
-	// returns false if there is a duplicate id, true if nothing bad happened
-	private fileStringsToJSON(fileStrings: string[], id: string, kind: InsightDatasetKind) {
+	private fileStringToSectionArray(fileString: string) {
+		if (fileString.trim().length === 0) {
+			return [];
+		}
+		let sections = [];
+		let jsonified = JSON.parse(fileString);
+		for (let section of jsonified.result) {
+			// todo check if any of these are undefined
+			let newSection: SectionFacade = {
+				audit: section.Audit,
+				avg: section.Avg,
+				dept: section.Subject,
+				fail: section.Fail,
+				id: section.Course,
+				instructor: section.Professor,
+				pass: section.Pass,
+				title: section.Title,
+				uuid: section.id,
+				year: section.Year
+			};
+			sections.push(newSection);
+			// todo file persistence
+			// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
+			//	.catch((err) => {
+			//		console.error(err);
+			//	});
+		}
+		return sections;
+	}
+
+	private sectionArraysToDataset(sectionArrays: SectionFacade[][], id: string, kind: InsightDatasetKind) {
+		let sections = sectionArrays.flat();
+
 		let newDataset: InsightDatasetExpanded = {
 			id: id,
 			kind: kind,
-			numRows: 0,
-			sections: []
+			numRows: sections.length,
+			sections: sections
 		};
 
-		for (let fileString of fileStrings) {
-			if (fileString.trim().length === 0) {
-				continue;
-			}
-
-			let jsonified = JSON.parse(fileString);
-			for (let section of jsonified.result) {
-				// todo check if any of these are undefined
-				let newSection: SectionFacade = {
-					audit: section.Audit,
-					avg: section.Avg,
-					dept: section.Subject,
-					fail: section.Fail,
-					id: section.Course,
-					instructor: section.Professor,
-					pass: section.Pass,
-					title: section.Title,
-					uuid: section.id,
-					year: section.Year
-				};
-				newDataset.sections.push(newSection);
-				newDataset.numRows++;
-				// todo file persistence
-				// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
-				//	.catch((err) => {
-				//		console.error(err);
-				//	});
-			}
-		}
-		for (let dataset of this.datasets) {
-			if (dataset.id === id) {
-				return false;
-			}
-		}
-		this.datasets.push(newDataset);
-		return true;
+		return newDataset;
 	}
 
 	/*
@@ -91,7 +87,7 @@ export default class InsightFacade implements IInsightFacade {
 	 */
 	private async handleJSON(id: string, kind: InsightDatasetKind, z: JSZip) {
 		if (z !== null) {
-			let promises: Array<Promise<string>> = [];
+			let promises: Array<Promise<SectionFacade[]>> = [];
 
 			let filteredFiles = z.filter(function (relativePath, file){
 				return relativePath.startsWith("courses/");
@@ -102,17 +98,27 @@ export default class InsightFacade implements IInsightFacade {
 			}
 
 			for (let file of filteredFiles) {
-				promises.push(file.async("string"));
+				promises.push(
+					new Promise((resolve, reject) => {
+						file.async("string")
+							.then((fileString) => {
+								let sections = this.fileStringToSectionArray(fileString);
+								resolve(sections);
+							});
+					}));
 			}
 
 			return new Promise<void>((resolve, reject) => {
-				Promise.all(promises).then((fileStrings) => {
-					let allGood = this.fileStringsToJSON(fileStrings, id, kind);
-					if (allGood) {
-						resolve();
-					} else {
-						reject(new InsightError("Invalid id: id already exists"));
+				Promise.all(promises).then((sectionArrays) => {
+					let newDataset = this.sectionArraysToDataset(sectionArrays, id, kind);
+
+					for (let dataset of this.datasets) {
+						if (dataset.id === id) {
+							reject(new InsightError("Invalid id: id already exists"));
+						}
 					}
+					this.datasets.push(newDataset);
+					resolve();
 				});
 			});
 		}
@@ -162,7 +168,20 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public removeDataset(id: string): Promise<string> {
-		return Promise.reject("Not implemented.");
+		// verify that id is ok
+		if (id.trim().length === 0 || id.includes("_")) {
+			return Promise.reject(new InsightError("Invalid id: only whitespace or contains underscore"));
+		}
+
+		for (let i = 0; i < this.datasets.length; i++) {
+			if (this.datasets[i].id === id) {
+				// you found it!
+				this.datasets.splice(i, i);
+				return Promise.resolve(id);
+			}
+		}
+
+		return Promise.reject(new NotFoundError("Invalid id: dataset does not exist"));
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
@@ -170,7 +189,16 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
-		return Promise.reject("Not implemented.");
+		let smallerDatasets: InsightDataset[] = [];
+		for (let dataset of this.datasets) {
+			let smallerDataset: InsightDataset = {
+				id: dataset.id,
+				kind: dataset.kind,
+				numRows: dataset.numRows
+			};
+			smallerDatasets.push(smallerDataset);
+		}
+		return Promise.resolve(smallerDatasets);
 	}
 
 }
