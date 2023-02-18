@@ -54,7 +54,7 @@ export default class InsightFacade implements IInsightFacade {
 			// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
 			//	.catch((err) => {
 			//		console.error(err);
-			//	});
+			//	 });
 		}
 		return sections;
 	}
