@@ -1,4 +1,3 @@
-import {pathToFileURL} from "url";
 
 export default class IsQueryValid {
 
@@ -15,43 +14,41 @@ export default class IsQueryValid {
 		} catch (err) {
 			return [false,0];
 		}
-
-
 		if (!("WHERE" in query) || !("OPTIONS" in query)){ // checking if body has WHERE and OPTIONS
 			return [false,0];
 		}
-
 		if (Object.keys(query).length > 2) {
 			return [false,0]; // more than BODY and OPTIONS
 		}
-
-		// if ("OPTIONS" in query) { // if body had OPTIONS and WHERE
-		// 	if(this.checkValidOptions(query["OPTIONS"])){
-		// 		if(this.checkValidFilter(query["WHERE"])){
-		// 			return [true,this.id];
-		// 		}
-		// 	} else {
-		// 		return [false,0];
-		// 	}
-		// }
-
+		if(Object.keys(query["WHERE"]).length === 0){
+			let queryElement: any = query["OPTIONS"];
+			let keys: any = Object.keys(queryElement);
+			if(keys[0] === "COLUMNS") {
+				let columns: any = queryElement["COLUMNS"];
+				if(Array.isArray(columns) && columns.length >= 1) {
+					for(let key of columns) {
+						let stringField: string[] = key.split("_");
+						this.id = stringField[0];
+					}
+				} else {
+					return [false,this.id];
+				}
+			} else {
+				return [false,this.id];
+			}
+			return [true,this.id];
+		}
 		if ("OPTIONS" in query) { // if body had OPTIONS and WHERE
 			if(this.checkValidFilter(query["WHERE"])){
 				if(this.checkValidOptions(query["OPTIONS"])){
 					return [true,this.id];
+				} else {
+					return [false,0];
 				}
 			} else {
 				return [false,0];
 			}
 		}
-
-
-		if ("WHERE" in query) { // if body only has where
-			if(this.checkValidFilter(query["WHERE"])) {
-				return [true, this.id];
-			}
-		}
-
 		return [false,0];
 	}
 
@@ -191,6 +188,18 @@ export default class IsQueryValid {
 		}
 		return false;
 	}
+
+	// public isColumnsValid(cols: any): boolean {
+	// 	if (Array.isArray(cols)) {
+	// 		for (let key of cols) {
+	// 			if(!(this.isKeyValid(key))) {
+	// 				return false;
+	// 			}
+	// 		}
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
 
 	public isOrderValid(options: any): boolean { // checks if order key is part of column keys
