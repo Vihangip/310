@@ -12,6 +12,7 @@ import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
 import JSZip from "jszip";
 import IsQueryValid from "./IsQueryValid";
 import PerformQuery from "./PerformQuery";
+import {rejects} from "assert";
 
 
 /**
@@ -124,6 +125,24 @@ export default class InsightFacade implements IInsightFacade {
 		}
 	}
 
+	private async handleZip(id: string, content: string, kind: InsightDatasetKind) {
+		// unzip, parse content
+		let zip = new JSZip();
+
+		return new Promise<void>((resolve, reject) => {
+			zip.loadAsync(content, {base64: true})
+				.then((z) => {
+					this.handleJSON(id, kind, z)
+						.then(() => {
+							resolve();
+						})
+						.catch((err) => {
+							reject(err);
+						});
+				});
+		});
+	}
+
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// verify that id is ok
 		if (id.trim().length === 0 || id.includes("_")) {
@@ -142,18 +161,12 @@ export default class InsightFacade implements IInsightFacade {
 					if (exists) {
 						reject(new InsightError("Invalid id: id already exists"));
 					}
-					// unzip, parse content
-					let zip = new JSZip();
-
-					zip.loadAsync(content, {base64: true})
-						.then((z) => {
-							this.handleJSON(id, kind, z)
-								.then(() => {
-									resolve(Object.keys(this.datasets));
-								})
-								.catch((err) => {
-									reject(err);
-								});
+					this.handleZip(id, content, kind)
+						.then(() => {
+							resolve(Object.keys(this.datasets));
+						})
+						.catch((err) => {
+							reject(err);
 						});
 				});
 		});

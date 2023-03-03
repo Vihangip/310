@@ -4,10 +4,14 @@ export default class PerformQuery{
 	constructor() {
 		console.log("performing query...");
 	}
+
 	public performQuery(query: any, dataset: any): Promise<InsightResult[]> {
 		let body = query["WHERE"];
+
 		let options = query["OPTIONS"];
+
 		let processedData: any[];
+
 		if(body === undefined) {
 			processedData = dataset;
 		} else {
@@ -16,11 +20,14 @@ export default class PerformQuery{
 		if(processedData.length > this.maxNoOfResults) {
 			return Promise.reject(new ResultTooLargeError("Results are more than 5000"));
 		}
-		let columns: any = this.processCols(options,processedData);
-		let output: any[] = this.outputResults(options,columns);
-		return Promise.resolve(output);
 
+		let columns: any = this.processCols(options,processedData);
+
+		let output: any[] = this.outputResults(options,columns);
+
+		return Promise.resolve(output);
 	}
+
 	public processFilter(whereStatement: any, dataset: any[]): any[] {
 		if ("AND" in whereStatement) {
 			return this.processAND(whereStatement["AND"],dataset);
@@ -45,6 +52,7 @@ export default class PerformQuery{
 		}
 		return [];
 	}
+
 	public processAND(andStatement: any, dataset: any[]): any[] {
 		let outputList: any[] =  [];
 		let andList: any[] = [];
@@ -65,6 +73,7 @@ export default class PerformQuery{
 		}
 		return outputList;
 	}
+
 	public processOR(orStatement: any, dataset: any[]): any[] {
 		let outputList: any[] =  [];
 		let orList: any[] = [];
@@ -137,6 +146,7 @@ export default class PerformQuery{
 		courseList.push([...course]);
 		return courseList;
 	}
+
 	public processSComp(sStatement: any, dataset: any): any[] {
 		let outputList: any[] = [];
 		let sectionList: any = Object.values(dataset)[3];
@@ -181,6 +191,7 @@ export default class PerformQuery{
 		}
 		return outputList;
 	}
+
 	public processNOT(notStatement: any, dataset: any): any[] {
 		let outputList: any[];
 		let sectionList: any = Object.values(dataset)[3];
@@ -195,6 +206,7 @@ export default class PerformQuery{
 		outputList = sections.filter((data: any) => !resultSections.includes(data));
 		return outputList;
 	}
+
 	private processCols(options: any, processedData: any[]): any[] {
 		let columns = options["COLUMNS"];
 		for(let k = 0; k < columns.length; k++){
@@ -216,6 +228,7 @@ export default class PerformQuery{
 		 }
 		 return processedData;
 	}
+
 	// the logic for the sorting part of the following method was taken from this stackoverflow answer
 	// https://stackoverflow.com/a/21689268
 	private outputResults(options: any, columns: any): any[] {
