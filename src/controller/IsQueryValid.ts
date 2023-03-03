@@ -1,3 +1,4 @@
+import {pathToFileURL} from "url";
 
 export default class IsQueryValid {
 
@@ -6,7 +7,8 @@ export default class IsQueryValid {
 		console.log("Checking if query is valid");
 	}
 
-	public isValid(query: any): any[] {
+
+	public isValid(query: any): any[] { // returns an array [if query is valid, id String]
 		try {
 			const queryAsString: string  = JSON.stringify(query);
 			JSON.parse(queryAsString);
@@ -14,7 +16,8 @@ export default class IsQueryValid {
 			return [false,0];
 		}
 
-		if (!("WHERE" in query) || !("OPTIONS" in query)){
+
+		if (!("WHERE" in query) || !("OPTIONS" in query)){ // checking if body has WHERE and OPTIONS
 			return [false,0];
 		}
 
@@ -22,15 +25,28 @@ export default class IsQueryValid {
 			return [false,0]; // more than BODY and OPTIONS
 		}
 
-		if ("OPTIONS" in query) {
-			if(this.checkValidOptions(query["OPTIONS"])){
-				if(this.checkValidFilter(query["WHERE"])){
+		// if ("OPTIONS" in query) { // if body had OPTIONS and WHERE
+		// 	if(this.checkValidOptions(query["OPTIONS"])){
+		// 		if(this.checkValidFilter(query["WHERE"])){
+		// 			return [true,this.id];
+		// 		}
+		// 	} else {
+		// 		return [false,0];
+		// 	}
+		// }
+
+		if ("OPTIONS" in query) { // if body had OPTIONS and WHERE
+			if(this.checkValidFilter(query["WHERE"])){
+				if(this.checkValidOptions(query["OPTIONS"])){
 					return [true,this.id];
 				}
+			} else {
+				return [false,0];
 			}
 		}
 
-		if ("WHERE" in query) {
+
+		if ("WHERE" in query) { // if body only has where
 			if(this.checkValidFilter(query["WHERE"])) {
 				return [true, this.id];
 			}
@@ -39,7 +55,7 @@ export default class IsQueryValid {
 		return [false,0];
 	}
 
-	public checkValidFilter(whereStatement: any): boolean {
+	public checkValidFilter(whereStatement: any): boolean { // processing filter
 		if ("AND" in whereStatement) {
 			return this.logicComparison(whereStatement["AND"]);
 		} else if ("OR" in whereStatement) {
@@ -55,11 +71,12 @@ export default class IsQueryValid {
 		} else if ("NOT" in whereStatement) {
 			return this.checkValidFilter(whereStatement["NOT"]);
 		} else {
-			return false;
+			return Object.keys(whereStatement).length === 0;
 		}
 	}
 
-	public logicComparison(logic: any): boolean {
+
+	public logicComparison(logic: any): boolean { // checking for AND, OR, NOT
 		if (Array.isArray(logic)) {
 			for (let statement of logic) {
 				if (!(this.checkValidFilter(statement))) {
@@ -71,7 +88,7 @@ export default class IsQueryValid {
 		return false;
 	}
 
-	public mComparison(m: any): boolean {
+	public mComparison(m: any): boolean { // comparing with GT, LT and EQ
 		let mKeys: any = Object.keys(m);
 		if (!(mKeys.length === 1) || !(typeof Object.values(m)[0] === "number")) {
 			return false;
@@ -85,7 +102,7 @@ export default class IsQueryValid {
 		}
 	}
 
-	public sComparison(s: any): boolean {
+	public sComparison(s: any): boolean { // IS comparison
 		let sKeys: any = Object.keys(s);
 		let sKeyValue: any = Object.values(s);
 		if (!(sKeys.length === 1) || !(typeof sKeyValue[0] === "string")) {
@@ -139,11 +156,35 @@ export default class IsQueryValid {
 		}
 	}
 
-	public isColumnsValid(cols: any): boolean {
-		if (Array.isArray(cols)) {
+	// public isColumnsValid(cols: any): boolean { // checks if all column keys are valid
+	// 	if (Array.isArray(cols) && cols.length >= 1) {
+	// 		for (let key of cols) {
+	// 			if(!(this.isKeyValid(key))) {
+	// 				return false;
+	// 			}
+	//
+	// 			let stringField: string[] = key.split("_");
+	// 			let currIdString: string = stringField[0];
+	//
+	// 			if(!(currIdString === this.id)) {
+	// 				return false;
+	// 			}
+	// 		}
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
+
+	public isColumnsValid(cols: any): boolean { // checks if all column keys are valid
+		if (Array.isArray(cols) && cols.length >= 1) {
 			for (let key of cols) {
-				if(!(this.isKeyValid(key))) {
-					return false;
+				let stringField: string[] = key.split("_");
+				let currIdString: string = stringField[0];
+
+				if(!(currIdString === this.id) || !(this.isKeyValid(key))) {
+					console.log("before");
+					return false; // something is wrong here, it doesn't return properly
+					// console.log("after");
 				}
 			}
 			return true;
@@ -152,7 +193,7 @@ export default class IsQueryValid {
 	}
 
 
-	public isOrderValid(options: any): boolean {
+	public isOrderValid(options: any): boolean { // checks if order key is part of column keys
 		let columnKeyList: any = options["COLUMNS"];
 		let orderKey: any = options["ORDER"];
 
@@ -162,7 +203,7 @@ export default class IsQueryValid {
 		return false;
 	}
 
-	public isKeyValid(key: any): boolean {
+	public isKeyValid(key: any): boolean { // checks validity of key according to EBNF
 		if (typeof key === "string" && key.includes("_")) {
 			let stringField: string[] = key.split("_");
 			if (stringField.length !== 2) {

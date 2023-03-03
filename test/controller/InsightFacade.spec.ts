@@ -177,7 +177,7 @@ describe("InsightFacade", function () {
 					expect(actual).to.deep.equals(expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
-					error === "ResultTooLargeError" || error === "InsightError",
+					error === "ResultTooLargeError" || error === "InsightError" || error === "NotFoundError",
 				assertOnError: (actual, expected) => {
 					// TODO: Complete this
 					if (expected === "ResultTooLargeError") {

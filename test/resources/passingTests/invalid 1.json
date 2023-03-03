@@ -1,5 +1,5 @@
 {
-	"title": "Very invalid query",
+	"title": "Invalid query body, WHERE missing",
 	"input": {
 		"OPTIONS": {}
 	},

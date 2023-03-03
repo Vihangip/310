@@ -1,0 +1,31 @@
+Invalid
+1. Invalid query body (WHERE missing only OPTIONS)
+2. invalid query key (wrong mkey)
+3. invalid GT body (array)
+4. invalid Scomp (comparing to number)
+5. invalid Scomp (wrong skey, mkey instead)
+6. invalid Scomp (wrong skey)
+7. invalid id string (empty)
+8. invalid id string (non-existent dataset id)
+9. invalid filter (GREATER instead of GT)
+10. invalid order (with wrong order key)
+11. invalid wildcard (* in the middle of word)
+12. too large results
+13. too large results (empty WHERE statement)
+14. invalid Mcomp (comparing to string)
+15. Invalid query body (OPTIONS missing)
+16. Invalid query (empty body)
+17. invalid order (order key not in columns)
+18. invalid columns (wrong column key)
+19. invalid columns (empty cols array]
+20. invalid query (missing comp)
+21. invalid options (columns missing)
+
+
+
+
+
+
+
+
+

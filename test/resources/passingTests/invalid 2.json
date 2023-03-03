@@ -1,0 +1,19 @@
+{
+	"title": "invalid query key, wrong mkey",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_average": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

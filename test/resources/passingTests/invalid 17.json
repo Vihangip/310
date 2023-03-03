@@ -1,0 +1,19 @@
+{
+	"title": "invalid order, order key not in columns",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_avg"
+			],
+			"ORDER": "classes_title"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
