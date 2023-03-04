@@ -15,12 +15,32 @@ Invalid
 14. invalid Mcomp (comparing to string)
 15. Invalid query body (OPTIONS missing)
 16. Invalid query (empty body)
-17. invalid order (order key not in columns)
+17. invalid order (trying to query two datasets in one query)
 18. invalid columns (wrong column key)
 19. invalid columns (empty cols array]
 20. invalid query (missing comp)
 21. invalid options (columns missing)
 
+
+Simple
+1. Greater than (ubc)
+2. Equal (ubc)
+3. Lesser than (ubc)
+4. Is (ubc)
+5. Is with empty string
+6. Not
+7. And
+8. Or
+9. Greater than (sections)
+10. Equal (sections)
+11. Lesser than (sections)
+12. Is (sections)
+
+Complex
+1. Or + And
+2. Or + not
+3. And + Not
+4. And + Or + Not
 
 
 

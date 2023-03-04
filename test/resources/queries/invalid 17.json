@@ -1,5 +1,6 @@
 {
-	"title": "invalid order, order key not in columns",
+
+	"title": "invalid order (trying to query two datasets in one query)",
 	"input": {
 		"WHERE": {
 			"GT": {

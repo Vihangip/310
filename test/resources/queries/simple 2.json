@@ -1,84 +1,85 @@
 {
-	"title": "Equal",
+
+	"title": "Equal ubc",
 	"input": {
 		"WHERE": {
 			"EQ": {
-				"sections_avg": 96
+				"ubc_avg": 96
 			}
 		},
 		"OPTIONS": {
 			"COLUMNS": [
-				"sections_dept",
-				"sections_avg"
+				"ubc_dept",
+				"ubc_avg"
 			],
-			"ORDER": "sections_avg"
+			"ORDER": "ubc_avg"
 		}
 	},
 	"errorExpected": false,
 	"expected": [
 		{
-			"sections_dept": "psyc",
-			"sections_avg": 96
+			"ubc_dept": "apsc",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "psyc",
-			"sections_avg": 96
+			"ubc_dept": "cnps",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "psyc",
-			"sections_avg": 96
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "phil",
-			"sections_avg": 96
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "pcth",
-			"sections_avg": 96
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "kin",
-			"sections_avg": 96
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "epse",
-			"sections_avg": 96
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "epse",
-			"sections_avg": 96
+			"ubc_dept": "epse",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "epse",
-			"sections_avg": 96
+			"ubc_dept": "epse",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
+			"ubc_dept": "epse",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
+			"ubc_dept": "kin",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
+			"ubc_dept": "pcth",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
+			"ubc_dept": "phil",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
+			"ubc_dept": "psyc",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "cnps",
-			"sections_avg": 96
+			"ubc_dept": "psyc",
+			"ubc_avg": 96
 		},
 		{
-			"sections_dept": "apsc",
-			"sections_avg": 96
+			"ubc_dept": "psyc",
+			"ubc_avg": 96
 		}
 	]
 }

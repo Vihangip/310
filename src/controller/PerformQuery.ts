@@ -214,11 +214,12 @@ export default class PerformQuery{
 
 	private processCols(options: any, processedData: any[]): any[] {
 		let columns = options["COLUMNS"];
+		let idString: string = "";
 		for(let k = 0; k < columns.length; k++){ // finds the wanted column names
 			let wholeKey = columns[k];
 			let words: string[] = wholeKey.split("_");
-			let field: string = words[1];
-			columns[k] = field;
+			idString = words[0];
+			columns[k] = words[1];
 		}
 		 for(let section of processedData) { // sections
 			 let secCols: string[] = Object.keys(section);
@@ -226,7 +227,7 @@ export default class PerformQuery{
 				 if (!columns.includes(col)) { // checks if column is part of wanted columns
 					 delete section[col];
 				 } else {
-					 section["sections_" + col] = section[col];
+					 section[idString + "_" + col] = section[col];
 					 delete section[col];
 				 }
 			 }
@@ -244,28 +245,27 @@ export default class PerformQuery{
 			return columns;
 		}
 
-		// let wholeKey = order;
-		// let words: string[] = wholeKey.split("_");
-		let field: string = order;
+		let words: string[] = order.split("_");
+		let id: string = words[0];
+		let field: string = words[1];
 
 		ouputResults = columns.sort((first: any,second: any) => { // sorts them in order
-			const firstFields: any = {
-				sections_avg: first.sections_avg,
-				sections_pass: first.pass,
-				sections_fail: first.fail,
-				sections_audit: first.audit,
-				sections_year: first.year,
-				sections_dept: first.sections_dept
-			};
+			const firstFields: any = {};
+			const secondFields: any = {};
 
-			const secondFields: any = {
-				sections_avg: second.sections_avg,
-				sections_pass: second.pass,
-				sections_fail: second.fail,
-				sections_audit: second.audit,
-				sections_year: second.year,
-				sections_dept: second.sections_dept
-			};
+			const firstKeys = Object.keys(first).filter((key) => key.startsWith(id));
+			const secondKeys = Object.keys(second).filter((key) => key.startsWith(id));
+
+			for(const key of firstKeys) {
+				const columnField: string = key.split("_")[1];
+				firstFields[columnField] = first[key];
+			}
+
+			for(const key of secondKeys) {
+				const columnField: string = key.split("_")[1];
+				secondFields[columnField] = second[key];
+			}
+
 
 			if(firstFields[field] > secondFields[field]) {
 				return 1;

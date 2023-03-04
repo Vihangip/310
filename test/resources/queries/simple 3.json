@@ -1,176 +1,176 @@
 {
-	"title": "Less than",
+	"title": "Less than ubc",
 	"input": {
 		"WHERE": {
 			"LT": {
-				"sections_avg": 50
+				"ubc_avg": 50
 			}
 		},
 		"OPTIONS": {
 			"COLUMNS": [
-				"sections_dept",
-				"sections_avg"
+				"ubc_dept",
+				"ubc_avg"
 			],
-			"ORDER": "sections_avg"
+			"ORDER": "ubc_avg"
 		}
 	},
 	"errorExpected": false,
 	"expected": [
 		{
-			"sections_dept": "frst",
-			"sections_avg": 0
+			"ubc_dept": "frst",
+			"ubc_avg": 0
 		},
 		{
-			"sections_dept": "lfs",
-			"sections_avg": 0
+			"ubc_dept": "lfs",
+			"ubc_avg": 0
 		},
 		{
-			"sections_dept": "lfs",
-			"sections_avg": 0
+			"ubc_dept": "lfs",
+			"ubc_avg": 0
 		},
 		{
-			"sections_dept": "wood",
-			"sections_avg": 1
+			"ubc_dept": "wood",
+			"ubc_avg": 1
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 4
+			"ubc_dept": "busi",
+			"ubc_avg": 4
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 4
+			"ubc_dept": "busi",
+			"ubc_avg": 4
 		},
 		{
-			"sections_dept": "fopr",
-			"sections_avg": 4.5
+			"ubc_dept": "fopr",
+			"ubc_avg": 4.5
 		},
 		{
-			"sections_dept": "civl",
-			"sections_avg": 33
+			"ubc_dept": "civl",
+			"ubc_avg": 33
 		},
 		{
-			"sections_dept": "phil",
-			"sections_avg": 33.2
+			"ubc_dept": "phil",
+			"ubc_avg": 33.2
 		},
 		{
-			"sections_dept": "hist",
-			"sections_avg": 34
+			"ubc_dept": "hist",
+			"ubc_avg": 34
 		},
 		{
-			"sections_dept": "educ",
-			"sections_avg": 39.03
+			"ubc_dept": "educ",
+			"ubc_avg": 39.03
 		},
 		{
-			"sections_dept": "educ",
-			"sections_avg": 39.03
+			"ubc_dept": "educ",
+			"ubc_avg": 39.03
 		},
 		{
-			"sections_dept": "chbe",
-			"sections_avg": 42
+			"ubc_dept": "chbe",
+			"ubc_avg": 42
 		},
 		{
-			"sections_dept": "chem",
-			"sections_avg": 42.5
+			"ubc_dept": "chem",
+			"ubc_avg": 42.5
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 42.64
+			"ubc_dept": "busi",
+			"ubc_avg": 42.64
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 42.64
+			"ubc_dept": "busi",
+			"ubc_avg": 42.64
 		},
 		{
-			"sections_dept": "psyc",
-			"sections_avg": 43.33
+			"ubc_dept": "psyc",
+			"ubc_avg": 43.33
 		},
 		{
-			"sections_dept": "chbe",
-			"sections_avg": 44.88
+			"ubc_dept": "chbe",
+			"ubc_avg": 44.88
 		},
 		{
-			"sections_dept": "hist",
-			"sections_avg": 46.33
+			"ubc_dept": "hist",
+			"ubc_avg": 46.33
 		},
 		{
-			"sections_dept": "hist",
-			"sections_avg": 46.33
+			"ubc_dept": "hist",
+			"ubc_avg": 46.33
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 46.5
+			"ubc_dept": "busi",
+			"ubc_avg": 46.5
 		},
 		{
-			"sections_dept": "math",
-			"sections_avg": 46.52
+			"ubc_dept": "math",
+			"ubc_avg": 46.52
 		},
 		{
-			"sections_dept": "frst",
-			"sections_avg": 46.59
+			"ubc_dept": "frst",
+			"ubc_avg": 46.59
 		},
 		{
-			"sections_dept": "comm",
-			"sections_avg": 46.71
+			"ubc_dept": "comm",
+			"ubc_avg": 46.71
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 46.95
+			"ubc_dept": "busi",
+			"ubc_avg": 46.95
 		},
 		{
-			"sections_dept": "hist",
-			"sections_avg": 47.13
+			"ubc_dept": "hist",
+			"ubc_avg": 47.13
 		},
 		{
-			"sections_dept": "lled",
-			"sections_avg": 47.29
+			"ubc_dept": "lled",
+			"ubc_avg": 47.29
 		},
 		{
-			"sections_dept": "lled",
-			"sections_avg": 47.82
+			"ubc_dept": "lled",
+			"ubc_avg": 47.82
 		},
 		{
-			"sections_dept": "lled",
-			"sections_avg": 48.9
+			"ubc_dept": "lled",
+			"ubc_avg": 48.9
 		},
 		{
-			"sections_dept": "comm",
-			"sections_avg": 49.07
+			"ubc_dept": "comm",
+			"ubc_avg": 49.07
 		},
 		{
-			"sections_dept": "frst",
-			"sections_avg": 49.14
+			"ubc_dept": "frst",
+			"ubc_avg": 49.14
 		},
 		{
-			"sections_dept": "hist",
-			"sections_avg": 49.15
+			"ubc_dept": "hist",
+			"ubc_avg": 49.15
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 49.17
+			"ubc_dept": "busi",
+			"ubc_avg": 49.17
 		},
 		{
-			"sections_dept": "civl",
-			"sections_avg": 49.25
+			"ubc_dept": "civl",
+			"ubc_avg": 49.25
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 49.47
+			"ubc_dept": "busi",
+			"ubc_avg": 49.47
 		},
 		{
-			"sections_dept": "busi",
-			"sections_avg": 49.47
+			"ubc_dept": "busi",
+			"ubc_avg": 49.47
 		},
 		{
-			"sections_dept": "lled",
-			"sections_avg": 49.73
+			"ubc_dept": "lled",
+			"ubc_avg": 49.73
 		},
 		{
-			"sections_dept": "lled",
-			"sections_avg": 49.86
+			"ubc_dept": "lled",
+			"ubc_avg": 49.86
 		},
 		{
-			"sections_dept": "math",
-			"sections_avg": 49.95
+			"ubc_dept": "math",
+			"ubc_avg": 49.95
 		}
 	]
 }
