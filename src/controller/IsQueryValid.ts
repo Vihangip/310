@@ -1,14 +1,29 @@
 
 export default class IsQueryValid {
 
-	private ids: Set<string>; // set, in case you can't have more than one idstring, etc
+	private id: string;
+	private mKeyCorrectValues;
+	private sKeyCorrectValues;
+
 	constructor() {
 		console.log("Checking if query is valid");
-		this.ids = new Set<string>();
+		this.id = "";
+		this.mKeyCorrectValues = ["avg", "pass", "fail", "audit", "year"];
+		this.sKeyCorrectValues = ["dept", "id", "instructor", "title", "uuid"];
 	}
 
-	public getIds() {
-		return this.ids;
+	public getId() {
+		return this.id;
+	}
+
+	// can be only one dataset per query
+	private setId(newId: string) {
+		if (this.id === "") {
+			this.id = newId;
+		}
+		if (this.id !== newId) {
+			throw new Error("More than one dataset id in query");
+		}
 	}
 
 	private isQueryKeysValid(query: any) {
@@ -76,12 +91,12 @@ export default class IsQueryValid {
 			throw new Error("Empty m comparison");
 		}
 
-		let [idString, mField] = this.parseComparatorKey(mKey, ["avg", "pass", "fail", "audit", "year"]);
+		let [idString, mField] = this.parseComparatorKey(mKey, this.mKeyCorrectValues);
 
 		if (isNaN(mVal)) {
 			throw new Error("Bad value for m key");
 		}
-		this.ids.add(idString);
+		this.setId(idString);
 		return true;
 	}
 
@@ -90,7 +105,7 @@ export default class IsQueryValid {
 		if (sKey === null) {
 			throw new Error("Empty s comparison");
 		}
-		let [idString, sField] = this.parseComparatorKey(sKey, ["dept", "id", "instructor", "title", "uuid"]);
+		let [idString, sField] = this.parseComparatorKey(sKey, this.sKeyCorrectValues);
 		if (typeof inputString !== "string") {
 			throw new Error("Bad value for input string");
 		}
@@ -103,7 +118,7 @@ export default class IsQueryValid {
 		if (inputString.includes("*")) {
 			throw new Error("Bad value for input string");
 		}
-		this.ids.add(idString);
+		this.setId(idString);
 		return true;
 	}
 
@@ -129,31 +144,76 @@ export default class IsQueryValid {
 
 	private parseComparatorKey(key: any, correctFields: any) {
 		if(!key.includes("_")) {
-			throw new Error("Invalid key");
+			throw new Error("Invalid key: does not include underscore");
 		}
 
 		let parts = key.split("_");
 		if(parts.length !== 2) {
-			throw new Error("Invalid key");
+			throw new Error("Invalid key: more or less than 2 parts");
 		}
 
 		let idString = parts[0].trim();
 		if (idString.length === 0) {
-			throw new Error("Invalid key");
+			throw new Error("Invalid key: empty key");
 		}
 		// shouldn't get here but just in case
 		if (idString.includes("_")) {
-			throw new Error("Invalid key");
+			throw new Error("Invalid key: underscore weirdness");
 		}
 
-		let field = parts[0].trim();
+		let field = parts[1].trim();
 		if (!correctFields.includes(field)) {
-			throw new Error("Invalid key");
+			console.log(field);
+			throw new Error("Invalid key: not a correct field");
 		}
 
 		return [idString, field];
 	}
 
+	private parseOptions(options: any) {
+		// can contain ORDER, HAS to contain COLUMNS
+		if (typeof options !== "object") {
+			throw new Error("Options not an object");
+		}
+		if (!("COLUMNS" in options)) {
+			throw new Error("Options missing columns");
+		}
+		let columns = options["COLUMNS"];
+		let orderKeys = null;
+		if ("ORDER" in options) {
+			orderKeys = options["ORDER"];
+		}
+		if (Object.keys(options).length > 2) {
+			throw new Error("Options has more than 2 keys");
+		}
+
+		let columnKeys = this.columnKeyVal(columns);
+		if (orderKeys !== null) {
+			if (!columnKeys.includes(orderKeys)) {
+				throw new Error("Order key not in column keys");
+			}
+		}
+		return true;
+	}
+
+	private columnKeyVal(columns: any) {
+		if (!Array.isArray(columns)) {
+			throw new Error("Columns not an array");
+		}
+
+		if (columns.length === 0) {
+			throw new Error("Columns empty");
+		}
+
+		return columns.map((key) => {
+			try {
+				this.parseComparatorKey(key, this.mKeyCorrectValues);
+			} catch (err) {
+				this.parseComparatorKey(key, this.sKeyCorrectValues);
+			}
+			return key;
+		});
+	}
 
 	public isValid(query: any): boolean { // returns an array [if query is valid, id String]
 		if (typeof query !== "object") {
@@ -166,46 +226,10 @@ export default class IsQueryValid {
 
 		try {
 			let [filterKey, filterValue] = this.filterKeyVal(query["WHERE"]);
-			return this.parseFilter(filterKey, filterValue);
+			return this.parseFilter(filterKey, filterValue) && this.parseOptions(query["OPTIONS"]);
 		} catch (e) {
+			console.error(e);
 			return false;
 		}
-
-		// todo: validate options
-
-		/*
-		if(Object.keys(query["WHERE"]).length === 0){
-			let queryElement: any = query["OPTIONS"];
-			let keys: any = Object.keys(queryElement);
-			if(keys[0] === "COLUMNS") {
-				let columns: any = queryElement["COLUMNS"];
-				if(Array.isArray(columns) && columns.length >= 1) {
-					for(let key of columns) {
-						let stringField: string[] = key.split("_");
-						this.id = stringField[0];
-					}
-				} else {
-					return [false,this.id];
-				}
-			} else {
-				return [false,this.id];
-			}
-			return [true,this.id];
-		}
-
-
-		if ("OPTIONS" in query) { // if body had OPTIONS and WHERE
-			if(this.checkValidFilter(query["WHERE"])){
-				if(this.checkValidOptions(query["OPTIONS"])){
-					return [true,this.id];
-				} else {
-					return [false,0];
-				}
-			} else {
-				return [false,0];
-			}
-		}
-		return [false,0];
-		*/
 	}
 }

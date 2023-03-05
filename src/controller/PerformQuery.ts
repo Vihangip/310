@@ -97,7 +97,8 @@ export default class PerformQuery{
 
 	public processMComp(mStatement: any, dataset: any, comp: string): any[] {
 		let outputList: any[] = [];
-		let sectionList: any = Object.values(dataset)[3];
+		// let sectionList: any = Object.values(dataset)[3];
+		let sectionList = dataset.sections;
 		let courses: any[] = this.convertToCourses(sectionList);
 		for(let course of courses) { // iterating through courses
 			for(let section of course) { // iterating through sections
@@ -131,7 +132,8 @@ export default class PerformQuery{
 		return outputList;
 	}
 
-	public convertToCourses(sectionList: any[]): any[] { // converts section list to courses by separating them by course id
+	// converts section list to courses by separating them by course id
+	public convertToCourses(sectionList: any[]): any[] {
 		let courseList: any = [];
 		let course: any = [];
 		let currCourseId: string = "";

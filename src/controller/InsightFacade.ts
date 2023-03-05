@@ -191,10 +191,20 @@ export default class InsightFacade implements IInsightFacade {
 			let queryValidator = new IsQueryValid();
 			let queryPerformer = new PerformQuery();
 			let validity = queryValidator.isValid(query);
-			let idStrings = queryValidator.getIds();
-			let idString = Array.from(idStrings)[0];
+			let idString = queryValidator.getId();
 
 			if (validity) { // query is valid
+				if (idString === null) {
+					console.log("Dataset does not exist");
+					reject(new InsightError("Dataset does not exist"));
+				}
+
+				if (!Object.keys(this.datasets).includes(idString)) {
+					console.log("Dataset does not exist");
+					reject(new InsightError("Dataset does not exist"));
+				}
+
+
 				let dataset = this.datasets[idString];
 				let queryData;
 				let queryResults;
