@@ -206,17 +206,17 @@ export default class PerformQuery{
 
 	public processNOT(notStatement: any, dataset: any): any[] { // not working
 
-		let outputList: any[];
+		let outputList: any[] = [];
 		let sectionList: any = Object.values(dataset)[3];
-		let courses: any[] = this.convertToCourses(sectionList);
-		let sections: any = [];
-		let resultSections: any[] = this.processFilter(notStatement,dataset);
-		for(let course of courses) {
-			for (let section of course) {
-				sections.push(section);
-			}
-		}
-		outputList = sections.filter((data: any) => !resultSections.includes(data));
+		// let courses: any[] = this.convertToCourses(sectionList);
+		// let sections: any = [];
+		// let resultSections: any[] = this.processFilter(notStatement,dataset);
+		// for(let course of courses) {
+		// 	for (let section of course) {
+		// 		sections.push(section);
+		// 	}
+		// }
+		// outputList = sections.filter((data: any) => !resultSections.includes(data));
 		return outputList;
 	}
 
