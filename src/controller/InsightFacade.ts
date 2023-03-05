@@ -24,7 +24,7 @@ export default class InsightFacade implements IInsightFacade {
 	// stores added datasets
 	private datasets: {[id: string]: InsightDatasetExpanded};
 
-	// Set up InsightDatasetExpanded[] variable
+	// Set up variable
 	constructor() {
 		this.datasets = {};
 		console.log("InsightFacadeImpl::init()");
@@ -190,10 +190,9 @@ export default class InsightFacade implements IInsightFacade {
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryValidator = new IsQueryValid();
 			let queryPerformer = new PerformQuery();
-			let validatorArray = queryValidator.isValid(query);
-			let validity = validatorArray[0];
-			let idString = validatorArray[1];
-
+			let validity = queryValidator.isValid(query);
+			let idStrings = queryValidator.getIds();
+			let idString = Array.from(idStrings)[0];
 
 			if (validity) { // query is valid
 				let dataset = this.datasets[idString];
