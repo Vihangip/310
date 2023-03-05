@@ -20,7 +20,7 @@ export default class IsQueryValid {
 		if (Object.keys(query).length > 2) {
 			return [false,0]; // more than BODY and OPTIONS
 		}
-		if(Object.keys(query["WHERE"]).length === 0){
+		if(Object.keys(query["WHERE"]).length === 0){ // if WHERE is empty
 			let queryElement: any = query["OPTIONS"];
 			let keys: any = Object.keys(queryElement);
 			if(keys[0] === "COLUMNS") {
@@ -38,7 +38,7 @@ export default class IsQueryValid {
 			}
 			return [true,this.id];
 		}
-		if ("OPTIONS" in query) { // if body had OPTIONS and WHERE
+		if ("OPTIONS" in query) { // if body has OPTIONS and WHERE
 			if(this.checkValidFilter(query["WHERE"])){
 				if(this.checkValidOptions(query["OPTIONS"])){
 					return [true,this.id];
@@ -153,25 +153,6 @@ export default class IsQueryValid {
 		}
 	}
 
-	// public isColumnsValid(cols: any): boolean { // checks if all column keys are valid
-	// 	if (Array.isArray(cols) && cols.length >= 1) {
-	// 		for (let key of cols) {
-	// 			if(!(this.isKeyValid(key))) {
-	// 				return false;
-	// 			}
-	//
-	// 			let stringField: string[] = key.split("_");
-	// 			let currIdString: string = stringField[0];
-	//
-	// 			if(!(currIdString === this.id)) {
-	// 				return false;
-	// 			}
-	// 		}
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
-
 	public isColumnsValid(cols: any): boolean { // checks if all column keys are valid
 		if (Array.isArray(cols) && cols.length >= 1) {
 			for (let key of cols) {
@@ -180,26 +161,13 @@ export default class IsQueryValid {
 
 				if(!(currIdString === this.id) || !(this.isKeyValid(key))) {
 					console.log("before");
-					return false; // something is wrong here, it doesn't return properly
-					// console.log("after");
+					return false;
 				}
 			}
 			return true;
 		}
 		return false;
 	}
-
-	// public isColumnsValid(cols: any): boolean {
-	// 	if (Array.isArray(cols)) {
-	// 		for (let key of cols) {
-	// 			if(!(this.isKeyValid(key))) {
-	// 				return false;
-	// 			}
-	// 		}
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
 
 
 	public isOrderValid(options: any): boolean { // checks if order key is part of column keys

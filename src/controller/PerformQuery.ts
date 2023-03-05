@@ -53,30 +53,38 @@ export default class PerformQuery{
 	}
 
 
-	public processAND(andStatement: any, dataset: any[]): any[] { // this is not working as intended
-
-		let outputList: any[] =  [];
+	public processAND(andStatement: any, dataset: any[]): any[] {
+		let outputList: any[] = [];
 		let andList: any[] = [];
-		let frequency: any[] = [];
-		for(let i = 0; i < Object.values(andStatement).length; i++) {
-			andList.push(this.processFilter(andStatement[i], dataset));
+		let frequency: any = {};
+
+		andStatement.forEach((filter: any) => {
+			andList.push(this.processFilter(filter, dataset));
+		});
+
+		for (const subElement of andList[0]) {
+			frequency[subElement.uuid] = 1;
 		}
-		for(let element of andList) {
-			for(let subElement of element){
-				if(frequency[subElement["id"]]) {
-					frequency[subElement["id"]]++;
+
+		for (let i = 1; i < andList.length; i++) {
+			for (const subElement of andList[i]) {
+				if (frequency[subElement.uuid]) {
+					frequency[subElement.uuid]++;
 				}
-				frequency[subElement["id"]] = 1;
-				if(frequency[subElement["id"]] === andList.length) {
+
+				if (frequency[subElement.uuid] === andList.length) {
 					outputList.push(subElement);
+				} else {
+					frequency[subElement.uuid] = 1;
 				}
 			}
 		}
+
 		return outputList;
 	}
 
 
-	public processOR(orStatement: any, dataset: any[]): any[] { // this is not working as intended
+	public processOR(orStatement: any, dataset: any[]): any[] {
 
 		let outputList: any[] =  [];
 		let orList: any[] = [];
@@ -86,10 +94,10 @@ export default class PerformQuery{
 		}
 		for(let element of orList) {
 			for(let subElement of element){
-				if(!(frequency[subElement["id"]])) {
+				if(!(frequency[subElement.uuid])) {
 					outputList.push(subElement);
 				}
-				frequency[subElement["id"]] = 1;
+				frequency[subElement.uuid] = 1;
 			}
 		}
 		return outputList;
