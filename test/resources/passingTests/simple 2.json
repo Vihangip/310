@@ -1,0 +1,85 @@
+{
+
+	"title": "Equal ubc",
+	"input": {
+		"WHERE": {
+			"EQ": {
+				"ubc_avg": 96
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"ubc_dept",
+				"ubc_avg"
+			],
+			"ORDER": "ubc_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"ubc_dept": "apsc",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "cnps",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "crwr",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "epse",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "epse",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "epse",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "kin",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "pcth",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "phil",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "psyc",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "psyc",
+			"ubc_avg": 96
+		},
+		{
+			"ubc_dept": "psyc",
+			"ubc_avg": 96
+		}
+	]
+}

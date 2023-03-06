@@ -1,0 +1,176 @@
+{
+	"title": "Less than - ubc",
+	"input": {
+		"WHERE": {
+			"LT": {
+				"ubc_avg": 50
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"ubc_dept",
+				"ubc_avg"
+			],
+			"ORDER": "ubc_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"ubc_dept": "frst",
+			"ubc_avg": 0
+		},
+		{
+			"ubc_dept": "lfs",
+			"ubc_avg": 0
+		},
+		{
+			"ubc_dept": "lfs",
+			"ubc_avg": 0
+		},
+		{
+			"ubc_dept": "wood",
+			"ubc_avg": 1
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 4
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 4
+		},
+		{
+			"ubc_dept": "fopr",
+			"ubc_avg": 4.5
+		},
+		{
+			"ubc_dept": "civl",
+			"ubc_avg": 33
+		},
+		{
+			"ubc_dept": "phil",
+			"ubc_avg": 33.2
+		},
+		{
+			"ubc_dept": "hist",
+			"ubc_avg": 34
+		},
+		{
+			"ubc_dept": "educ",
+			"ubc_avg": 39.03
+		},
+		{
+			"ubc_dept": "educ",
+			"ubc_avg": 39.03
+		},
+		{
+			"ubc_dept": "chbe",
+			"ubc_avg": 42
+		},
+		{
+			"ubc_dept": "chem",
+			"ubc_avg": 42.5
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 42.64
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 42.64
+		},
+		{
+			"ubc_dept": "psyc",
+			"ubc_avg": 43.33
+		},
+		{
+			"ubc_dept": "chbe",
+			"ubc_avg": 44.88
+		},
+		{
+			"ubc_dept": "hist",
+			"ubc_avg": 46.33
+		},
+		{
+			"ubc_dept": "hist",
+			"ubc_avg": 46.33
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 46.5
+		},
+		{
+			"ubc_dept": "math",
+			"ubc_avg": 46.52
+		},
+		{
+			"ubc_dept": "frst",
+			"ubc_avg": 46.59
+		},
+		{
+			"ubc_dept": "comm",
+			"ubc_avg": 46.71
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 46.95
+		},
+		{
+			"ubc_dept": "hist",
+			"ubc_avg": 47.13
+		},
+		{
+			"ubc_dept": "lled",
+			"ubc_avg": 47.29
+		},
+		{
+			"ubc_dept": "lled",
+			"ubc_avg": 47.82
+		},
+		{
+			"ubc_dept": "lled",
+			"ubc_avg": 48.9
+		},
+		{
+			"ubc_dept": "comm",
+			"ubc_avg": 49.07
+		},
+		{
+			"ubc_dept": "frst",
+			"ubc_avg": 49.14
+		},
+		{
+			"ubc_dept": "hist",
+			"ubc_avg": 49.15
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 49.17
+		},
+		{
+			"ubc_dept": "civl",
+			"ubc_avg": 49.25
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 49.47
+		},
+		{
+			"ubc_dept": "busi",
+			"ubc_avg": 49.47
+		},
+		{
+			"ubc_dept": "lled",
+			"ubc_avg": 49.73
+		},
+		{
+			"ubc_dept": "lled",
+			"ubc_avg": 49.86
+		},
+		{
+			"ubc_dept": "math",
+			"ubc_avg": 49.95
+		}
+	]
+}

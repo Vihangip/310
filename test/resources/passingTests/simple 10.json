@@ -1,5 +1,5 @@
 {
-	"title": "Equal",
+	"title": "Equal  - sections",
 	"input": {
 		"WHERE": {
 			"EQ": {
@@ -17,59 +17,7 @@
 	"errorExpected": false,
 	"expected": [
 		{
-			"sections_dept": "psyc",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "psyc",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "psyc",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "phil",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "pcth",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "kin",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "epse",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "epse",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "epse",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "crwr",
-			"sections_avg": 96
-		},
-		{
-			"sections_dept": "crwr",
+			"sections_dept": "apsc",
 			"sections_avg": 96
 		},
 		{
@@ -77,7 +25,59 @@
 			"sections_avg": 96
 		},
 		{
-			"sections_dept": "apsc",
+			"sections_dept": "crwr",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "crwr",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "crwr",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "crwr",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "crwr",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "epse",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "epse",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "epse",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "kin",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "pcth",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "phil",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "psyc",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "psyc",
+			"sections_avg": 96
+		},
+		{
+			"sections_dept": "psyc",
 			"sections_avg": 96
 		}
 	]

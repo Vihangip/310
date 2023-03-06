@@ -68,6 +68,11 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.have.members(["ubc"]);
 		});
 
+		it ("should successfully add a second dataset", function() {
+			const result = facade.addDataset("sfu", sections, InsightDatasetKind.Sections);
+			return expect(result).to.eventually.have.members(["sfu"]);
+		});
+
 		it ("should reject with dataset id with underscore (causes problems with ebnf?)", function() {
 			const result = facade.addDataset("ubc_courses", sections, InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
@@ -154,6 +159,8 @@ describe("InsightFacade", function () {
 			// Will *fail* if there is a problem reading ANY dataset.
 			const loadDatasetPromises = [
 				facade.addDataset("sections", sections, InsightDatasetKind.Sections),
+				// facade.addDataset("ubc", sections, InsightDatasetKind.Sections),
+
 			];
 
 			return Promise.all(loadDatasetPromises);
