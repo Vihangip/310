@@ -3,15 +3,15 @@
 	"input": {
 		"WHERE": {
 			"IS": {
-				"ubc_dept": ""
+				"sections_dept": ""
 			}
 		},
 		"OPTIONS": {
 			"COLUMNS": [
-				"ubc_title",
-				"ubc_avg"
+				"sections_title",
+				"sections_avg"
 			],
-			"ORDER": "ubc_avg"
+			"ORDER": "sections_avg"
 		}
 	},
 	"errorExpected": false,

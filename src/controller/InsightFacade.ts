@@ -49,6 +49,11 @@ export default class InsightFacade implements IInsightFacade {
 				uuid: section.id,
 				year: section.Year
 			};
+
+			if (section.Section === "overall") {
+				newSection.year = 1900;
+			}
+
 			sections.push(newSection);
 			// todo file persistence
 			// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
