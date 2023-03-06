@@ -1,9 +1,17 @@
+import {
+	Filter,
+	MComparisonFilter,
+	SComparisonFilter,
+	Query,
+	LogicComparisonFilter,
+	NegationFilter, EmptyFilter
+} from "./FilterFacade";
 
 export default class IsQueryValid {
 
 	private id: string;
-	private mKeyCorrectValues;
-	private sKeyCorrectValues;
+	private readonly mKeyCorrectValues;
+	private readonly sKeyCorrectValues;
 
 	constructor() {
 		console.log("Checking if query is valid");
@@ -58,7 +66,7 @@ export default class IsQueryValid {
 		}
 	}
 
-	private parseFilter(key: any, value: any) {
+	private parseFilter(key: any, value: any): Filter {
 		switch (key) {
 			case "AND":
 			case "OR":
@@ -81,11 +89,10 @@ export default class IsQueryValid {
 	}
 
 	private parseLogicComparison(key: any, value: any) {
-		this.filterListValues(value);
-		return true;
+		return new LogicComparisonFilter(key, this.filterListValues(value));
 	}
 
-	private parseMComparison(key: any, value: any) {
+	private parseMComparison(key: any, value: any): MComparisonFilter {
 		let [mKey, mVal] = this.filterKeyVal(value);
 		if (mKey === null) {
 			throw new Error("Empty m comparison");
@@ -93,11 +100,10 @@ export default class IsQueryValid {
 
 		let [idString, mField] = this.parseComparatorKey(mKey, this.mKeyCorrectValues);
 
-		if (isNaN(mVal)) {
+		if (typeof mVal !== "number") {
 			throw new Error("Bad value for m key");
 		}
-		this.setId(idString);
-		return true;
+		return new MComparisonFilter(key, idString, mField, mVal);
 	}
 
 	private parseSComparison(key: any, value: any) {
@@ -109,23 +115,26 @@ export default class IsQueryValid {
 		if (typeof inputString !== "string") {
 			throw new Error("Bad value for input string");
 		}
+		let start = "^";
+		let end = "$";
+
 		if (inputString.startsWith("*")) {
 			inputString = inputString.substring(1);
+			start = "^.*";
 		}
 		if (inputString.endsWith("*")) {
 			inputString = inputString.substring(0, inputString.length - 1);
+			end = ".*$";
 		}
 		if (inputString.includes("*")) {
 			throw new Error("Bad value for input string");
 		}
-		this.setId(idString);
-		return true;
+		return new SComparisonFilter(key, idString, sField, new RegExp(start + inputString + end));
 	}
 
 	private parseNegation(key: any, value: any) {
 		let [filterKey, filterVal] = this.filterKeyVal(value);
-		this.parseFilter(filterKey, filterVal);
-		return true;
+		return new NegationFilter(key, this.parseFilter(filterKey, filterVal));
 	}
 
 	private filterListValues(filterList: any) {
@@ -167,6 +176,7 @@ export default class IsQueryValid {
 			throw new Error("Invalid key: not a correct field");
 		}
 
+		this.setId(idString);
 		return [idString, field];
 	}
 
@@ -179,57 +189,72 @@ export default class IsQueryValid {
 			throw new Error("Options missing columns");
 		}
 		let columns = options["COLUMNS"];
-		let orderKeys = null;
+		let orderKey = null;
 		if ("ORDER" in options) {
-			orderKeys = options["ORDER"];
+			orderKey = options["ORDER"];
 		}
 		if (Object.keys(options).length > 2) {
 			throw new Error("Options has more than 2 keys");
 		}
 
-		let columnKeys = this.columnKeyVal(columns);
-		if (orderKeys !== null) {
-			if (!columnKeys.includes(orderKeys)) {
+		let [idString, columnFields] = this.keyVal(columns);
+		let orderField = null;
+		if (orderKey !== null) {
+			if (!columns.includes(orderKey)) {
 				throw new Error("Order key not in column keys");
 			}
+			let [orderIdString, orderFields] = this.keyVal([orderKey]);
+			if(orderFields) {
+				orderField = orderFields[0];
+			}
 		}
-		return true;
+		return [columnFields, orderField];
 	}
 
-	private columnKeyVal(columns: any) {
-		if (!Array.isArray(columns)) {
+	private keyVal(keys: any) {
+		if (!Array.isArray(keys)) {
 			throw new Error("Columns not an array");
 		}
 
-		if (columns.length === 0) {
+		if (keys.length === 0) {
 			throw new Error("Columns empty");
 		}
 
-		return columns.map((key) => {
+		let idString = null;
+		let fields = keys.map((key) => {
+			let field = null;
 			try {
-				this.parseComparatorKey(key, this.mKeyCorrectValues);
+				[idString, field] = this.parseComparatorKey(key, this.mKeyCorrectValues);
 			} catch (err) {
-				this.parseComparatorKey(key, this.sKeyCorrectValues);
+				[idString, field] = this.parseComparatorKey(key, this.sKeyCorrectValues);
 			}
-			return key;
+			return field;
 		});
+		return [idString, fields];
 	}
 
-	public isValid(query: any): boolean { // returns an array [if query is valid, id String]
+	public isValid(query: any): Query | null {
 		if (typeof query !== "object") {
-			return false;
+			return null;
 		}
 
 		if (!this.isQueryKeysValid(query)) {
-			return false;
+			return null;
 		}
 
 		try {
 			let [filterKey, filterValue] = this.filterKeyVal(query["WHERE"]);
-			return this.parseFilter(filterKey, filterValue) && this.parseOptions(query["OPTIONS"]);
+			let filter: Filter;
+			if(filterKey) {
+				filter = this.parseFilter(filterKey, filterValue);
+			} else {
+				filter = new EmptyFilter("");
+			}
+			let [columnFields, orderField] = this.parseOptions(query["OPTIONS"]);
+			return new Query(filter, columnFields, orderField);;
 		} catch (e) {
 			console.error(e);
-			return false;
+			return null;
 		}
 	}
 }

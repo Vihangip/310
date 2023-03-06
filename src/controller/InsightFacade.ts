@@ -4,15 +4,13 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError
+	NotFoundError, ResultTooLargeError
 } from "./IInsightFacade";
 import * as fs from "fs-extra";
 
 import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
 import JSZip from "jszip";
 import IsQueryValid from "./IsQueryValid";
-import PerformQuery from "./PerformQuery";
-import {rejects} from "assert";
 
 
 /**
@@ -23,6 +21,7 @@ import {rejects} from "assert";
 export default class InsightFacade implements IInsightFacade {
 	// stores added datasets
 	private datasets: {[id: string]: InsightDatasetExpanded};
+	private maxNumResults = 5000;
 
 	// Set up variable
 	constructor() {
@@ -189,47 +188,37 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryValidator = new IsQueryValid();
-			let queryPerformer = new PerformQuery();
-			let validity = queryValidator.isValid(query);
+			let queryObj = queryValidator.isValid(query);
 			let idString = queryValidator.getId();
 
-			if (validity) { // query is valid
+			if (queryObj) { // query is valid
 				if (idString === null) {
-					console.log("Dataset does not exist");
-					reject(new InsightError("Dataset does not exist"));
+					reject(new InsightError("Dataset does not exist: id is null"));
 				}
 
 				if (!Object.keys(this.datasets).includes(idString)) {
-					console.log("Dataset does not exist");
-					reject(new InsightError("Dataset does not exist"));
+					reject(new InsightError("Dataset does not exist: dataset has not been added"));
 				}
-
 
 				let dataset = this.datasets[idString];
-				let queryData;
-				let queryResults;
 
-				try {
-					if (dataset === undefined) { // invalid id, maybe it doesn't exist
-						console.log("Dataset does not exist");
-						return reject(new InsightError("Dataset does not exist"));
-					} else {
-						queryData = JSON.parse(JSON.stringify(dataset));
-						queryResults = queryPerformer.performQuery(query, queryData); // performing the query
-						resolve(queryResults); // successfully performed query
+				if (queryObj.isWhereEmpty()) {
+					if (dataset.sections.length > this.maxNumResults) {
+						reject(new ResultTooLargeError(
+							"Excess keys in query: where is empty and the dataset is too large"));
 					}
-				} catch (Error) { // something else wrong with performing the query
-					console.log("Unable to obtain query results");
-					return reject(new InsightError("Unable to obtain query results"));
 				}
 
+				let results = queryObj.run(dataset);
+				if (results.length > this.maxNumResults) {
+					reject(new ResultTooLargeError("Excess keys in query: too many things are being searched for"));
+				}
+				resolve(results);
+
 			} else { // query is invalid
-				console.log("Invalid query");
-				return reject(new InsightError("Invalid query"));
+				reject(new InsightError("Invalid query"));
 			}
-
 		});
-
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
