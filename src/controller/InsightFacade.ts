@@ -10,7 +10,7 @@ import * as fs from "fs-extra";
 
 import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
 import JSZip from "jszip";
-import IsQueryValid from "./IsQueryValid";
+import QueryBuilder from "./QueryBuilder";
 
 
 /**
@@ -187,9 +187,9 @@ export default class InsightFacade implements IInsightFacade {
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		return new Promise<InsightResult[]>( (resolve, reject) => {
-			let queryValidator = new IsQueryValid();
-			let queryObj = queryValidator.isValid(query);
-			let idString = queryValidator.getId();
+			let queryBuilder = new QueryBuilder();
+			let queryObj = queryBuilder.isValid(query);
+			let idString = queryBuilder.getId();
 
 			if (queryObj) { // query is valid
 				if (idString === null) {

@@ -7,7 +7,7 @@ import {
 	NegationFilter, EmptyFilter
 } from "./FilterFacade";
 
-export default class IsQueryValid {
+export default class QueryBuilder {
 
 	private id: string;
 	private readonly mKeyCorrectValues;
