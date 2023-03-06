@@ -111,20 +111,27 @@ export default class InsightFacade implements IInsightFacade {
 							.then((fileString) => {
 								let sections = this.fileStringToSectionArray(fileString);
 								resolve(sections);
+							})
+							.catch((err) => {
+								reject(err);
 							});
 					}));
 			}
 
 			return new Promise<void>((resolve, reject) => {
-				Promise.all(promises).then((sectionArrays) => {
-					let newDataset = this.sectionArraysToDataset(sectionArrays, id, kind);
-					if (id in this.datasets) {
-						reject(new InsightError("Invalid id: id already exists"));
-					} else {
-						this.datasets[id] = newDataset;
-						resolve();
-					}
-				});
+				Promise.all(promises)
+					.then((sectionArrays) => {
+						let newDataset = this.sectionArraysToDataset(sectionArrays, id, kind);
+						if (id in this.datasets) {
+							reject(new InsightError("Invalid id: id already exists"));
+						} else {
+							this.datasets[id] = newDataset;
+							resolve();
+						}
+					})
+					.catch((err) => {
+						reject(err);
+					});
 			});
 		}
 	}
@@ -143,6 +150,9 @@ export default class InsightFacade implements IInsightFacade {
 						.catch((err) => {
 							reject(err);
 						});
+				})
+				.catch((err) => {
+					reject(err);
 				});
 		});
 	}
@@ -172,6 +182,9 @@ export default class InsightFacade implements IInsightFacade {
 						.catch((err) => {
 							reject(err);
 						});
+				})
+				.catch((err) => {
+					reject(err);
 				});
 		});
 	}
