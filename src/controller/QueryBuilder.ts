@@ -16,8 +16,9 @@ export default class QueryBuilder {
 	constructor() {
 		console.log("Checking if query is valid");
 		this.id = "";
-		this.mKeyCorrectValues = ["avg", "pass", "fail", "audit", "year"];
-		this.sKeyCorrectValues = ["dept", "id", "instructor", "title", "uuid"];
+		this.mKeyCorrectValues = ["avg", "pass", "fail", "audit", "year", "lat" , "lon" , "seats"];
+		this.sKeyCorrectValues = ["dept", "id", "instructor", "title", "uuid", "fullname" , "shortname" , "number" ,
+			"name" , "address" , "type" , "furniture" , "href"];
 	}
 
 	public getId() {
@@ -251,7 +252,7 @@ export default class QueryBuilder {
 				filter = new EmptyFilter("");
 			}
 			let [columnFields, orderField] = this.parseOptions(query["OPTIONS"]);
-			return new Query(filter, columnFields, orderField);;
+			return new Query(filter, columnFields, orderField);
 		} catch (e) {
 			console.error(e);
 			return null;
