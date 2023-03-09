@@ -206,10 +206,11 @@ export default class InsightFacade implements IInsightFacade {
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryBuilder = new QueryBuilder();
-			let queryObj = queryBuilder.isValid(query);
+			let queryObj = queryBuilder.build(query);
 			let idString = queryBuilder.getId();
 
-			if (queryObj) { // query is valid
+			if (queryObj) { // if the query is valid, it will not be null
+				// make sure that the dataset is good
 				if (idString === null) {
 					reject(new InsightError("Dataset does not exist: id is null"));
 				}
@@ -220,6 +221,7 @@ export default class InsightFacade implements IInsightFacade {
 
 				let dataset = this.datasets[idString];
 
+				// verify before you start the querying process that an empty where won't cause issues
 				if (queryObj.isWhereEmpty()) {
 					if (dataset.sections.length > this.maxNumResults) {
 						reject(new ResultTooLargeError(
@@ -227,10 +229,15 @@ export default class InsightFacade implements IInsightFacade {
 					}
 				}
 
+				// run recursively through the query's filters
 				let results = queryObj.run(dataset);
+
+				// make sure that the result isn't too long
 				if (results.length > this.maxNumResults) {
 					reject(new ResultTooLargeError("Excess keys in query: too many things are being searched for"));
 				}
+
+				// all good!
 				resolve(results);
 
 			} else { // query is invalid
