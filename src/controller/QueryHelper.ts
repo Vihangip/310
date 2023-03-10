@@ -1,5 +1,5 @@
 // collection of small utility methods for QueryBuilder and FilterFacade
-import {SectionFacade} from "./SectionFacade";
+import {SectionFacade} from "./DatasetFacade";
 
 export default abstract class QueryHelper {
 	// picks particular member variable from a section given a string of that member variable
