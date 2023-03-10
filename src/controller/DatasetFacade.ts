@@ -14,9 +14,25 @@ export interface SectionFacade {
 	audit: number;
 }
 
+// interface that represents a single room
+export interface RoomFacade {
+	fullname: string;
+	shortname: string;
+	number: string;
+	name: string;
+	address: string;
+	lat: number;
+	lon: number;
+	seats: number;
+	type: string;
+	furniture: string;
+	href: string;
+}
+
 // interface that represents a dataset. contains base level info as well as a list of sections
-// with detailed info about each. an InsightDatasetExpanded[] member variable should exist
+// or rooms with detailed info about each. an InsightDatasetExpanded[] member variable should exist
 // in InsightFacade
 export interface InsightDatasetExpanded extends InsightDataset {
 	sections: SectionFacade[];
+	rooms: RoomFacade[];
 }

@@ -1,5 +1,5 @@
 import {InsightResult} from "./IInsightFacade";
-import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
+import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
 import QueryHelper from "./QueryHelper";
 
 export abstract class Filter {

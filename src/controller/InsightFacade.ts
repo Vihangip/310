@@ -8,7 +8,7 @@ import {
 } from "./IInsightFacade";
 import * as fs from "fs-extra";
 
-import {InsightDatasetExpanded, SectionFacade} from "./SectionFacade";
+import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
 import JSZip from "jszip";
 import QueryBuilder from "./QueryBuilder";
 
@@ -71,7 +71,8 @@ export default class InsightFacade implements IInsightFacade {
 			id: id,
 			kind: kind,
 			numRows: sections.length,
-			sections: sections
+			sections: sections,
+			rooms: []
 		};
 
 		return newDataset;
