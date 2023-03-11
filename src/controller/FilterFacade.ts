@@ -207,11 +207,13 @@ export class NegationFilter extends Filter {
 export class Query {
 	private filter: Filter;
 	private columns: string[]; // only the fields, because you can only have one dataset
-	private order: string | null; // only a field as above, null if order doesn't matter
-	constructor(filter: Filter, columns: string[], order: string | null) {
+	private anyKeyList: any;
+	private direction: string | null; // only a field as above, null if order doesn't matter
+	constructor(filter: Filter, columns: string[], anyKeyList: any[] | null, direction: string | null) {
 		this.filter = filter;
 		this.columns = columns;
-		this.order = order;
+		this.anyKeyList = anyKeyList;
+		this.direction = direction;
 	}
 
 	// returns true if query's WHERE doesn't have a filter in it
@@ -243,19 +245,19 @@ export class Query {
 			return sectionInfo;
 		});
 		// now sort the list of objects if needed
-		if(this.order) {
-			results.sort((a, b) => {
-				if(a && b) {
-					if (a[dataset.id + "_" + this.order] < b[dataset.id + "_" + this.order]) {
-						return -1;
-					} else if (a[dataset.id + "_" + this.order] > b[dataset.id + "_" + this.order]) {
-						return 1;
-					}
-					return 0;
-				}
-				return 0;
-			});
-		}
+		// if(this.order) {
+		// 	results.sort((a, b) => {
+		// 		if(a && b) {
+		// 			if (a[dataset.id + "_" + this.order] < b[dataset.id + "_" + this.order]) {
+		// 				return -1;
+		// 			} else if (a[dataset.id + "_" + this.order] > b[dataset.id + "_" + this.order]) {
+		// 				return 1;
+		// 			}
+		// 			return 0;
+		// 		}
+		// 		return 0;
+		// 	});
+		// }
 		return results;
 	}
 }

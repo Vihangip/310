@@ -6,7 +6,10 @@ import {
 	LogicComparisonFilter,
 	NegationFilter, EmptyFilter
 } from "./FilterFacade";
+
+// eslint-disable-next-line import/namespace,import/default
 import QueryHelper from "./QueryHelper";
+
 
 export default class QueryBuilder {
 	private id: string;
@@ -66,12 +69,13 @@ export default class QueryBuilder {
 	// m comparisons have a key and object
 	private parseMComparison(key: any, value: any): MComparisonFilter {
 		// the only valid object here is one with a single key-value pair
-		let [mKey, mVal] = QueryHelper.validateKeyValPair(value);
+		let [mKey, mVal] = QueryHelper.returnKeyValPair(value);
 		if (mKey === null) {
 			throw new Error("Empty m comparison");
 		}
 		// validates and splits up the two portions of the object's key, e.g. "sections_avg" -> "sections" and "avg"
-		let [idString, mField] = this.splitComparatorKey(mKey, this.mKeyCorrectValues);
+		let [idString, mField] = QueryHelper.isKeyValid(mKey, this.mKeyCorrectValues);
+		this.setId(idString);
 		// the object's value MUST be a number
 		if (typeof mVal !== "number") {
 			throw new Error("Bad value for m key");
@@ -82,12 +86,13 @@ export default class QueryBuilder {
 	// s comparisons have a key and object
 	private parseSComparison(key: any, value: any) {
 		// the only valid object here is one with a single key-value pair
-		let [sKey, inputString] = QueryHelper.validateKeyValPair(value);
+		let [sKey, inputString] = QueryHelper.returnKeyValPair(value);
 		if (sKey === null) {
 			throw new Error("Empty s comparison");
 		}
 		// validates and splits up the two portions of the object's key, e.g. "sections_dept" -> "sections" and "dept"
-		let [idString, sField] = this.splitComparatorKey(sKey, this.sKeyCorrectValues);
+		let [idString, sField] = QueryHelper.isKeyValid(sKey, this.sKeyCorrectValues);
+		this.setId(idString);
 		// the object's value MUST be a string
 		if (typeof inputString !== "string") {
 			throw new Error("Bad value for input string");
@@ -113,7 +118,7 @@ export default class QueryBuilder {
 	// through that filter and any sub-filters before making this Filter object
 	private parseNegation(key: any, value: any) {
 		// the only valid filter here is one with a single key-value pair
-		let [filterKey, filterVal] = QueryHelper.validateKeyValPair(value);
+		let [filterKey, filterVal] = QueryHelper.returnKeyValPair(value);
 		return new NegationFilter(key, this.parseFilter(filterKey, filterVal));
 	}
 
@@ -126,39 +131,14 @@ export default class QueryBuilder {
 			throw new Error("Filter list is empty");
 		}
 		return filterList.map((filter) => {
-			let [filterKey, filterValue] = QueryHelper.validateKeyValPair(filter);
+			let [filterKey, filterValue] = QueryHelper.returnKeyValPair(filter);
 			return this.parseFilter(filterKey, filterValue);
 		});
 	}
 
-	// validates an m or s comparator key against a given list of correct fields, then splits it up
-	private splitComparatorKey(key: any, correctFields: any) {
-		if(!key.includes("_")) {
-			throw new Error("Invalid key: does not include underscore");
-		}
-		let parts = key.split("_");
-		if(parts.length !== 2) {
-			throw new Error("Invalid key: more or less than 2 parts");
-		}
-		let idString = parts[0].trim();
-		if (idString.length === 0) {
-			throw new Error("Invalid key: empty key");
-		}
-		// shouldn't get here but just in case
-		if (idString.includes("_")) {
-			throw new Error("Invalid key: underscore weirdness");
-		}
-		let field = parts[1].trim();
-		if (!correctFields.includes(field)) {
-			console.log(field);
-			throw new Error("Invalid key: not a correct field");
-		}
-		this.setId(idString);
-		return [idString, field];
-	}
 
 	// determine whether OPTIONS is valid and deal with ORDER if necessary
-	private parseOptions(options: any) {
+	private parseOptions(options: any, applyKeys: any[]) {
 		// can contain ORDER, HAS to contain COLUMNS
 		if (typeof options !== "object") {
 			throw new Error("Options not an object");
@@ -166,33 +146,77 @@ export default class QueryBuilder {
 		if (!("COLUMNS" in options)) {
 			throw new Error("Options missing columns");
 		}
+
 		let columns = options["COLUMNS"];
 		let orderKey = null;
+		let anyKeys = null;
+		let orderDirection = null;
 		if ("ORDER" in options) {
 			orderKey = options["ORDER"];
 		}
 		if (Object.keys(options).length > 2) {
 			throw new Error("Options has more than 2 keys");
 		}
-		// get overall id (single string) and a list of the mfields/sfields of each column (list of strings)
-		// (e.g. "sections_avg", "sections_id" -> ["sections", ["avg", "id"]])
-		let [idString, columnFields] = this.parseColumnFields(columns);
-		let orderField = null;
+		let [idString, columnFields] = this.parseColumnFields(columns, applyKeys);
 		if (orderKey !== null) {
-			if (!columns.includes(orderKey)) {
-				throw new Error("Order key not in column keys");
-			}
-			// grab mfield/sfield of order as well, if it exists
-			let [orderIdString, orderFields] = this.parseColumnFields([orderKey]);
-			if(orderFields) {
-				orderField = orderFields[0];
-			}
+			let [anyKeyList, direction] = this.parseSort(orderKey, columns);
+			anyKeys = anyKeyList;
+			orderDirection = direction;
 		}
-		return [columnFields, orderField];
+
+		console.log("parsed options");
+		return [idString, columnFields, anyKeys, orderDirection];
 	}
 
-	// get overall id (single string) and a list of the mfields/sfields of each key in a key list (list of strings)
-	private parseColumnFields(keys: any) {
+	// returns [anyKeyList, direction]
+	private parseSort(sort: any, columns: any[]) {
+		let anyKeyList: any = [];
+		let direction: any = null;
+		let correctDirections = ["UP", "DOWN"];
+
+		// just one Anykey
+		if(typeof sort !== "object") {
+			if(sort === null) {
+				throw new Error("Order key is empty");
+			} else if (!columns.includes(sort)) {
+				throw new Error("Order key is not in columns");
+			}
+			anyKeyList.push(sort);
+		}
+
+		// contains direction and anykey list
+		if(typeof sort === "object") {
+			if (Object.keys(sort).length > 2) {
+				throw new Error("Order has more than 2 keys");
+			}
+
+			if (!("dir" in sort)) {
+				throw new Error("dir missing in order");
+			}
+
+			if (!("keys" in sort)) {
+				throw new Error("keys missing in order");
+			}
+
+			direction = sort["dir"];
+			let keys: any = sort["keys"];
+
+			if(!correctDirections.includes(direction)) {
+				throw new Error("Wrong direction");
+			}
+
+			for(const key of keys) {
+				if(!columns.includes(key)) {
+					throw new Error("Order key is not in columns");
+				}
+				anyKeyList.push(key);
+			}
+		}
+		return [anyKeyList, direction];
+	}
+
+	// get overall id (single string) and a list of anyKey
+	private parseColumnFields(keys: any, applyKeys: any[]) {
 		if (!Array.isArray(keys)) {
 			throw new Error("Columns not an array");
 		}
@@ -203,12 +227,23 @@ export default class QueryBuilder {
 		let fields = keys.map((key) => {
 			let field = null;
 			try {
-				[idString, field] = this.splitComparatorKey(key, this.mKeyCorrectValues);
+				[idString, field] = QueryHelper.isKeyValid(key, this.mKeyCorrectValues);
+				this.setId(idString);
 			} catch (err) {
-				[idString, field] = this.splitComparatorKey(key, this.sKeyCorrectValues);
+				try {
+					[idString, field] = QueryHelper.isKeyValid(key, this.sKeyCorrectValues);
+					this.setId(idString);
+				} catch (err2) {
+					if (applyKeys.includes(key)) {
+						field = key;
+					} else {
+						throw new Error("Invalid key: not an Apply Key");
+					}
+				}
 			}
 			return field;
 		});
+
 		return [idString, fields];
 	}
 
@@ -217,7 +252,7 @@ export default class QueryBuilder {
 		if (typeof query !== "object") {
 			return null;
 		}
-		// WHERE and OPTIONS should be the only top-level keys in the query
+		// WHERE, OPTIONS and TRANSFORMATIONS should be the only top-level keys in the query
 		if (!QueryHelper.isQueryKeysValid(query)) {
 			return null;
 		}
@@ -232,7 +267,7 @@ export default class QueryBuilder {
 			[s comparison, object], [negation, single filter].
 			the below function validates the filter object and splits it up
 			*/
-			let [filterKey, filterValue] = QueryHelper.validateKeyValPair(query["WHERE"]);
+			let [filterKey, filterValue] = QueryHelper.returnKeyValPair(query["WHERE"]);
 			// this info is then turned into a custom Filter object
 			let filter: Filter;
 			if(filterKey) {
@@ -240,15 +275,24 @@ export default class QueryBuilder {
 			} else {
 				filter = new EmptyFilter("");
 			}
-			/*
-			OPTIONS has a similar object, which contains COLUMNS and may contain ORDER.
-			in this step we validate and split it up, similar to above
-			 */
-			let [columnFields, orderField] = this.parseOptions(query["OPTIONS"]);
-			return new Query(filter, columnFields, orderField);
+
+			let applyKeysArray = [];
+			// transformations
+			if(query["TRANSFORMATIONS"]) {
+				let[idString, groupKeys, applyKeys,
+					applyTokens, keyFields] = QueryHelper.parseTransformations(query["TRANSFORMATIONS"]);
+				applyKeysArray = applyKeys;
+			}
+			// options
+			let [idString, columnFields, anyKeyList, direction] = this.parseOptions(query["OPTIONS"], applyKeysArray);
+			console.log("Done validating");
+
+			// TODO need to add more fields to query object
+			return new Query(filter, columnFields, anyKeyList, direction);
 		} catch (e) {
 			console.error(e);
 			return null;
 		}
 	}
+
 }
