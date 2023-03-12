@@ -7,7 +7,6 @@ import {
 	NegationFilter, EmptyFilter
 } from "./FilterFacade";
 
-// eslint-disable-next-line import/namespace,import/default
 import QueryHelper from "./QueryHelper";
 
 
