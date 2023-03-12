@@ -88,6 +88,7 @@ export default abstract class RoomHelper {
 		return tableNodes;
 	}
 
+	// yes... this looks AWFUL lol. working on making it more readable
 	public static findValidTable(tables: Element[]) {
 		for (let table of tables) {
 			if (table.childNodes) {
@@ -199,11 +200,10 @@ export default abstract class RoomHelper {
 		if (fileString.trim().length === 0) {
 			return [];
 		}
-
 		let tables = RoomHelper.fileStringToTableArray(fileString);
 		let validTable = RoomHelper.findValidTable(tables);
 		if (!validTable) {
-			throw new InsightError("Invalid content: no valid table in building file");
+			return [];
 		}
 		let roomNumbers = RoomHelper.getCellLinkTitles(validTable, "views-field-field-room-number");
 		let roomCapacities = RoomHelper.getRoomCapacities(validTable);
@@ -229,7 +229,18 @@ export default abstract class RoomHelper {
 			};
 			rooms.push(newRoom);
 		}
-		console.log(rooms);
 		return rooms;
+	}
+
+	public static roomArraysToDataset(roomArrays: RoomFacade[][], id: string, kind: InsightDatasetKind) {
+		let rooms = roomArrays.flat();
+		let newDataset: InsightDatasetExpanded = {
+			id: id,
+			kind: kind,
+			numRows: rooms.length,
+			sections: [],
+			rooms: rooms
+		};
+		return newDataset;
 	}
 }

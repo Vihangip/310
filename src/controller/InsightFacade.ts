@@ -106,12 +106,10 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(err);
 			}
 
-
-			/*
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises)
-					.then((sectionArrays) => {
-						let newDataset = SectionHelper.sectionArraysToDataset(sectionArrays, id, kind);
+					.then((roomArrays) => {
+						let newDataset = RoomHelper.roomArraysToDataset(roomArrays, id, kind);
 						if (id in this.datasets) {
 							reject(new InsightError("Invalid id: id already exists"));
 						} else {
@@ -123,7 +121,6 @@ export default class InsightFacade implements IInsightFacade {
 						reject(err);
 					});
 			});
-			 */
 		}
 	}
 

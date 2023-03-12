@@ -168,7 +168,7 @@ describe("InsightFacade", function () {
 			clearDisk();
 		});
 
-		it ("should successfully add a dataset", function() {
+		it ("should successfully add a dataset",  function() {
 			const result = facade.addDataset("ubc", rooms, InsightDatasetKind.Rooms);
 			return expect(result).to.eventually.have.members(["ubc"]);
 		});
