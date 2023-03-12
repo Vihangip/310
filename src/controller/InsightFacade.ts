@@ -98,22 +98,14 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(new InsightError("Invalid content: no index.htm file"));
 			}
 			let index = await indexFile.async("string");
-			let indexTables = InsightHelper.fileStringToTableArray(index);
-			let indexTableCodes = InsightHelper.tableArrayToCodes(indexTables);
-
 			let filteredFiles: JSZipObject[] = [];
-
-			for (let code of indexTableCodes) {
-				let filePath = "campus/discover/buildings-and-classrooms/" + code + ".htm";
-				if (z.file(filePath)) {
-					filteredFiles.push(z.file(filePath) as JSZipObject);
-				}
+			try {
+				filteredFiles = InsightHelper.getFilteredRoomFiles(index, z);
+			} catch (err) {
+				return Promise.reject(err);
 			}
 
-			if (filteredFiles.length === 0) {
-				return Promise.reject(new InsightError("Invalid content: not within a campus/discover folder"));
-			}
-
+			/*
 			let promises: Array<Promise<SectionFacade[]>> = [];
 
 			for (let file of filteredFiles) {
@@ -130,6 +122,8 @@ export default class InsightFacade implements IInsightFacade {
 							});
 					}));
 			}
+			*/
+
 
 			/*
 			return new Promise<void>((resolve, reject) => {
