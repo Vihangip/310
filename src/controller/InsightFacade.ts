@@ -9,11 +9,12 @@ import {
 } from "./IInsightFacade";
 import * as fs from "fs-extra";
 
-import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
+import {InsightDatasetExpanded, RoomFacade, SectionFacade} from "./DatasetFacade";
 import JSZip, {JSZipObject} from "jszip";
 import QueryBuilder from "./QueryBuilder";
-import InsightHelper from "./InsightHelper";
+import SectionHelper from "./SectionHelper";
 import {parse} from "parse5";
+import RoomHelper from "./RoomHelper";
 
 
 /**
@@ -64,7 +65,7 @@ export default class InsightFacade implements IInsightFacade {
 					new Promise((resolve, reject) => {
 						file.async("string")
 							.then((fileString) => {
-								let sections = InsightHelper.fileStringToSectionArray(fileString);
+								let sections = SectionHelper.fileStringToSectionArray(fileString);
 								resolve(sections);
 							})
 							.catch((err) => {
@@ -76,7 +77,7 @@ export default class InsightFacade implements IInsightFacade {
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises)
 					.then((sectionArrays) => {
-						let newDataset = InsightHelper.sectionArraysToDataset(sectionArrays, id, kind);
+						let newDataset = SectionHelper.sectionArraysToDataset(sectionArrays, id, kind);
 						if (id in this.datasets) {
 							reject(new InsightError("Invalid id: id already exists"));
 						} else {
@@ -98,38 +99,19 @@ export default class InsightFacade implements IInsightFacade {
 				return Promise.reject(new InsightError("Invalid content: no index.htm file"));
 			}
 			let index = await indexFile.async("string");
-			let filteredFiles: JSZipObject[] = [];
+			let promises: Array<Promise<RoomFacade[]>> = [];
 			try {
-				filteredFiles = InsightHelper.getFilteredRoomFiles(index, z);
+				promises = RoomHelper.getRoomPromises(index, z);
 			} catch (err) {
 				return Promise.reject(err);
 			}
-
-			/*
-			let promises: Array<Promise<SectionFacade[]>> = [];
-
-			for (let file of filteredFiles) {
-				promises.push(
-					new Promise((resolve, reject) => {
-						file.async("string")
-							.then((fileString) => {
-								let rooms = InsightHelper.fileStringToRoomArray(fileString);
-								// resolve(rooms);
-								resolve([]);
-							})
-							.catch((err) => {
-								reject(err);
-							});
-					}));
-			}
-			*/
 
 
 			/*
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises)
 					.then((sectionArrays) => {
-						let newDataset = InsightHelper.sectionArraysToDataset(sectionArrays, id, kind);
+						let newDataset = SectionHelper.sectionArraysToDataset(sectionArrays, id, kind);
 						if (id in this.datasets) {
 							reject(new InsightError("Invalid id: id already exists"));
 						} else {
