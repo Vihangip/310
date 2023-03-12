@@ -22,18 +22,20 @@ describe("InsightFacade", function () {
 
 	// Declare datasets used in tests. You should add more datasets like this!
 	let sections: string;
+	let rooms: string;
 	let badCoursesFolderSections: string; // JSON files are not in a courses folder
 
 	before(function () {
 		// This block runs once and loads the datasets.
 		sections = getContentFromArchives("pair.zip");
+		rooms = getContentFromArchives("campus.zip");
 		badCoursesFolderSections = getContentFromArchives("badCoursesFolderPair.zip");
 
 		// Just in case there is anything hanging around from a previous run of the test suite
 		clearDisk();
 	});
 
-	describe("Add/Remove/List Dataset", function () {
+	describe("Add/Remove/List Dataset (Sections)", function () {
 		before(function () {
 			console.info(`Before: ${this.test?.parent?.title}`);
 		});
@@ -140,6 +142,35 @@ describe("InsightFacade", function () {
 		it ("should successfully report no datasets added yet", function() {
 			const result = facade.listDatasets();
 			return expect(result).to.eventually.have.length(0);
+		});
+	});
+
+	describe("Add/Remove/List Dataset (Rooms)", function () {
+		before(function () {
+			console.info(`Before: ${this.test?.parent?.title}`);
+		});
+
+		beforeEach(function () {
+			// This section resets the insightFacade instance
+			// This runs before each test
+			console.info(`BeforeTest: ${this.currentTest?.title}`);
+			facade = new InsightFacade();
+		});
+
+		after(function () {
+			console.info(`After: ${this.test?.parent?.title}`);
+		});
+
+		afterEach(function () {
+			// This section resets the data directory (removing any cached data)
+			// This runs after each test, which should make each test independent of the previous one
+			console.info(`AfterTest: ${this.currentTest?.title}`);
+			clearDisk();
+		});
+
+		it ("should successfully add a dataset", function() {
+			const result = facade.addDataset("ubc", rooms, InsightDatasetKind.Rooms);
+			return expect(result).to.eventually.have.members(["ubc"]);
 		});
 	});
 
