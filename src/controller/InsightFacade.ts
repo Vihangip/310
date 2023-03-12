@@ -4,13 +4,17 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError, ResultTooLargeError
+	NotFoundError,
+	ResultTooLargeError
 } from "./IInsightFacade";
 import * as fs from "fs-extra";
 
-import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
-import JSZip from "jszip";
+import {InsightDatasetExpanded, RoomFacade, SectionFacade} from "./DatasetFacade";
+import JSZip, {JSZipObject} from "jszip";
 import QueryBuilder from "./QueryBuilder";
+import SectionHelper from "./SectionHelper";
+import {parse} from "parse5";
+import RoomHelper from "./RoomHelper";
 
 
 /**
@@ -27,55 +31,6 @@ export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		this.datasets = {};
 		console.log("InsightFacadeImpl::init()");
-	}
-
-	private fileStringToSectionArray(fileString: string) {
-		if (fileString.trim().length === 0) {
-			return [];
-		}
-		let sections = [];
-		let jsonified = JSON.parse(fileString);
-		for (let section of jsonified.result) {
-			// todo check if any of these are undefined
-			let newSection: SectionFacade = {
-				audit: section.Audit,
-				avg: section.Avg,
-				dept: section.Subject,
-				fail: section.Fail,
-				id: section.Course,
-				instructor: section.Professor,
-				pass: section.Pass,
-				title: section.Title,
-				uuid: section.id,
-				year: section.Year
-			};
-
-			if (section.Section === "overall") {
-				newSection.year = 1900;
-			}
-
-			sections.push(newSection);
-			// todo file persistence
-			// fs.outputJson("/data/" + id + "/" + section.id + ".json", newSection)
-			//	.catch((err) => {
-			//		console.error(err);
-			//	 });
-		}
-		return sections;
-	}
-
-	private sectionArraysToDataset(sectionArrays: SectionFacade[][], id: string, kind: InsightDatasetKind) {
-		let sections = sectionArrays.flat();
-
-		let newDataset: InsightDatasetExpanded = {
-			id: id,
-			kind: kind,
-			numRows: sections.length,
-			sections: sections,
-			rooms: []
-		};
-
-		return newDataset;
 	}
 
 	/*
@@ -110,7 +65,7 @@ export default class InsightFacade implements IInsightFacade {
 					new Promise((resolve, reject) => {
 						file.async("string")
 							.then((fileString) => {
-								let sections = this.fileStringToSectionArray(fileString);
+								let sections = SectionHelper.fileStringToSectionArray(fileString);
 								resolve(sections);
 							})
 							.catch((err) => {
@@ -122,7 +77,39 @@ export default class InsightFacade implements IInsightFacade {
 			return new Promise<void>((resolve, reject) => {
 				Promise.all(promises)
 					.then((sectionArrays) => {
-						let newDataset = this.sectionArraysToDataset(sectionArrays, id, kind);
+						let newDataset = SectionHelper.sectionArraysToDataset(sectionArrays, id, kind);
+						if (id in this.datasets) {
+							reject(new InsightError("Invalid id: id already exists"));
+						} else {
+							this.datasets[id] = newDataset;
+							resolve();
+						}
+					})
+					.catch((err) => {
+						reject(err);
+					});
+			});
+		}
+	}
+
+	private async handleHTM(id: string, kind: InsightDatasetKind, z: JSZip) {
+		if (z !== null) {
+			let indexFile = z.file("index.htm");
+			if (!indexFile) {
+				return Promise.reject(new InsightError("Invalid content: no index.htm file"));
+			}
+			let index = await indexFile.async("string");
+			let promises: Array<Promise<RoomFacade[]>> = [];
+			try {
+				promises = RoomHelper.getRoomPromises(index, z);
+			} catch (err) {
+				return Promise.reject(err);
+			}
+
+			return new Promise<void>((resolve, reject) => {
+				Promise.all(promises)
+					.then((roomArrays) => {
+						let newDataset = RoomHelper.roomArraysToDataset(roomArrays, id, kind);
 						if (id in this.datasets) {
 							reject(new InsightError("Invalid id: id already exists"));
 						} else {
@@ -144,13 +131,23 @@ export default class InsightFacade implements IInsightFacade {
 		return new Promise<void>((resolve, reject) => {
 			zip.loadAsync(content, {base64: true})
 				.then((z) => {
-					this.handleJSON(id, kind, z)
-						.then(() => {
-							resolve();
-						})
-						.catch((err) => {
-							reject(err);
-						});
+					if (kind === InsightDatasetKind.Sections) {
+						this.handleJSON(id, kind, z)
+							.then(() => {
+								resolve();
+							})
+							.catch((err) => {
+								reject(err);
+							});
+					} else {
+						this.handleHTM(id, kind, z)
+							.then(() => {
+								resolve();
+							})
+							.catch((err) => {
+								reject(err);
+							});
+					}
 				})
 				.catch((err) => {
 					reject(err);

@@ -29,6 +29,15 @@ export interface RoomFacade {
 	href: string;
 }
 
+// interface that represents a single building
+export interface BuildingFacade {
+	fullname: string;
+	shortname: string;
+	address: string;
+	lat: number;
+	lon: number;
+}
+
 // interface that represents a dataset. contains base level info as well as a list of sections
 // or rooms with detailed info about each. an InsightDatasetExpanded[] member variable should exist
 // in InsightFacade
