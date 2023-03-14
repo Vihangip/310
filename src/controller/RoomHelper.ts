@@ -3,8 +3,7 @@ import {InsightDatasetKind, InsightError} from "./IInsightFacade";
 import {parse} from "parse5";
 import {Node, Element} from "parse5/dist/tree-adapters/default";
 import JSZip, {JSZipObject} from "jszip";
-import InsightFacade from "./InsightFacade";
-import SectionHelper from "./SectionHelper";
+import GeolocationHelper from "./GeolocationHelper";
 
 export default abstract class RoomHelper {
 	private static readonly validIndexClasses = ["views-field-title", "views-field-field-building-code",
@@ -210,25 +209,35 @@ export default abstract class RoomHelper {
 		let roomFurnitures = RoomHelper.getCellStrings(validTable, "views-field-field-room-furniture");
 		let roomTypes = RoomHelper.getCellStrings(validTable, "views-field-field-room-type");
 		let roomHrefs = RoomHelper.getRoomHrefs(validTable);
-
 		let rooms: RoomFacade[] = [];
-		// todo check if lengths are not good
-		for (let i = 0; i < roomNumbers.length; i++) {
-			let newRoom: RoomFacade = {
-				address: building.address,
-				fullname: building.fullname,
-				furniture: roomFurnitures[i],
-				href: roomHrefs[i],
-				lat: 0,
-				lon: 0,
-				name: building.shortname + "_" + roomNumbers[i],
-				number: roomNumbers[i],
-				seats: roomCapacities[i],
-				shortname: building.shortname,
-				type: roomTypes[i]
-			};
-			rooms.push(newRoom);
-		}
+
+		// if lat/lon are bad then don't add ANY of this building's rooms to the overall dataset
+		GeolocationHelper.getGeolocationObj(building.address)
+			.then((res) => {
+				if (res.lat) {
+					// todo check if lengths are not good
+					for (let i = 0; i < roomNumbers.length; i++) {
+						let newRoom: RoomFacade = {
+							address: building.address,
+							fullname: building.fullname,
+							furniture: roomFurnitures[i],
+							href: roomHrefs[i],
+							lat: res.lat,
+							lon: res.lon,
+							name: building.shortname + "_" + roomNumbers[i],
+							number: roomNumbers[i],
+							seats: roomCapacities[i],
+							shortname: building.shortname,
+							type: roomTypes[i]
+						};
+						rooms.push(newRoom);
+					}
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+
 		return rooms;
 	}
 
