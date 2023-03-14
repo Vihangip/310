@@ -1,6 +1,7 @@
 import {InsightResult} from "./IInsightFacade";
 import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
 import QueryHelper from "./QueryHelper";
+import FacadeHelper from "./FacadeHelper";
 
 export abstract class Filter {
 	protected kind: string; // GT, LT, EQ, IS...
@@ -204,16 +205,24 @@ export class NegationFilter extends Filter {
 }
 
 // top level query object (can only have one filter in it)
-export class Query {
+export default class Query {
 	private filter: Filter;
 	private columns: string[]; // only the fields, because you can only have one dataset
 	private anyKeyList: any;
+	private groupKeys: any;
+	private applyTokens: any;
+	private keyFields: any;
 	private direction: string | null; // only a field as above, null if order doesn't matter
-	constructor(filter: Filter, columns: string[], anyKeyList: any[] | null, direction: string | null) {
+	constructor(filter: Filter, columns: string[], anyKeyList: any[] | null, direction: string | null,
+		groupKeys: any[] | null, applyTokens: any[] | null, keyFields: any[] | null ) {
 		this.filter = filter;
 		this.columns = columns;
 		this.anyKeyList = anyKeyList;
 		this.direction = direction;
+
+		this.groupKeys = groupKeys;
+		this.applyTokens = applyTokens;
+		this.keyFields = keyFields;
 	}
 
 	// returns true if query's WHERE doesn't have a filter in it
@@ -223,6 +232,7 @@ export class Query {
 
 	// given a dataset, recurses through the query's filter and any sub-filters to find the entries that satisfy it
 	public run(dataset: InsightDatasetExpanded): InsightResult[] {
+		let outputResults = [];
 		/*
 		recursive step, runs all sub-filters first to get a list of indices (numbers)
 		in the dataset's list of sections that work
@@ -244,20 +254,13 @@ export class Query {
 			}
 			return sectionInfo;
 		});
-		// now sort the list of objects if needed
-		// if(this.order) {
-		// 	results.sort((a, b) => {
-		// 		if(a && b) {
-		// 			if (a[dataset.id + "_" + this.order] < b[dataset.id + "_" + this.order]) {
-		// 				return -1;
-		// 			} else if (a[dataset.id + "_" + this.order] > b[dataset.id + "_" + this.order]) {
-		// 				return 1;
-		// 			}
-		// 			return 0;
-		// 		}
-		// 		return 0;
-		// 	});
-		// }
-		return results;
+
+		if (this.anyKeyList !== null) {
+			outputResults = FacadeHelper.sortOptions(this.columns, this.direction, this.anyKeyList, results);
+		} else {
+			outputResults = results;
+		}
+
+		return outputResults;
 	}
 }

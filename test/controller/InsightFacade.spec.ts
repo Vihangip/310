@@ -210,14 +210,12 @@ describe("InsightFacade", function () {
 			"./test/resources/queries",
 			{
 				assertOnResult: (actual, expected) => {
-					// TODO: Complete this
 					console.log("here");
 					expect(actual).to.deep.equals(expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
 					error === "ResultTooLargeError" || error === "InsightError" || error === "NotFoundError",
 				assertOnError: (actual, expected) => {
-					// TODO: Complete this
 					if (expected === "ResultTooLargeError") {
 						expect(actual).to.be.instanceof(ResultTooLargeError);
 					} else {

@@ -101,7 +101,6 @@ export default abstract class QueryHelper {
 		}
 		let field = parts[1].trim();
 		if (!correctFields.includes(field)) {
-			console.log(field);
 			throw new Error("Invalid key: not a correct field");
 		}
 		// this.setId(idString);
@@ -133,12 +132,13 @@ export default abstract class QueryHelper {
 
 		let applyIdString = applyID[0];
 
-		if(idString !== applyIdString) {
+
+		if (idString !== applyIdString) {
 			throw new Error("Group dataset and Apply dataset are not same");
 		}
 
 		console.log("parsed transformations");
-		return [idString, groupKeys, applyKeys, applyTokens, keyFields];
+		return [groupKeys, applyKeys, applyTokens, keyFields];
 	}
 
 	private static parseGroupKeys(keys: any): any[] {
@@ -178,11 +178,11 @@ export default abstract class QueryHelper {
 
 		let applyRules: number = apply.length;
 
-		if(applyRules === 0) {
+		if (applyRules === 0) {
 			throw new Error("Apply is empty");
 		}
 
-		for(let i = 0; i < applyRules; i++ ) {
+		for (let i = 0; i < applyRules; i++ ) {
 			let [applyKey, applyToken, keyIdString, keyField] = this.parseApplyRule(apply[i]);
 			if(idString === "") {
 				idString = keyIdString;
@@ -206,23 +206,23 @@ export default abstract class QueryHelper {
 	// returns apply rule = [applyKey, applyToken, keyIdString, keyField]
 	private static parseApplyRule(applyElement: any) {
 		let correctTokens = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
-		if(typeof applyElement !== "object") {
+		if (typeof applyElement !== "object") {
 			throw new Error("Apply rule is not an object");
 		}
 
 		let [applyKey, value] = this.returnKeyValPair(applyElement);
 
-		if(applyKey.includes("_") || applyKey.length === 0) {
+		if (applyKey.includes("_") || applyKey.length === 0) {
 			throw new Error("Invalid Apply Key");
 		}
 
-		if(typeof value !== "object") {
+		if (typeof value !== "object") {
 			throw new Error("Apply Key value is not an object");
 		}
 
 		let [token, key] = this.returnKeyValPair(value);
 
-		if(!correctTokens.includes(token)) {
+		if (!correctTokens.includes(token)) {
 			throw new Error("Incorrect Token");
 		}
 

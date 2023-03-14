@@ -1,8 +1,7 @@
-import {
+import Query, {
 	Filter,
 	MComparisonFilter,
 	SComparisonFilter,
-	Query,
 	LogicComparisonFilter,
 	NegationFilter, EmptyFilter
 } from "./FilterFacade";
@@ -16,7 +15,6 @@ export default class QueryBuilder {
 	private readonly sKeyCorrectValues;
 
 	constructor() {
-		console.log("Checking if query is valid");
 		this.id = "";
 		this.mKeyCorrectValues = ["avg", "pass", "fail", "audit", "year", "lat" , "lon" , "seats"];
 		this.sKeyCorrectValues = ["dept", "id", "instructor", "title", "uuid", "fullname" , "shortname" , "number" ,
@@ -67,15 +65,13 @@ export default class QueryBuilder {
 
 	// m comparisons have a key and object
 	private parseMComparison(key: any, value: any): MComparisonFilter {
-		// the only valid object here is one with a single key-value pair
 		let [mKey, mVal] = QueryHelper.returnKeyValPair(value);
 		if (mKey === null) {
 			throw new Error("Empty m comparison");
 		}
-		// validates and splits up the two portions of the object's key, e.g. "sections_avg" -> "sections" and "avg"
+
 		let [idString, mField] = QueryHelper.isKeyValid(mKey, this.mKeyCorrectValues);
 		this.setId(idString);
-		// the object's value MUST be a number
 		if (typeof mVal !== "number") {
 			throw new Error("Bad value for m key");
 		}
@@ -84,19 +80,17 @@ export default class QueryBuilder {
 
 	// s comparisons have a key and object
 	private parseSComparison(key: any, value: any) {
-		// the only valid object here is one with a single key-value pair
 		let [sKey, inputString] = QueryHelper.returnKeyValPair(value);
 		if (sKey === null) {
 			throw new Error("Empty s comparison");
 		}
-		// validates and splits up the two portions of the object's key, e.g. "sections_dept" -> "sections" and "dept"
+
 		let [idString, sField] = QueryHelper.isKeyValid(sKey, this.sKeyCorrectValues);
 		this.setId(idString);
-		// the object's value MUST be a string
 		if (typeof inputString !== "string") {
 			throw new Error("Bad value for input string");
 		}
-		// building regex to deal with wildcards
+
 		let start = "^";
 		let end = "$";
 		if (inputString.startsWith("*")) {
@@ -138,7 +132,6 @@ export default class QueryBuilder {
 
 	// determine whether OPTIONS is valid and deal with ORDER if necessary
 	private parseOptions(options: any, applyKeys: any[]) {
-		// can contain ORDER, HAS to contain COLUMNS
 		if (typeof options !== "object") {
 			throw new Error("Options not an object");
 		}
@@ -163,8 +156,7 @@ export default class QueryBuilder {
 			orderDirection = direction;
 		}
 
-		console.log("parsed options");
-		return [idString, columnFields, anyKeys, orderDirection];
+		return [columnFields, anyKeys, orderDirection];
 	}
 
 	// returns [anyKeyList, direction]
@@ -251,23 +243,12 @@ export default class QueryBuilder {
 		if (typeof query !== "object") {
 			return null;
 		}
-		// WHERE, OPTIONS and TRANSFORMATIONS should be the only top-level keys in the query
 		if (!QueryHelper.isQueryKeysValid(query)) {
 			return null;
 		}
-		/*
-		this try-catch is the root of all the error handling in this class!
-		if ANYTHING goes wrong in query validation and building, this function must return null
-		 */
+
 		try {
-			/*
-			WHERE has a single filter object (key-value pair). if valid, this will be one of:
-			[null, null] (no filter), [logic comparison, list of filters], [m comparison, object],
-			[s comparison, object], [negation, single filter].
-			the below function validates the filter object and splits it up
-			*/
 			let [filterKey, filterValue] = QueryHelper.returnKeyValPair(query["WHERE"]);
-			// this info is then turned into a custom Filter object
 			let filter: Filter;
 			if(filterKey) {
 				filter = this.parseFilter(filterKey, filterValue);
@@ -276,18 +257,25 @@ export default class QueryBuilder {
 			}
 
 			let applyKeysArray = [];
+			let groupKeysArray = [];
+			let applyTokensArray = [];
+			let keyFieldsArray = [];
+
 			// transformations
 			if(query["TRANSFORMATIONS"]) {
-				let[idString, groupKeys, applyKeys,
+				let[groupKeys, applyKeys,
 					applyTokens, keyFields] = QueryHelper.parseTransformations(query["TRANSFORMATIONS"]);
 				applyKeysArray = applyKeys;
+				groupKeysArray = groupKeys;
+				applyTokensArray = applyTokens;
+				keyFieldsArray = keyFields;
 			}
-			// options
-			let [idString, columnFields, anyKeyList, direction] = this.parseOptions(query["OPTIONS"], applyKeysArray);
-			console.log("Done validating");
 
-			// TODO need to add more fields to query object
-			return new Query(filter, columnFields, anyKeyList, direction);
+			// options
+			let [columnFields, anyKeyList, direction] = this.parseOptions(query["OPTIONS"], applyKeysArray);
+
+			return new Query(filter, columnFields, anyKeyList, direction, groupKeysArray,
+				applyTokensArray, keyFieldsArray);
 		} catch (e) {
 			console.error(e);
 			return null;
