@@ -155,8 +155,7 @@ export default class QueryBuilder {
 			anyKeys = anyKeyList;
 			orderDirection = direction;
 		}
-
-		return [columnFields, anyKeys, orderDirection];
+		return [idString, columnFields, anyKeys, orderDirection];
 	}
 
 	// returns [anyKeyList, direction]
@@ -226,7 +225,7 @@ export default class QueryBuilder {
 					this.setId(idString);
 				} catch (err2) {
 					if (applyKeys.includes(key)) {
-						field = key;
+						field = "applyKey";
 					} else {
 						throw new Error("Invalid key: not an Apply Key");
 					}
@@ -272,10 +271,10 @@ export default class QueryBuilder {
 			}
 
 			// options
-			let [columnFields, anyKeyList, direction] = this.parseOptions(query["OPTIONS"], applyKeysArray);
+			let [idString,columnFields, anyKeyList, direction] = this.parseOptions(query["OPTIONS"], applyKeysArray);
 
-			return new Query(filter, columnFields, anyKeyList, direction, groupKeysArray,
-				applyTokensArray, keyFieldsArray);
+			return new Query(idString, filter, columnFields, anyKeyList, direction, groupKeysArray,
+				applyTokensArray, keyFieldsArray, applyKeysArray);
 		} catch (e) {
 			console.error(e);
 			return null;

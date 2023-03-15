@@ -1,5 +1,5 @@
 // collection of small utility methods for QueryBuilder and FilterFacade
-import {SectionFacade} from "./DatasetFacade";
+import {SectionFacade, RoomFacade} from "./DatasetFacade";
 
 export default abstract class QueryHelper {
 
@@ -10,7 +10,7 @@ export default abstract class QueryHelper {
 
 	// picks particular member variable from a section given a string of that member variable
 
-	public static getSectionInfo(section: SectionFacade, member: string): number | string | null {
+	public static getSectionInfo(section: SectionFacade, member: string): any {
 		switch (member) {
 			case "uuid":
 				return section.uuid;
@@ -32,6 +32,35 @@ export default abstract class QueryHelper {
 				return section.fail;
 			case "audit":
 				return section.audit;
+			default:
+				throw new Error("Unknown member");
+		}
+	}
+
+	public static getRoomInfo(room: RoomFacade, member: string): any {
+		switch (member) {
+			case "fullname":
+				return room.fullname;
+			case "shortname":
+				return room.shortname;
+			case "number":
+				return room.number;
+			case "name":
+				return room.name;
+			case "address":
+				return room.address;
+			case "lat":
+				return room.lat;
+			case "lon":
+				return room.lon;
+			case "seats":
+				return room.seats;
+			case "type":
+				return room.type;
+			case "furniture":
+				return room.furniture;
+			case "href":
+				return room.href;
 			default:
 				throw new Error("Unknown member");
 		}

@@ -1,0 +1,249 @@
+{
+	"title": "small transformations SUM with order",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "cpsc"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"Total Failed"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"Total Failed"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"Total Failed": {
+						"SUM": "sections_fail"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_title": "artif intell 1",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "artif intell 2",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "comp comm protcl",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "comput robotics",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "hmn-cmpt intract",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "info visualizatn",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "m.sc major essay",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "machine learn i",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "phy user intfc",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "prog lang princ",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "software eng",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "student seminar",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "thry of automata",
+			"Total Failed": 0
+		},
+		{
+			"sections_title": "computl ling 1",
+			"Total Failed": 2
+		},
+		{
+			"sections_title": "hmn-cp interactn",
+			"Total Failed": 2
+		},
+		{
+			"sections_title": "honours thesis",
+			"Total Failed": 2
+		},
+		{
+			"sections_title": "para algs & arch",
+			"Total Failed": 2
+		},
+		{
+			"sections_title": "fund alg dsgn&an",
+			"Total Failed": 4
+		},
+		{
+			"sections_title": "intgrt sys desgn",
+			"Total Failed": 4
+		},
+		{
+			"sections_title": "softwr eng proj",
+			"Total Failed": 4
+		},
+		{
+			"sections_title": "alg in bioin",
+			"Total Failed": 6
+		},
+		{
+			"sections_title": "compiler constrc",
+			"Total Failed": 6
+		},
+		{
+			"sections_title": "parallel comput",
+			"Total Failed": 6
+		},
+		{
+			"sections_title": "comptr & society",
+			"Total Failed": 10
+		},
+		{
+			"sections_title": "adv software eng",
+			"Total Failed": 16
+		},
+		{
+			"sections_title": "hum-com interact",
+			"Total Failed": 16
+		},
+		{
+			"sections_title": "distrbt'd systms",
+			"Total Failed": 18
+		},
+		{
+			"sections_title": "theory comptg",
+			"Total Failed": 22
+		},
+		{
+			"sections_title": "computer vision",
+			"Total Failed": 26
+		},
+		{
+			"sections_title": "func & logic prg",
+			"Total Failed": 26
+		},
+		{
+			"sections_title": "num comp alg prb",
+			"Total Failed": 28
+		},
+		{
+			"sections_title": "intel systems",
+			"Total Failed": 34
+		},
+		{
+			"sections_title": "num approx/discr",
+			"Total Failed": 46
+		},
+		{
+			"sections_title": "programmng langs",
+			"Total Failed": 52
+		},
+		{
+			"sections_title": "comptng life sci",
+			"Total Failed": 62
+		},
+		{
+			"sections_title": "machine lrn mine",
+			"Total Failed": 66
+		},
+		{
+			"sections_title": "adv alg dsgn&anl",
+			"Total Failed": 70
+		},
+		{
+			"sections_title": "comp graphics",
+			"Total Failed": 76
+		},
+		{
+			"sections_title": "intr sftwr eng",
+			"Total Failed": 84
+		},
+		{
+			"sections_title": "adv opertng sysm",
+			"Total Failed": 86
+		},
+		{
+			"sections_title": "adv rel databse",
+			"Total Failed": 86
+		},
+		{
+			"sections_title": "intr rel databse",
+			"Total Failed": 88
+		},
+		{
+			"sections_title": "basics comp syst",
+			"Total Failed": 102
+		},
+		{
+			"sections_title": "internet comp",
+			"Total Failed": 140
+		},
+		{
+			"sections_title": "dta&alg elec eng",
+			"Total Failed": 144
+		},
+		{
+			"sections_title": "artificial intel",
+			"Total Failed": 186
+		},
+		{
+			"sections_title": "comp hard&os",
+			"Total Failed": 252
+		},
+		{
+			"sections_title": "intro comp sys",
+			"Total Failed": 354
+		},
+		{
+			"sections_title": "basic alg&data",
+			"Total Failed": 392
+		},
+		{
+			"sections_title": "intr alg dsgn&an",
+			"Total Failed": 402
+		},
+		{
+			"sections_title": "sftwr constructn",
+			"Total Failed": 588
+		},
+		{
+			"sections_title": "model comptn",
+			"Total Failed": 592
+		},
+		{
+			"sections_title": "comptn, progrmng",
+			"Total Failed": 1576
+		}
+	]
+}

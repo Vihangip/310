@@ -2,6 +2,7 @@ import {InsightResult} from "./IInsightFacade";
 import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
 import QueryHelper from "./QueryHelper";
 import FacadeHelper from "./FacadeHelper";
+import TransformHelper from "./TransformHelper";
 
 export abstract class Filter {
 	protected kind: string; // GT, LT, EQ, IS...
@@ -38,45 +39,41 @@ export class MComparisonFilter extends Filter {
 
 	// produce a list of indices (numbers) in the dataset's sections array that satisfy the comparison
 	public run(dataset: InsightDatasetExpanded): number[] {
-		let indices: number[] = [];
-		switch (this.kind) {
-			case "GT":
-				for (let i = 0; i < dataset.sections.length; i++) {
-					let sectionInfo = QueryHelper.getSectionInfo(dataset.sections[i], this.mField);
-					if (sectionInfo === null || typeof sectionInfo === "string") {
-						throw new Error("Unexpected section member datatype: " + this.mField);
-					}
-					if (sectionInfo > this.compValue) {
-						indices.push(i);
-					}
+		const filterFn = (value: any, compValue: any, operator: string) => {
+			if (value === null || typeof value === "string") {
+				throw new Error("Unexpected section member datatype: " + this.mField);
+			}
+			switch (operator) {
+				case "GT":
+					return value > compValue;
+				case "LT":
+					return value < compValue;
+				case "EQ":
+					return value === compValue;
+				default:
+					return false;
+			}
+		};
+
+		const indices: number[] = [];
+		try {
+			for (let i = 0; i < dataset.sections.length; i++) {
+				const value = QueryHelper.getSectionInfo(dataset.sections[i], this.mField);
+				if (filterFn(value, this.compValue, this.kind)) {
+					indices.push(i);
 				}
-				return indices;
-			case "LT":
-				for (let i = 0; i < dataset.sections.length; i++) {
-					let sectionInfo = QueryHelper.getSectionInfo(dataset.sections[i], this.mField);
-					if (sectionInfo === null || typeof sectionInfo === "string") {
-						throw new Error("Unexpected section member datatype: " + this.mField);
-					}
-					if (sectionInfo < this.compValue) {
-						indices.push(i);
-					}
+			}
+		} catch (e) {
+			for (let i = 0; i < dataset.rooms.length; i++) {
+				const value = QueryHelper.getRoomInfo(dataset.rooms[i], this.mField);
+				if (filterFn(value, this.compValue, this.kind)) {
+					indices.push(i);
 				}
-				return indices;
-			case "EQ":
-				for (let i = 0; i < dataset.sections.length; i++) {
-					let sectionInfo = QueryHelper.getSectionInfo(dataset.sections[i], this.mField);
-					if (sectionInfo === null || typeof sectionInfo === "string") {
-						throw new Error("Unexpected section member datatype: " + this.mField);
-					}
-					if (sectionInfo === this.compValue) {
-						indices.push(i);
-					}
-				}
-				return indices;
-			default:
-				return indices;
+			}
 		}
+		return indices;
 	}
+
 }
 
 // custom Filter object for s comparison
@@ -84,7 +81,6 @@ export class SComparisonFilter extends Filter {
 	private idString: string; // id of dataset
 	private sField: string; // dept, id...
 	private inputString: RegExp; // regex to compare against
-
 	constructor(kind: string, idString: string, sField: string, inputString: RegExp) {
 		super(kind);
 		this.idString = idString;
@@ -95,13 +91,25 @@ export class SComparisonFilter extends Filter {
 	// produce a list of indices (numbers) in the dataset's sections array that satisfy the comparison
 	public run(dataset: InsightDatasetExpanded): number[] {
 		let indices: number[] = [];
-		for (let i = 0; i < dataset.sections.length; i++) {
-			let sectionInfo = QueryHelper.getSectionInfo(dataset.sections[i], this.sField);
-			if (sectionInfo === null || typeof sectionInfo === "number") {
-				throw new Error("Unexpected section member datatype: " + this.sField);
+		try {
+			for (let i = 0; i < dataset.sections.length; i++) {
+				let sectionInfo = QueryHelper.getSectionInfo(dataset.sections[i], this.sField);
+				if (sectionInfo === null || typeof sectionInfo === "number") {
+					throw new Error("Unexpected section member datatype: " + this.sField);
+				}
+				if (sectionInfo.match(this.inputString)) {
+					indices.push(i);
+				}
 			}
-			if (sectionInfo.match(this.inputString)) {
-				indices.push(i);
+		} catch (e) {
+			for (let i = 0; i < dataset.rooms.length; i++) {
+				let roomInfo = QueryHelper.getRoomInfo(dataset.rooms[i], this.sField);
+				if (roomInfo === null || typeof roomInfo === "number") {
+					throw new Error("Unexpected section member datatype: " + this.sField);
+				}
+				if (roomInfo.match(this.inputString)) {
+					indices.push(i);
+				}
 			}
 		}
 		return indices;
@@ -173,10 +181,18 @@ export class NegationFilter extends Filter {
 		let indices: number[] = [];
 		// results = all indices that work with any sub-filters
 		let results = this.filter.run(dataset);
-		if (results.length === 0) {
-			return dataset.sections.map((section, index) => {
-				return index;
-			});
+		try {
+			if (results.length === 0) {
+				return dataset.sections.map((section, index) => {
+					return index;
+				});
+			}
+		} catch (e) {
+			if (results.length === 0) {
+				return dataset.rooms.map((section, index) => {
+					return index;
+				});
+			}
 		}
 		/*
 		sort the results, so we don't have to go searching through the whole array each time
@@ -188,15 +204,30 @@ export class NegationFilter extends Filter {
 		// count through the possible indices, saving only indices that are NOT in results (sub-filters do not apply)
 		let end = results[0];
 		let currentResult = 0;
-		for (let i = 0; i < dataset.sections.length; i++) {
-			if (i < end) {
-				indices.push(i);
-			} else {
-				currentResult++;
-				if (currentResult < results.length) {
-					end = results[currentResult];
+		try {
+			for (let i = 0; i < dataset.sections.length; i++) {
+				if (i < end) {
+					indices.push(i);
 				} else {
-					end = dataset.sections.length;
+					currentResult++;
+					if (currentResult < results.length) {
+						end = results[currentResult];
+					} else {
+						end = dataset.sections.length;
+					}
+				}
+			}
+		} catch (e) {
+			for (let i = 0; i < dataset.rooms.length; i++) {
+				if (i < end) {
+					indices.push(i);
+				} else {
+					currentResult++;
+					if (currentResult < results.length) {
+						end = results[currentResult];
+					} else {
+						end = dataset.rooms.length;
+					}
 				}
 			}
 		}
@@ -207,22 +238,26 @@ export class NegationFilter extends Filter {
 // top level query object (can only have one filter in it)
 export default class Query {
 	private filter: Filter;
+	private idString: string;
 	private columns: string[]; // only the fields, because you can only have one dataset
 	private anyKeyList: any;
 	private groupKeys: any;
 	private applyTokens: any;
 	private keyFields: any;
 	private direction: string | null; // only a field as above, null if order doesn't matter
-	constructor(filter: Filter, columns: string[], anyKeyList: any[] | null, direction: string | null,
-		groupKeys: any[] | null, applyTokens: any[] | null, keyFields: any[] | null ) {
+
+	private applyKeys: any;
+	constructor(idString: string, filter: Filter, columns: string[], anyKeyList: any[] | null, direction: string | null,
+		groupKeys: any[] | null, applyTokens: any[] | null, keyFields: any[] | null, applyKeys: string[] | null) {
+		this.idString = idString;
 		this.filter = filter;
 		this.columns = columns;
 		this.anyKeyList = anyKeyList;
 		this.direction = direction;
-
 		this.groupKeys = groupKeys;
 		this.applyTokens = applyTokens;
 		this.keyFields = keyFields;
+		this.applyKeys = applyKeys;
 	}
 
 	// returns true if query's WHERE doesn't have a filter in it
@@ -233,34 +268,31 @@ export default class Query {
 	// given a dataset, recurses through the query's filter and any sub-filters to find the entries that satisfy it
 	public run(dataset: InsightDatasetExpanded): InsightResult[] {
 		let outputResults = [];
-		/*
-		recursive step, runs all sub-filters first to get a list of indices (numbers)
-		in the dataset's list of sections that work
-		*/
+		let transformedResults: any;
+		let results: any;
+		// recursive step, runs all sub-filters first to get a list of indices (numbers) in the dataset's list of sections that work
 		let indices = this.filter.run(dataset);
-		/*
-		turn the list of indices into a list of InsightResult objects.
-		each object contains only the mfields/sfields in columns
-		*/
-		let results = indices.map((index) => {
-			let section = dataset.sections[index];
-			let sectionInfo: InsightResult = {};
-			for (let column of this.columns) {
-				let key = dataset.id + "_" + column;
-				let val = QueryHelper.getSectionInfo(section, column);
-				if(val !== null) {
-					sectionInfo[key] = val;
-				}
-			}
-			return sectionInfo;
-		});
 
+		if (this.groupKeys.length !== 0) {
+			let groupedResults = FacadeHelper.groupResults(this.groupKeys, indices, dataset);
+			transformedResults = TransformHelper.applyTransformations(groupedResults, this.applyTokens, this.keyFields);
+			results = FacadeHelper.getResults(this.idString, this.columns, this.applyKeys, transformedResults,
+				groupedResults);
+		} else {
+			// turn the list of indices into a list of InsightResult objects. each object contains only the mfields/sfields in columns
+			results = indices.map((index) => {
+				try {
+					return FacadeHelper.convertSectIndices(dataset,index,this.columns);
+				} catch (e) {
+					return FacadeHelper.convertRoomIndices(dataset,index,this.columns);
+				}
+			});
+		}
 		if (this.anyKeyList !== null) {
-			outputResults = FacadeHelper.sortOptions(this.columns, this.direction, this.anyKeyList, results);
+			outputResults = FacadeHelper.sortOptions(this.direction, this.anyKeyList, results);
 		} else {
 			outputResults = results;
 		}
-
 		return outputResults;
 	}
 }
