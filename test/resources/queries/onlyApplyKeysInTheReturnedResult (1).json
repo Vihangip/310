@@ -1,0 +1,170 @@
+{
+	"title": "only apply keys in the returned result",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sumAvg",
+				"avgAvg",
+				"sumPass",
+				"avgPass"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sumAvg",
+					"avgAvg"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_dept",
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"sumAvg": {
+						"SUM": "sections_avg"
+					}
+				},
+				{
+					"sumPass": {
+						"SUM": "sections_pass"
+					}
+				},
+				{
+					"avgPass": {
+						"AVG": "sections_pass"
+					}
+				},
+				{
+					"avgAvg": {
+						"AVG": "sections_avg"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sumAvg": 590.89,
+			"avgAvg": 98.48,
+			"sumPass": 124,
+			"avgPass": 20.67
+		},
+		{
+			"sumAvg": 589.22,
+			"avgAvg": 98.2,
+			"sumPass": 90,
+			"avgPass": 15
+		},
+		{
+			"sumAvg": 489.72,
+			"avgAvg": 97.94,
+			"sumPass": 72,
+			"avgPass": 14.4
+		},
+		{
+			"sumAvg": 393.84,
+			"avgAvg": 98.46,
+			"sumPass": 56,
+			"avgPass": 14
+		},
+		{
+			"sumAvg": 294.13,
+			"avgAvg": 98.04,
+			"sumPass": 46,
+			"avgPass": 15.33
+		},
+		{
+			"sumAvg": 199.56,
+			"avgAvg": 99.78,
+			"sumPass": 18,
+			"avgPass": 9
+		},
+		{
+			"sumAvg": 197.96,
+			"avgAvg": 98.98,
+			"sumPass": 164,
+			"avgPass": 82
+		},
+		{
+			"sumAvg": 197.5,
+			"avgAvg": 98.75,
+			"sumPass": 24,
+			"avgPass": 12
+		},
+		{
+			"sumAvg": 196.9,
+			"avgAvg": 98.45,
+			"sumPass": 22,
+			"avgPass": 11
+		},
+		{
+			"sumAvg": 196,
+			"avgAvg": 98,
+			"sumPass": 2,
+			"avgPass": 1
+		},
+		{
+			"sumAvg": 195.19,
+			"avgAvg": 97.59,
+			"sumPass": 26,
+			"avgPass": 13
+		},
+		{
+			"sumAvg": 194.96,
+			"avgAvg": 97.48,
+			"sumPass": 42,
+			"avgPass": 21
+		},
+		{
+			"sumAvg": 194.66,
+			"avgAvg": 97.33,
+			"sumPass": 24,
+			"avgPass": 12
+		},
+		{
+			"sumAvg": 194.5,
+			"avgAvg": 97.25,
+			"sumPass": 8,
+			"avgPass": 4
+		},
+		{
+			"sumAvg": 194.18,
+			"avgAvg": 97.09,
+			"sumPass": 22,
+			"avgPass": 11
+		},
+		{
+			"sumAvg": 194.18,
+			"avgAvg": 97.09,
+			"sumPass": 22,
+			"avgPass": 11
+		},
+		{
+			"sumAvg": 97.69,
+			"avgAvg": 97.69,
+			"sumPass": 16,
+			"avgPass": 16
+		},
+		{
+			"sumAvg": 97.67,
+			"avgAvg": 97.67,
+			"sumPass": 9,
+			"avgPass": 9
+		},
+		{
+			"sumAvg": 97.5,
+			"avgAvg": 97.5,
+			"sumPass": 14,
+			"avgPass": 14
+		}
+	]
+}

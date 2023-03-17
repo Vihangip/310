@@ -1,0 +1,134 @@
+{
+	"title": "easy 2",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sumAvg",
+				"sections_dept",
+				"sections_title"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sumAvg"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_dept",
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"sumAvg": {
+						"AVG": "sections_pass"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sumAvg": 82,
+			"sections_dept": "spph",
+			"sections_title": "work int health"
+		},
+		{
+			"sumAvg": 21,
+			"sections_dept": "math",
+			"sections_title": "algb geometry i"
+		},
+		{
+			"sumAvg": 20.67,
+			"sections_dept": "epse",
+			"sections_title": "educ stds autism"
+		},
+		{
+			"sumAvg": 16,
+			"sections_dept": "epse",
+			"sections_title": "sem in autism"
+		},
+		{
+			"sumAvg": 15.33,
+			"sections_dept": "cnps",
+			"sections_title": "career planning"
+		},
+		{
+			"sumAvg": 15,
+			"sections_dept": "nurs",
+			"sections_title": "fam nrs pract"
+		},
+		{
+			"sumAvg": 14.4,
+			"sections_dept": "epse",
+			"sections_title": "assess lrn diffi"
+		},
+		{
+			"sumAvg": 14,
+			"sections_dept": "educ",
+			"sections_title": "res mthd in educ"
+		},
+		{
+			"sumAvg": 14,
+			"sections_dept": "nurs",
+			"sections_title": "cl pro prim care"
+		},
+		{
+			"sumAvg": 13,
+			"sections_dept": "epse",
+			"sections_title": "acad assess schl"
+		},
+		{
+			"sumAvg": 12,
+			"sections_dept": "eece",
+			"sections_title": "multimedia sys"
+		},
+		{
+			"sumAvg": 12,
+			"sections_dept": "nurs",
+			"sections_title": "eth&profl issues"
+		},
+		{
+			"sumAvg": 11,
+			"sections_dept": "epse",
+			"sections_title": "dev el sk df&hrd"
+		},
+		{
+			"sumAvg": 11,
+			"sections_dept": "epse",
+			"sections_title": "cor des ed res"
+		},
+		{
+			"sumAvg": 11,
+			"sections_dept": "math",
+			"sections_title": "harmonic anal i"
+		},
+		{
+			"sumAvg": 9,
+			"sections_dept": "epse",
+			"sections_title": "coll&uni teachng"
+		},
+		{
+			"sumAvg": 9,
+			"sections_dept": "math",
+			"sections_title": "algb topology i"
+		},
+		{
+			"sumAvg": 4,
+			"sections_dept": "math",
+			"sections_title": "diff geometry i"
+		},
+		{
+			"sumAvg": 1,
+			"sections_dept": "crwr",
+			"sections_title": "thesis"
+		}
+	]
+}

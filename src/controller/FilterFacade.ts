@@ -20,14 +20,14 @@ export class EmptyFilter extends Filter {
 	}
 
 	public run(dataset: InsightDatasetExpanded): number[] {
-		return [];
-		// if (dataset.kind === "sections") {
-		// 	return dataset.sections.map((_, i) => i);
-		// } else if (dataset.kind === "rooms") {
-		// 	return dataset.rooms.map((_, i) => i);
-		// } else {
-		// 	return [];
-		// }
+		// return [];
+		if (dataset.kind === "sections") {
+			return dataset.sections.map((_, i) => i);
+		} else if (dataset.kind === "rooms") {
+			return dataset.rooms.map((_, i) => i);
+		} else {
+			return [];
+		}
 	}
 
 }
@@ -260,7 +260,7 @@ export default class Query {
 
 	// returns true if query's WHERE doesn't have a filter in it
 	public isGroupEmpty() {
-		return this.filter instanceof EmptyFilter;
+		return this.filter instanceof EmptyFilter && (this.groupKeys.length === 0);
 	}
 
 	// given a dataset, recurses through the query's filter and any sub-filters to find the entries that satisfy it

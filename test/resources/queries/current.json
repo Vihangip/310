@@ -1,0 +1,47 @@
+{
+	"title": "SELECT dept, id, avg WHERE avg == 95 || avg > 90 && dept == 'adhe' ORDER BY avg",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 96
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"overallAvg"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"overallAvg"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title",
+				"sections_avg",
+				"sections_dept",
+				"sections_id",
+				"sections_instructor",
+				"sections_id",
+				"sections_uuid",
+				"sections_pass",
+				"sections_fail",
+				"sections_audit",
+				"sections_year"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_avg"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [{"sections_title":"algb topology i","overallAvg":99.78},{"sections_title":"algb topology i","overallAvg":99.78},{"sections_title":"career planning","overallAvg":99.19},{"sections_title":"work int health","overallAvg":98.98},{"sections_title":"work int health","overallAvg":98.98},{"sections_title":"educ stds autism","overallAvg":98.8},{"sections_title":"educ stds autism","overallAvg":98.76},{"sections_title":"educ stds autism","overallAvg":98.76},{"sections_title":"multimedia sys","overallAvg":98.75},{"sections_title":"multimedia sys","overallAvg":98.75},{"sections_title":"cl pro prim care","overallAvg":98.71},{"sections_title":"cl pro prim care","overallAvg":98.71},{"sections_title":"assess lrn diffi","overallAvg":98.7},{"sections_title":"educ stds autism","overallAvg":98.58},{"sections_title":"educ stds autism","overallAvg":98.58},{"sections_title":"fam nrs pract","overallAvg":98.58},{"sections_title":"fam nrs pract","overallAvg":98.58},{"sections_title":"fam nrs pract","overallAvg":98.5},{"sections_title":"fam nrs pract","overallAvg":98.5},{"sections_title":"dev el sk df&hrd","overallAvg":98.45},{"sections_title":"dev el sk df&hrd","overallAvg":98.45},{"sections_title":"assess lrn diffi","overallAvg":98.36},{"sections_title":"cl pro prim care","overallAvg":98.21},{"sections_title":"cl pro prim care","overallAvg":98.21},{"sections_title":"assess lrn diffi","overallAvg":98.08},{"sections_title":"thesis","overallAvg":98},{"sections_title":"thesis","overallAvg":98},{"sections_title":"acad assess schl","overallAvg":97.78},{"sections_title":"sem in autism","overallAvg":97.69},{"sections_title":"coll&uni teachng","overallAvg":97.67},{"sections_title":"fam nrs pract","overallAvg":97.53},{"sections_title":"fam nrs pract","overallAvg":97.53},{"sections_title":"res mthd in educ","overallAvg":97.5},{"sections_title":"algb geometry i","overallAvg":97.48},{"sections_title":"algb geometry i","overallAvg":97.48},{"sections_title":"career planning","overallAvg":97.47},{"sections_title":"career planning","overallAvg":97.47},{"sections_title":"educ stds autism","overallAvg":97.41},{"sections_title":"acad assess schl","overallAvg":97.41},{"sections_title":"eth&profl issues","overallAvg":97.33},{"sections_title":"eth&profl issues","overallAvg":97.33},{"sections_title":"assess lrn diffi","overallAvg":97.29},{"sections_title":"assess lrn diffi","overallAvg":97.29},{"sections_title":"diff geometry i","overallAvg":97.25},{"sections_title":"diff geometry i","overallAvg":97.25},{"sections_title":"cor des ed res","overallAvg":97.09},{"sections_title":"cor des ed res","overallAvg":97.09},{"sections_title":"harmonic anal i","overallAvg":97.09},{"sections_title":"harmonic anal i","overallAvg":97.09},{"sections_title":"thesis","overallAvg":97},{"sections_title":"acad assess schl","overallAvg":97},{"sections_title":"masters thesis","overallAvg":97},{"sections_title":"sociocult determ","overallAvg":96.96},{"sections_title":"aud&non-txt arch","overallAvg":96.94},{"sections_title":"aud&non-txt arch","overallAvg":96.94},{"sections_title":"audi prctcm iv","overallAvg":96.9},{"sections_title":"audi prctcm iv","overallAvg":96.9},{"sections_title":"intro excp child","overallAvg":96.9},{"sections_title":"intro excp child","overallAvg":96.9},{"sections_title":"probability ii","overallAvg":96.83},{"sections_title":"probability ii","overallAvg":96.83},{"sections_title":"survlnc&monitrng","overallAvg":96.8},{"sections_title":"survlnc&monitrng","overallAvg":96.8},{"sections_title":"eth&profl issues","overallAvg":96.73},{"sections_title":"eth&profl issues","overallAvg":96.73},{"sections_title":"fam nrs pract","overallAvg":96.64},{"sections_title":"fam nrs pract","overallAvg":96.64},{"sections_title":"seminar","overallAvg":96.59},{"sections_title":"cnsl mat cr prov","overallAvg":96.5},{"sections_title":"cnsl mat cr prov","overallAvg":96.5},{"sections_title":"ubc chamb string","overallAvg":96.5},{"sections_title":"ubc chamb string","overallAvg":96.5},{"sections_title":"indig, tech&ed","overallAvg":96.47},{"sections_title":"indig, tech&ed","overallAvg":96.47},{"sections_title":"nat resrce mngmt","overallAvg":96.47},{"sections_title":"nat resrce mngmt","overallAvg":96.47},{"sections_title":"adlt edu pract","overallAvg":96.46},{"sections_title":"adlt edu pract","overallAvg":96.46},{"sections_title":"algebra ii","overallAvg":96.44},{"sections_title":"algebra ii","overallAvg":96.44},{"sections_title":"mo pict prod i","overallAvg":96.4},{"sections_title":"mo pict prod i","overallAvg":96.4},{"sections_title":"ds intl forstry","overallAvg":96.36},{"sections_title":"ds intl forstry","overallAvg":96.36},{"sections_title":"prgm devl cnsl","overallAvg":96.33},{"sections_title":"specific lrn dis","overallAvg":96.33},{"sections_title":"specific lrn dis","overallAvg":96.33},{"sections_title":"msc major essay","overallAvg":96.33},{"sections_title":"dynam struct 2","overallAvg":96.27},{"sections_title":"dynam struct 2","overallAvg":96.27},{"sections_title":"prt diff equa i","overallAvg":96.25},{"sections_title":"prt diff equa i","overallAvg":96.25},{"sections_title":"hydrmtllgcl rctr","overallAvg":96.25},{"sections_title":"hydrmtllgcl rctr","overallAvg":96.25},{"sections_title":"educ stds autism","overallAvg":96.24},{"sections_title":"hn dev: inf-adlt","overallAvg":96.23},{"sections_title":"assess lrn diffi","overallAvg":96.21},{"sections_title":"classroom mgmt","overallAvg":96.21},{"sections_title":"classroom mgmt","overallAvg":96.21},{"sections_title":"prgm devl cnsl","overallAvg":96.16},{"sections_title":"social analysis","overallAvg":96.15},{"sections_title":"social analysis","overallAvg":96.15},{"sections_title":"dev wkshp/sem","overallAvg":96.11},{"sections_title":"acad libraries","overallAvg":96.1},{"sections_title":"acad libraries","overallAvg":96.1},{"sections_title":"hlth & soc care","overallAvg":96.09},{"sections_title":"phyl asp phy act","overallAvg":96.06},{"sections_title":"phyl asp phy act","overallAvg":96.06},{"sections_title":"intro excp child","overallAvg":96.03},{"sections_title":"intro excp child","overallAvg":96.03}]
+
+}
