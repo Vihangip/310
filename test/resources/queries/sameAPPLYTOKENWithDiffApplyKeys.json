@@ -1,0 +1,78 @@
+{
+	"title": "same APPLY TOKEN with diff apply keys",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sum",
+				"sum2"
+			],
+			"ORDER": "sum"
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_dept"
+			],
+			"APPLY": [
+				{
+					"sum": {
+						"SUM": "sections_avg"
+					}
+				},
+				{
+					"sum2": {
+						"SUM": "sections_avg"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "educ",
+			"sum": 97.5,
+			"sum2": 97.5
+		},
+		{
+			"sections_dept": "crwr",
+			"sum": 196,
+			"sum2": 196
+		},
+		{
+			"sections_dept": "eece",
+			"sum": 197.5,
+			"sum2": 197.5
+		},
+		{
+			"sections_dept": "spph",
+			"sum": 197.96,
+			"sum2": 197.96
+		},
+		{
+			"sections_dept": "cnps",
+			"sum": 294.13,
+			"sum2": 294.13
+		},
+		{
+			"sections_dept": "math",
+			"sum": 783.2,
+			"sum2": 783.2
+		},
+		{
+			"sections_dept": "nurs",
+			"sum": 1177.72,
+			"sum2": 1177.72
+		},
+		{
+			"sections_dept": "epse",
+			"sum": 1862.24,
+			"sum2": 1862.24
+		}
+	]
+}

@@ -221,10 +221,18 @@ export default class InsightFacade implements IInsightFacade {
 
 				// verify before you start the querying process that an empty where won't cause issues
 				if (queryObj.isWhereEmpty()) {
-					if (dataset.sections.length > this.maxNumResults) {
-						reject(new ResultTooLargeError(
-							"Excess keys in query: where is empty and the dataset is too large"));
+					if (dataset.kind === "sections") {
+						if (dataset.sections.length > this.maxNumResults) {
+							reject(new ResultTooLargeError(
+								"Excess keys in query: where is empty and the dataset is too large"));
+						}
+					} else if (dataset.kind === "rooms") {
+						if (dataset.sections.length > this.maxNumResults) {
+							reject(new ResultTooLargeError(
+								"Excess keys in query: where is empty and the dataset is too large"));
+						}
 					}
+
 				}
 
 				// run recursively through the query's filters

@@ -161,8 +161,7 @@ export default abstract class QueryHelper {
 
 		let applyIdString = applyID[0];
 
-
-		if (idString !== applyIdString) {
+		if (applyIdString !== "" && idString !== applyIdString) {
 			throw new Error("Group dataset and Apply dataset are not same");
 		}
 
@@ -207,24 +206,24 @@ export default abstract class QueryHelper {
 
 		let applyRules: number = apply.length;
 
-		if (applyRules === 0) {
-			throw new Error("Apply is empty");
-		}
-
-		for (let i = 0; i < applyRules; i++ ) {
-			let [applyKey, applyToken, keyIdString, keyField] = this.parseApplyRule(apply[i]);
-			if(idString === "") {
-				idString = keyIdString;
-				keyIdStringArr.push(keyIdString);
-			} else if(idString !== keyIdString) {
-				throw new Error("Keys are not referring to same dataset");
+		if (applyRules !== 0) {
+			for (let i = 0; i < applyRules; i++ ) {
+				let [applyKey, applyToken, keyIdString, keyField] = this.parseApplyRule(apply[i]);
+				if(idString === "") {
+					idString = keyIdString;
+					keyIdStringArr.push(keyIdString);
+				} else if(idString !== keyIdString) {
+					throw new Error("Keys are not referring to same dataset");
+				}
+				if(applyKeys.includes(applyKey)) {
+					throw new Error("Duplicate Apply key");
+				}
+				applyKeys.push(applyKey);
+				applyTokens.push(applyToken);
+				keyFields.push(keyField);
 			}
-			if(applyKeys.includes(applyKey)) {
-				throw new Error("Duplicate Apply key");
-			}
-			applyKeys.push(applyKey);
-			applyTokens.push(applyToken);
-			keyFields.push(keyField);
+		} else {
+			keyIdStringArr.push(idString);
 		}
 
 		applyRuleList.push(keyIdStringArr);

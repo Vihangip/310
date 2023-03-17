@@ -19,9 +19,10 @@ export class EmptyFilter extends Filter {
 		super(kind);
 	}
 
-	public run(): number[] {
+	public run(dataset: InsightDatasetExpanded): number[] {
 		return [];
 	}
+
 }
 
 // custom Filter object for m comparison
@@ -272,9 +273,9 @@ export default class Query {
 		} else {
 			results = indices.map((index) => {
 				try {
-					return FacadeHelper.convertSectIndices(dataset,index,this.columns);
+					return FacadeHelper.convertSectIndices(dataset, index, this.columns);
 				} catch (e) {
-					return FacadeHelper.convertRoomIndices(dataset,index,this.columns);
+					return FacadeHelper.convertRoomIndices(dataset, index, this.columns);
 				}
 			});
 		}

@@ -1,4 +1,5 @@
 import QueryHelper from "./QueryHelper";
+import Decimal from "decimal.js";
 
 export default abstract class TransformHelper {
 	public static applyTransformations(groupedResults: any[], applyTokens: any,
@@ -93,7 +94,7 @@ export default abstract class TransformHelper {
 				}
 				sum = sum + value;
 			}
-			sumArray.push(this.formatNumber(sum));
+			sumArray.push(Number(sum.toFixed(2)));
 			sum = 0;
 		}
 		return sumArray;
@@ -116,37 +117,23 @@ export default abstract class TransformHelper {
 
 	private static performAvg(values: any): number[] {
 		let avgArray: any = [];
-		let sum: number = 0;
 		let count: number = 0;
 		let avg: any;
 		for (let groupValues of values) {
+			let sum = new Decimal(0);
 			for (let value of groupValues) {
 				if (typeof value !== "number") {
 					throw new Error("Avg value is not a number");
 				}
-				sum = sum + value;
+				value = new Decimal(value);
+				sum = Decimal.add(sum,value);
 				count++;
 			}
-			avg = sum / count;
-			sum = 0;
+			avg = sum.toNumber() / count;
 			count = 0;
-			avgArray.push(this.formatNumber(avg));
+			avgArray.push(Number(+avg.toFixed(2)));
 		}
 		return avgArray;
-	}
-
-	private static formatNumber(number: number): number {
-		let correctNumber: string;
-		const roundedNum = number.toFixed(2);
-		const parts = roundedNum.split(".");
-		if (parts[1] === "00") {
-			correctNumber =  parts[0];
-		} else if (parts[1].endsWith("0")) {
-			correctNumber = parts[0] + "." + parts[1][0];
-		} else {
-			correctNumber = roundedNum;
-		}
-		return Number(correctNumber);
 	}
 
 }
