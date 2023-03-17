@@ -20,7 +20,7 @@ export default abstract class GeolocationHelper {
 					resolve(JSON.parse(data));
 				});
 			}).on("error", (err) => {
-				reject(err);
+				reject(new InsightError("Bad geolocation"));
 			});
 		});
 	}
