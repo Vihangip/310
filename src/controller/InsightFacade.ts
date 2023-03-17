@@ -220,7 +220,7 @@ export default class InsightFacade implements IInsightFacade {
 				let dataset = this.datasets[idString];
 
 				// verify before you start the querying process that an empty where won't cause issues
-				if (queryObj.isWhereEmpty()) {
+				if (queryObj.isGroupEmpty()) {
 					if (dataset.kind === "sections") {
 						if (dataset.sections.length > this.maxNumResults) {
 							reject(new ResultTooLargeError(
@@ -234,9 +234,13 @@ export default class InsightFacade implements IInsightFacade {
 					}
 
 				}
+				let results: string | any[] | PromiseLike<InsightResult[]> = [];
 
-				// run recursively through the query's filters
-				let results = queryObj.run(dataset);
+				try {
+					results = queryObj.run(dataset);
+				} catch (e) {
+					reject (new InsightError("Error while performing query"));
+				}
 
 				// make sure that the result isn't too long
 				if (results.length > this.maxNumResults) {
