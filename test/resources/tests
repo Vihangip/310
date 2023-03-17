@@ -1,4 +1,4 @@
-Invalid
+Invalid - All pass
 1. Invalid query body (WHERE missing only OPTIONS)
 2. invalid query key (wrong mkey)
 3. invalid GT body (array)
@@ -20,9 +20,13 @@ Invalid
 19. invalid columns (empty cols array]
 20. invalid query (missing comp)
 21. invalid options (columns missing)
+22. invalid query, querying two datasets when not added
+23. invalid scomp - rooms
+24. invalid type - rooms
+25. invalid mcomp - rooms
 
 
-Simple
+Simple - All pass
 1. Greater than (ubc)
 2. Equal (ubc)
 3. Lesser than (ubc)
@@ -41,6 +45,66 @@ Complex
 2. Or + not
 3. And + Not
 4. And + Or + Not
+5. with transformations, order, AND, IS, wildcard, GT, MAX
+
+Transformations - All pass
+1. simple with AVG + order
+2. simple with SUM + order
+3. simple with MIN + order
+4. simple with MAX + order
+5. simple with COUNT + order
+6. with two apply keys
+7. with multiple apply keys
+8. simple with AVG no order
+9. invalid apply token
+10. invalid apply key - duplicate
+11. invalid apply rule - not an object
+12. invalid apply key - contains underscore
+13. invalid transformations not an object
+14. invalid contains object other than WHERE OPTIONS and TRANSFORMATIONS
+15. additional COUNT test
+16. Invalid - all APPLY keys not in COLUMNS
+
+
+
+Order - All Pass
+1. with no order
+2. order UP with multiple anykeys
+3. order DOWN with multiple anykeys
+4. order DOWN with one key
+5. invalid order direction
+6. invalid order - not an object
+7. invalid order direction - not a string
+8. invalid anykey in columns
+9. invalid anykey - key not in columns
+
+
+Group - All tests pass
+1. one group key
+2. two group keys
+3. three group keys
+4. invalid key in keylist
+5. invalid - all group keys not in columns
+6. invalid - group by apply key
+
+Below tests not added yet
+-------------------------------------------------------------------------------------
+
+Rooms - All except lat, lon pass
+1. GT seats
+2. LT lat
+3. EQ lon
+4. IS number
+5. IS name
+6. IS href
+7. wildcard - address
+8. wildcard - type
+9. different dataset 'building' of rooms kind
+10. AND - furniture
+11. OR
+12. NOT
+13. LT seats
+14. EQ seats
 
 
 

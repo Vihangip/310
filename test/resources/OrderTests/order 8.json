@@ -1,0 +1,23 @@
+{
+	"title": "Invalid anykey",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sectionsPass"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sectionsPass"
+				]
+			}
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

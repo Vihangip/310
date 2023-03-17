@@ -181,7 +181,7 @@ export default abstract class QueryHelper {
 
 		let idString = null;
 		let fields = keys.map((key) => {
-			let field = null;
+			let field;
 			try {
 				[idString, field] = this.isKeyValid(key, this.mKeyCorrectValues);
 			} catch (err) {
@@ -218,6 +218,9 @@ export default abstract class QueryHelper {
 				keyIdStringArr.push(keyIdString);
 			} else if(idString !== keyIdString) {
 				throw new Error("Keys are not referring to same dataset");
+			}
+			if(applyKeys.includes(applyKey)) {
+				throw new Error("Duplicate Apply key");
 			}
 			applyKeys.push(applyKey);
 			applyTokens.push(applyToken);

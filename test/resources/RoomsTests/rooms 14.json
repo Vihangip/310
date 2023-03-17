@@ -1,0 +1,41 @@
+{
+	"title": "Equal - rooms (seats)",
+	"input": {
+		"WHERE": {
+			"EQ": {
+				"rooms_seats": 150
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_seats"
+			],
+			"ORDER": "rooms_seats"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A102",
+			"rooms_seats": 150
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A104",
+			"rooms_seats": 150
+		},
+		{
+			"rooms_fullname": "Earth Sciences Building",
+			"rooms_name": "ESB_1012",
+			"rooms_seats": 150
+		},
+		{
+			"rooms_fullname": "Hennings",
+			"rooms_name": "HENN_202",
+			"rooms_seats": 150
+		}
+	]
+}

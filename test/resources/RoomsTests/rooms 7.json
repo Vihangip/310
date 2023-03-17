@@ -1,0 +1,958 @@
+{
+	"title": "Wildcard - rooms (address)",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_address": "*Main Mall*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_number",
+				"rooms_address"
+			],
+			"ORDER": "rooms_number"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_037",
+			"rooms_number": "037",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_039",
+			"rooms_number": "039",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_098",
+			"rooms_number": "098",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_100",
+			"rooms_number": "100",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1001",
+			"rooms_number": "1001",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1002",
+			"rooms_number": "1002",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1003",
+			"rooms_number": "1003",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1003",
+			"rooms_number": "1003",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1004",
+			"rooms_number": "1004",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1005",
+			"rooms_number": "1005",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1005",
+			"rooms_number": "1005",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Earth Sciences Building",
+			"rooms_name": "ESB_1012",
+			"rooms_number": "1012",
+			"rooms_address": "2207 Main Mall"
+		},
+		{
+			"rooms_fullname": "Earth Sciences Building",
+			"rooms_name": "ESB_1013",
+			"rooms_number": "1013",
+			"rooms_address": "2207 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1020",
+			"rooms_number": "1020",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1021",
+			"rooms_number": "1021",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1022",
+			"rooms_number": "1022",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1023",
+			"rooms_number": "1023",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1024",
+			"rooms_number": "1024",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Aquatic Ecosystems Research Laboratory",
+			"rooms_name": "AERL_120",
+			"rooms_number": "120",
+			"rooms_address": "2202 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1221",
+			"rooms_number": "1221",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_1328",
+			"rooms_number": "1328",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1402",
+			"rooms_number": "1402",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_154",
+			"rooms_number": "154",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_158",
+			"rooms_number": "158",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_160",
+			"rooms_number": "160",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1611",
+			"rooms_number": "1611",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1613",
+			"rooms_number": "1613",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1615",
+			"rooms_number": "1615",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1617",
+			"rooms_number": "1617",
+			"rooms_address": "2424 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_166",
+			"rooms_number": "166",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_200",
+			"rooms_number": "200",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_201",
+			"rooms_number": "201",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Earth Sciences Building",
+			"rooms_name": "ESB_2012",
+			"rooms_number": "2012",
+			"rooms_address": "2207 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacLeod",
+			"rooms_name": "MCLD_202",
+			"rooms_number": "202",
+			"rooms_address": "2356 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_202",
+			"rooms_number": "202",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_203",
+			"rooms_number": "203",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_204",
+			"rooms_number": "204",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_204A",
+			"rooms_number": "204A",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_205",
+			"rooms_number": "205",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_206",
+			"rooms_number": "206",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_207",
+			"rooms_number": "207",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_208",
+			"rooms_number": "208",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_209",
+			"rooms_number": "209",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_210",
+			"rooms_number": "210",
+			"rooms_address": "2125 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacLeod",
+			"rooms_name": "MCLD_214",
+			"rooms_number": "214",
+			"rooms_address": "2356 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacLeod",
+			"rooms_name": "MCLD_220",
+			"rooms_number": "220",
+			"rooms_address": "2356 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacLeod",
+			"rooms_name": "MCLD_228",
+			"rooms_number": "228",
+			"rooms_address": "2356 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_232",
+			"rooms_number": "232",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_234",
+			"rooms_number": "234",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_235",
+			"rooms_number": "235",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_237",
+			"rooms_number": "237",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_241",
+			"rooms_number": "241",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacLeod",
+			"rooms_name": "MCLD_242",
+			"rooms_number": "242",
+			"rooms_address": "2356 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_243",
+			"rooms_number": "243",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_254",
+			"rooms_number": "254",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacLeod",
+			"rooms_name": "MCLD_254",
+			"rooms_number": "254",
+			"rooms_address": "2356 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_256",
+			"rooms_number": "256",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_260",
+			"rooms_number": "260",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_291",
+			"rooms_number": "291",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_292",
+			"rooms_number": "292",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_293",
+			"rooms_number": "293",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_295",
+			"rooms_number": "295",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_296",
+			"rooms_number": "296",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_332",
+			"rooms_number": "332",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_334",
+			"rooms_number": "334",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_335",
+			"rooms_number": "335",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_339",
+			"rooms_number": "339",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_343",
+			"rooms_number": "343",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_345",
+			"rooms_number": "345",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_347",
+			"rooms_number": "347",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_350",
+			"rooms_number": "350",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_354",
+			"rooms_number": "354",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_358",
+			"rooms_number": "358",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360A",
+			"rooms_number": "360A",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360B",
+			"rooms_number": "360B",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360C",
+			"rooms_number": "360C",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360D",
+			"rooms_number": "360D",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360E",
+			"rooms_number": "360E",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360F",
+			"rooms_number": "360F",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360G",
+			"rooms_number": "360G",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360H",
+			"rooms_number": "360H",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360J",
+			"rooms_number": "360J",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360K",
+			"rooms_number": "360K",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360L",
+			"rooms_number": "360L",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_360M",
+			"rooms_number": "360M",
+			"rooms_address": "2357 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_432",
+			"rooms_number": "432",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_434",
+			"rooms_number": "434",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_435",
+			"rooms_number": "435",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_437",
+			"rooms_number": "437",
+			"rooms_address": "2053 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A101",
+			"rooms_number": "A101",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A102",
+			"rooms_number": "A102",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A103",
+			"rooms_number": "A103",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A104",
+			"rooms_number": "A104",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A201",
+			"rooms_number": "A201",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A202",
+			"rooms_number": "A202",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A203",
+			"rooms_number": "A203",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B141",
+			"rooms_number": "B141",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B142",
+			"rooms_number": "B142",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Chemistry",
+			"rooms_name": "CHEM_B150",
+			"rooms_number": "B150",
+			"rooms_address": "2036 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B208",
+			"rooms_number": "B208",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B209",
+			"rooms_number": "B209",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B210",
+			"rooms_number": "B210",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B211",
+			"rooms_number": "B211",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B213",
+			"rooms_number": "B213",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B215",
+			"rooms_number": "B215",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B216",
+			"rooms_number": "B216",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B218",
+			"rooms_number": "B218",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B219",
+			"rooms_number": "B219",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Chemistry",
+			"rooms_name": "CHEM_B250",
+			"rooms_number": "B250",
+			"rooms_address": "2036 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B302",
+			"rooms_number": "B302",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B303",
+			"rooms_number": "B303",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B304",
+			"rooms_number": "B304",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B306",
+			"rooms_number": "B306",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B307",
+			"rooms_number": "B307",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B308",
+			"rooms_number": "B308",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B309",
+			"rooms_number": "B309",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B310",
+			"rooms_number": "B310",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B312",
+			"rooms_number": "B312",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B313",
+			"rooms_number": "B313",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B315",
+			"rooms_number": "B315",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B316",
+			"rooms_number": "B316",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B318",
+			"rooms_number": "B318",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B319",
+			"rooms_number": "B319",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Chemistry",
+			"rooms_name": "CHEM_C124",
+			"rooms_number": "C124",
+			"rooms_address": "2036 Main Mall"
+		},
+		{
+			"rooms_fullname": "Chemistry",
+			"rooms_name": "CHEM_C126",
+			"rooms_number": "C126",
+			"rooms_address": "2036 Main Mall"
+		},
+		{
+			"rooms_fullname": "Chemistry",
+			"rooms_name": "CHEM_D200",
+			"rooms_number": "D200",
+			"rooms_address": "2036 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D201",
+			"rooms_number": "D201",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D204",
+			"rooms_number": "D204",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D205",
+			"rooms_number": "D205",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D207",
+			"rooms_number": "D207",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D209",
+			"rooms_number": "D209",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D213",
+			"rooms_number": "D213",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D214",
+			"rooms_number": "D214",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D216",
+			"rooms_number": "D216",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D217",
+			"rooms_number": "D217",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D218",
+			"rooms_number": "D218",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D219",
+			"rooms_number": "D219",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D221",
+			"rooms_number": "D221",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D222",
+			"rooms_number": "D222",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D228",
+			"rooms_number": "D228",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D229",
+			"rooms_number": "D229",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Chemistry",
+			"rooms_name": "CHEM_D300",
+			"rooms_number": "D300",
+			"rooms_address": "2036 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D301",
+			"rooms_number": "D301",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D304",
+			"rooms_number": "D304",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D306",
+			"rooms_number": "D306",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D307",
+			"rooms_number": "D307",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D312",
+			"rooms_number": "D312",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D313",
+			"rooms_number": "D313",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D314",
+			"rooms_number": "D314",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D315",
+			"rooms_number": "D315",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D316",
+			"rooms_number": "D316",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D317",
+			"rooms_number": "D317",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D319",
+			"rooms_number": "D319",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D322",
+			"rooms_number": "D322",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D323",
+			"rooms_number": "D323",
+			"rooms_address": "1866 Main Mall"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D325",
+			"rooms_number": "D325",
+			"rooms_address": "1866 Main Mall"
+		}
+	]
+}

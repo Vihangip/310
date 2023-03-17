@@ -1,0 +1,166 @@
+{
+	"title": "Wildcard - rooms (type)",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_type": "*Style"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_number",
+				"rooms_type"
+			],
+			"ORDER": "rooms_number"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_037",
+			"rooms_number": "037",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_039",
+			"rooms_number": "039",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1001",
+			"rooms_number": "1001",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Forest Sciences Centre",
+			"rooms_name": "FSC_1003",
+			"rooms_number": "1003",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Allard Hall (LAW)",
+			"rooms_name": "ALRD_105",
+			"rooms_number": "105",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Civil and Mechanical Engineering",
+			"rooms_name": "CEME_1204",
+			"rooms_number": "1204",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Allard Hall (LAW)",
+			"rooms_name": "ALRD_121",
+			"rooms_number": "121",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Civil and Mechanical Engineering",
+			"rooms_name": "CEME_1212",
+			"rooms_number": "1212",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Civil and Mechanical Engineering",
+			"rooms_name": "CEME_1215",
+			"rooms_number": "1215",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Irving K Barber Learning Centre",
+			"rooms_name": "IBLC_155",
+			"rooms_number": "155",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "MacMillan",
+			"rooms_name": "MCML_160",
+			"rooms_number": "160",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_234",
+			"rooms_number": "234",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_235",
+			"rooms_number": "235",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_237",
+			"rooms_number": "237",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Iona Building",
+			"rooms_name": "IONA_301",
+			"rooms_number": "301",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_334",
+			"rooms_number": "334",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_335",
+			"rooms_number": "335",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Henry Angus",
+			"rooms_name": "ANGU_434",
+			"rooms_number": "434",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A202",
+			"rooms_number": "A202",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_A203",
+			"rooms_number": "A203",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B208",
+			"rooms_number": "B208",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B213",
+			"rooms_number": "B213",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_B215",
+			"rooms_number": "B215",
+			"rooms_type": "Case Style"
+		},
+		{
+			"rooms_fullname": "Buchanan",
+			"rooms_name": "BUCH_D222",
+			"rooms_number": "D222",
+			"rooms_type": "Case Style"
+		}
+	]
+}

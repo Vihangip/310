@@ -1,0 +1,16 @@
+{
+	"title": "Invalid mcomp",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_address",
+				"rooms_Seats"
+			],
+			"ORDER": "rooms_seats"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

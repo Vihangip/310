@@ -1,0 +1,28 @@
+{
+	"title": "Is - rooms (href)",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/GEOG-201"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_number",
+				"rooms_href"
+			],
+			"ORDER": "rooms_number"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Geography",
+			"rooms_name": "GEOG_201",
+			"rooms_number": "201",
+			"rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/GEOG-201"
+		}
+	]
+}

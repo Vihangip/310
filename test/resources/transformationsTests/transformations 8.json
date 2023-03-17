@@ -1,0 +1,91 @@
+{
+	"title": "small transformations",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "fipr"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"overallAvg"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_avg"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"overallAvg": 81.11,
+			"sections_title": "adv doc dev&prod"
+		},
+		{
+			"overallAvg": 81.17,
+			"sections_title": "cinematograph ii"
+		},
+		{
+			"overallAvg": 80.21,
+			"sections_title": "cinmtgry&light i"
+		},
+		{
+			"overallAvg": 79.7,
+			"sections_title": "int directing"
+		},
+		{
+			"overallAvg": 73.85,
+			"sections_title": "intr hst flm prd"
+		},
+		{
+			"overallAvg": 79.79,
+			"sections_title": "intr mtn pct dir"
+		},
+		{
+			"overallAvg": 70.3,
+			"sections_title": "intro screen act"
+		},
+		{
+			"overallAvg": 87.02,
+			"sections_title": "mo pict prod i"
+		},
+		{
+			"overallAvg": 84.59,
+			"sections_title": "mo pict prod ii"
+		},
+		{
+			"overallAvg": 84.9,
+			"sections_title": "motn pictr sound"
+		},
+		{
+			"overallAvg": 78.41,
+			"sections_title": "plan&prof practc"
+		},
+		{
+			"overallAvg": 85.06,
+			"sections_title": "post-prod tec i"
+		},
+		{
+			"overallAvg": 80.48,
+			"sections_title": "prodcing film&tv"
+		},
+		{
+			"overallAvg": 86.72,
+			"sections_title": "snd rec film&vid"
+		},
+		{
+			"overallAvg": 82.31,
+			"sections_title": "video prod i"
+		}
+	]
+}

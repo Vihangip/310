@@ -1,0 +1,41 @@
+{
+	"title": "Is - rooms (number)",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_number": "200"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_number"
+			],
+			"ORDER": "rooms_number"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Geography",
+			"rooms_name": "GEOG_200",
+			"rooms_number": "200"
+		},
+		{
+			"rooms_fullname": "Hennings",
+			"rooms_name": "HENN_200",
+			"rooms_number": "200"
+		},
+		{
+			"rooms_fullname": "Leonard S. Klinck (also known as CSCI)",
+			"rooms_name": "LSK_200",
+			"rooms_number": "200"
+		},
+		{
+			"rooms_fullname": "Neville Scarfe",
+			"rooms_name": "SCRF_200",
+			"rooms_number": "200"
+		}
+	]
+}

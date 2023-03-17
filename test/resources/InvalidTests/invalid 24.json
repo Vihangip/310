@@ -1,0 +1,19 @@
+{
+	"title": "Invalid type",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"rooms_seats": "150"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_seats"
+			],
+			"ORDER": "rooms_seats"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

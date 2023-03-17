@@ -1,0 +1,249 @@
+{
+	"title": "small transformations MAX with order",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "cpsc"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"Maximum passed"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"Maximum passed"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"Maximum passed": {
+						"MAX": "sections_pass"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_title": "comptn, progrmng",
+			"Maximum passed": 966
+		},
+		{
+			"sections_title": "model comptn",
+			"Maximum passed": 701
+		},
+		{
+			"sections_title": "sftwr constructn",
+			"Maximum passed": 696
+		},
+		{
+			"sections_title": "basic alg&data",
+			"Maximum passed": 497
+		},
+		{
+			"sections_title": "intro comp sys",
+			"Maximum passed": 411
+		},
+		{
+			"sections_title": "intr alg dsgn&an",
+			"Maximum passed": 351
+		},
+		{
+			"sections_title": "intr sftwr eng",
+			"Maximum passed": 347
+		},
+		{
+			"sections_title": "comp hard&os",
+			"Maximum passed": 326
+		},
+		{
+			"sections_title": "intr rel databse",
+			"Maximum passed": 310
+		},
+		{
+			"sections_title": "artificial intel",
+			"Maximum passed": 247
+		},
+		{
+			"sections_title": "internet comp",
+			"Maximum passed": 236
+		},
+		{
+			"sections_title": "dta&alg elec eng",
+			"Maximum passed": 206
+		},
+		{
+			"sections_title": "adv rel databse",
+			"Maximum passed": 186
+		},
+		{
+			"sections_title": "machine lrn mine",
+			"Maximum passed": 171
+		},
+		{
+			"sections_title": "func & logic prg",
+			"Maximum passed": 158
+		},
+		{
+			"sections_title": "comptng life sci",
+			"Maximum passed": 151
+		},
+		{
+			"sections_title": "comp graphics",
+			"Maximum passed": 139
+		},
+		{
+			"sections_title": "adv software eng",
+			"Maximum passed": 135
+		},
+		{
+			"sections_title": "basics comp syst",
+			"Maximum passed": 118
+		},
+		{
+			"sections_title": "computer vision",
+			"Maximum passed": 112
+		},
+		{
+			"sections_title": "programmng langs",
+			"Maximum passed": 105
+		},
+		{
+			"sections_title": "comptr & society",
+			"Maximum passed": 104
+		},
+		{
+			"sections_title": "adv opertng sysm",
+			"Maximum passed": 95
+		},
+		{
+			"sections_title": "hum-com interact",
+			"Maximum passed": 93
+		},
+		{
+			"sections_title": "machine learn i",
+			"Maximum passed": 79
+		},
+		{
+			"sections_title": "distrbt'd systms",
+			"Maximum passed": 77
+		},
+		{
+			"sections_title": "softwr eng proj",
+			"Maximum passed": 75
+		},
+		{
+			"sections_title": "num comp alg prb",
+			"Maximum passed": 64
+		},
+		{
+			"sections_title": "num approx/discr",
+			"Maximum passed": 64
+		},
+		{
+			"sections_title": "adv alg dsgn&anl",
+			"Maximum passed": 56
+		},
+		{
+			"sections_title": "parallel comput",
+			"Maximum passed": 52
+		},
+		{
+			"sections_title": "hmn-cp interactn",
+			"Maximum passed": 51
+		},
+		{
+			"sections_title": "theory comptg",
+			"Maximum passed": 50
+		},
+		{
+			"sections_title": "intel systems",
+			"Maximum passed": 44
+		},
+		{
+			"sections_title": "compiler constrc",
+			"Maximum passed": 44
+		},
+		{
+			"sections_title": "alg in bioin",
+			"Maximum passed": 32
+		},
+		{
+			"sections_title": "para algs & arch",
+			"Maximum passed": 25
+		},
+		{
+			"sections_title": "info visualizatn",
+			"Maximum passed": 25
+		},
+		{
+			"sections_title": "fund alg dsgn&an",
+			"Maximum passed": 23
+		},
+		{
+			"sections_title": "comp comm protcl",
+			"Maximum passed": 23
+		},
+		{
+			"sections_title": "student seminar",
+			"Maximum passed": 22
+		},
+		{
+			"sections_title": "hmn-cmpt intract",
+			"Maximum passed": 22
+		},
+		{
+			"sections_title": "artif intell 1",
+			"Maximum passed": 22
+		},
+		{
+			"sections_title": "prog lang princ",
+			"Maximum passed": 20
+		},
+		{
+			"sections_title": "phy user intfc",
+			"Maximum passed": 20
+		},
+		{
+			"sections_title": "software eng",
+			"Maximum passed": 19
+		},
+		{
+			"sections_title": "computl ling 1",
+			"Maximum passed": 19
+		},
+		{
+			"sections_title": "artif intell 2",
+			"Maximum passed": 18
+		},
+		{
+			"sections_title": "intgrt sys desgn",
+			"Maximum passed": 14
+		},
+		{
+			"sections_title": "comput robotics",
+			"Maximum passed": 14
+		},
+		{
+			"sections_title": "honours thesis",
+			"Maximum passed": 11
+		},
+		{
+			"sections_title": "thry of automata",
+			"Maximum passed": 8
+		},
+		{
+			"sections_title": "m.sc major essay",
+			"Maximum passed": 5
+		}
+	]
+}

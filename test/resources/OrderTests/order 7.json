@@ -1,0 +1,23 @@
+{
+	"title": "Invalid order direction - not a string",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_pass"
+			],
+			"ORDER": {
+				"dir": 10,
+				"keys": [
+					"sections_pass"
+				]
+			}
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

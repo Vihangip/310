@@ -1,0 +1,33 @@
+{
+	"title": "invalid query contains object other than WHERE OPTIONS and TRANSFORMATIONS",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "fipr"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"overallAvg"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_avg"
+					}
+				}
+			]
+		},
+		"SOMETHING ELSE" : {
+			"RANDOM" : ["hello"]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

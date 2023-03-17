@@ -1,0 +1,26 @@
+{
+	"title": "Is - rooms (name)",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_name": "LSK_200"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_number"
+			],
+			"ORDER": "rooms_number"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Leonard S. Klinck (also known as CSCI)",
+			"rooms_name": "LSK_200",
+			"rooms_number": "200"
+		}
+	]
+}

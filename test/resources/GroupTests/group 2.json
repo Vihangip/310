@@ -1,0 +1,134 @@
+{
+	"title": "Query with two group keys",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"overallAvg"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"overallAvg"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_dept",
+				"sections_pass"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_pass"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "crwr",
+			"overallAvg": 1
+		},
+		{
+			"sections_dept": "math",
+			"overallAvg": 4
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 9
+		},
+		{
+			"sections_dept": "math",
+			"overallAvg": 9
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 10
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 11
+		},
+		{
+			"sections_dept": "math",
+			"overallAvg": 11
+		},
+		{
+			"sections_dept": "eece",
+			"overallAvg": 12
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 12
+		},
+		{
+			"sections_dept": "nurs",
+			"overallAvg": 12
+		},
+		{
+			"sections_dept": "educ",
+			"overallAvg": 14
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 14
+		},
+		{
+			"sections_dept": "nurs",
+			"overallAvg": 14
+		},
+		{
+			"sections_dept": "cnps",
+			"overallAvg": 15
+		},
+		{
+			"sections_dept": "cnps",
+			"overallAvg": 16
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 16
+		},
+		{
+			"sections_dept": "nurs",
+			"overallAvg": 16
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 17
+		},
+		{
+			"sections_dept": "nurs",
+			"overallAvg": 17
+		},
+		{
+			"sections_dept": "math",
+			"overallAvg": 21
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 22
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 24
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 25
+		},
+		{
+			"sections_dept": "spph",
+			"overallAvg": 82
+		}
+	]
+}

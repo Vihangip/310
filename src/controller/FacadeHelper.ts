@@ -1,5 +1,4 @@
-
-import {InsightDataset, InsightResult} from "./IInsightFacade";
+import {InsightResult} from "./IInsightFacade";
 import {InsightDatasetExpanded, SectionFacade, RoomFacade} from "./DatasetFacade";
 import QueryHelper from "./QueryHelper";
 
@@ -104,17 +103,17 @@ export default abstract class FacadeHelper {
 	}
 
 	public static groupResults(groupKeys: any, indices: number[], dataset: InsightDatasetExpanded): any[] {
-		let groups: [];
+		let groups: any = [];
 		let facadeObjects: any;
 
-		try {
+		if (dataset.kind === "sections") {
 			facadeObjects = indices.map((index) => {
 				let facade;
 				facade = dataset.sections[index];
 				return facade;
 			});
 			groups = this.groupingSections(groupKeys, facadeObjects);
-		} catch (e) {
+		} else if (dataset.kind === "rooms") {
 			facadeObjects = indices.map((index) => {
 				let facade;
 				facade = dataset.rooms[index];
@@ -122,6 +121,7 @@ export default abstract class FacadeHelper {
 			});
 			groups = this.groupingRooms(groupKeys,facadeObjects);
 		}
+
 		return groups;
 	}
 
@@ -225,30 +225,28 @@ export default abstract class FacadeHelper {
 	public static getResults(idString: string, columns: string[], applyKeys: any, transformedResults: any,
 							 groupedResults: any) {
 		let output: InsightResult[] = [];
-		let iResult: InsightResult = {};
-		for (let i = 0; i < applyKeys.length; i++) {
-			for (let j = 0; j < groupedResults.length; j++) {
-				let group = groupedResults[j];
-				let facade = group[0];
-				for (let column of columns) {
-					if (column !== "applyKey") {
-						let currColValue;
-						try {
-							currColValue = QueryHelper.getSectionInfo(facade, column);
-						} catch (e) {
-							currColValue = QueryHelper.getRoomInfo(facade, column);
-						}
-						iResult[idString + "_" + column] = currColValue;
+		for (let group of groupedResults) {
+			let iResult: InsightResult = {};
+			let facade = group[0];
+			for (let column of columns) {
+				if (!applyKeys.includes(column)) {
+					let currColValue;
+					try {
+						currColValue = QueryHelper.getSectionInfo(facade, column);
+					} catch (e) {
+						currColValue = QueryHelper.getRoomInfo(facade, column);
+					}
+					iResult[idString + "_" + column] = currColValue;
 
-					} else if (column === "applyKey") {
+				} else if (applyKeys.includes(column)) {
+					for (let i = 0; i < applyKeys.length; i++) {
 						let applyKey = applyKeys[i];
-						let applyKeyValue = transformedResults[i][j];
+						let applyKeyValue = transformedResults[i][groupedResults.indexOf(group)];
 						iResult[applyKey] = applyKeyValue;
 					}
 				}
-				output.push(iResult);
-				iResult = {};
 			}
+			output.push(iResult);
 		}
 		return output;
 	}

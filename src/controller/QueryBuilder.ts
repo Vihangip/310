@@ -273,6 +273,15 @@ export default class QueryBuilder {
 			// options
 			let [idString,columnFields, anyKeyList, direction] = this.parseOptions(query["OPTIONS"], applyKeysArray);
 
+			if (applyKeysArray.length !== 0 && groupKeysArray.length !== 0) {
+				for (let column of columnFields) {
+					if (!groupKeysArray.includes(column)) {
+						if (!applyKeysArray.includes(column)) {
+							throw new Error("Keys in COLUMNS not in GROUP or APPLY");
+						}
+					}
+				}
+			}
 			return new Query(idString, filter, columnFields, anyKeyList, direction, groupKeysArray,
 				applyTokensArray, keyFieldsArray, applyKeysArray);
 		} catch (e) {

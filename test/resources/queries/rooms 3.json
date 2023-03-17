@@ -1,0 +1,41 @@
+{
+	"title": "Equal - rooms",
+	"input": {
+		"WHERE": {
+			"EQ": {
+				"rooms_lon": -123.25741
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_name",
+				"rooms_lon"
+			],
+			"ORDER": "rooms_lon"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_fullname": "Anthropology and Sociology",
+			"rooms_name": "ANSO_202",
+			"rooms_lon": -123.25741
+		},
+		{
+			"rooms_fullname": "Anthropology and Sociology",
+			"rooms_name": "ANSO_203",
+			"rooms_lon": -123.25741
+		},
+		{
+			"rooms_fullname": "Anthropology and Sociology",
+			"rooms_name": "ANSO_205",
+			"rooms_lon": -123.25741
+		},
+		{
+			"rooms_fullname": "Anthropology and Sociology",
+			"rooms_name": "ANSO_207",
+			"rooms_lon": -123.25741
+		}
+	]
+}

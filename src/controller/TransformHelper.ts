@@ -4,9 +4,9 @@ export default abstract class TransformHelper {
 	public static applyTransformations(groupedResults: any[], applyTokens: any,
 									   keyFields: any): any[] {
 		let output: any = [];
-		let values: any = [];
-		let tokenValues: any;
+		let tokenValues: any = [];
 		for (let i = 0; i < applyTokens.length; i++) {
+			let values: any = [];
 			for (let group of groupedResults) {
 				let currValues: any = [];
 				for (let facade of group) {
@@ -19,7 +19,8 @@ export default abstract class TransformHelper {
 					}
 					currValues.push(value);
 				}
-				values.push(currValues.slice());
+				values.push(currValues);
+				currValues.slice();
 			}
 			let currToken = applyTokens[i];
 
@@ -59,6 +60,7 @@ export default abstract class TransformHelper {
 				}
 			}
 			minArray.push(smallest);
+			smallest = null;
 		}
 		return minArray;
 	}
@@ -76,6 +78,7 @@ export default abstract class TransformHelper {
 				}
 			}
 			maxArray.push(largest);
+			largest = null;
 		}
 		return maxArray;
 	}
@@ -96,15 +99,18 @@ export default abstract class TransformHelper {
 		return sumArray;
 	}
 
-	private static performCount(values: any): number[] {
-		let countArray: any = [];
-		let count: number = 0;
+
+	private static performCount(values: any[]): number[] {
+		let countArray: number[] = [];
+
 		for (let groupValues of values) {
+			let uniqueValues = new Set();
 			for (let value of groupValues) {
-				count = count++;
+				uniqueValues.add(value);
 			}
-			countArray.push(count);
+			countArray.push(uniqueValues.size);
 		}
+
 		return countArray;
 	}
 

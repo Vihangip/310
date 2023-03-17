@@ -1,5 +1,5 @@
 import {InsightResult} from "./IInsightFacade";
-import {InsightDatasetExpanded, SectionFacade} from "./DatasetFacade";
+import {InsightDatasetExpanded} from "./DatasetFacade";
 import QueryHelper from "./QueryHelper";
 import FacadeHelper from "./FacadeHelper";
 import TransformHelper from "./TransformHelper";
@@ -27,8 +27,8 @@ export class EmptyFilter extends Filter {
 // custom Filter object for m comparison
 export class MComparisonFilter extends Filter {
 	private idString: string; // id of dataset
-	private mField: string; // avg, pass, fail...
-	private compValue: number; // number to compare against
+	private readonly mField: string; // avg, pass, fail...
+	private readonly compValue: number; // number to compare against
 
 	constructor(kind: string, idString: string, mField: string, compValue: number) {
 		super(kind);
@@ -56,14 +56,14 @@ export class MComparisonFilter extends Filter {
 		};
 
 		const indices: number[] = [];
-		try {
+		if (dataset.kind === "sections") {
 			for (let i = 0; i < dataset.sections.length; i++) {
 				const value = QueryHelper.getSectionInfo(dataset.sections[i], this.mField);
 				if (filterFn(value, this.compValue, this.kind)) {
 					indices.push(i);
 				}
 			}
-		} catch (e) {
+		} else if (dataset.kind === "rooms") {
 			for (let i = 0; i < dataset.rooms.length; i++) {
 				const value = QueryHelper.getRoomInfo(dataset.rooms[i], this.mField);
 				if (filterFn(value, this.compValue, this.kind)) {
@@ -79,8 +79,8 @@ export class MComparisonFilter extends Filter {
 // custom Filter object for s comparison
 export class SComparisonFilter extends Filter {
 	private idString: string; // id of dataset
-	private sField: string; // dept, id...
-	private inputString: RegExp; // regex to compare against
+	private readonly sField: string; // dept, id...
+	private readonly inputString: RegExp; // regex to compare against
 	constructor(kind: string, idString: string, sField: string, inputString: RegExp) {
 		super(kind);
 		this.idString = idString;
@@ -91,7 +91,8 @@ export class SComparisonFilter extends Filter {
 	// produce a list of indices (numbers) in the dataset's sections array that satisfy the comparison
 	public run(dataset: InsightDatasetExpanded): number[] {
 		let indices: number[] = [];
-		try {
+
+		if (dataset.kind === "sections") {
 			for (let i = 0; i < dataset.sections.length; i++) {
 				let sectionInfo = QueryHelper.getSectionInfo(dataset.sections[i], this.sField);
 				if (sectionInfo === null || typeof sectionInfo === "number") {
@@ -101,7 +102,7 @@ export class SComparisonFilter extends Filter {
 					indices.push(i);
 				}
 			}
-		} catch (e) {
+		} else if (dataset.kind === "rooms") {
 			for (let i = 0; i < dataset.rooms.length; i++) {
 				let roomInfo = QueryHelper.getRoomInfo(dataset.rooms[i], this.sField);
 				if (roomInfo === null || typeof roomInfo === "number") {
@@ -118,7 +119,7 @@ export class SComparisonFilter extends Filter {
 
 // custom Filter object for logic comparison
 export class LogicComparisonFilter extends Filter {
-	private filterList: Filter[]; // sub-filters
+	private readonly filterList: Filter[]; // sub-filters
 	constructor(kind: string, filterList: Filter[]) {
 		super(kind);
 		this.filterList = filterList;
@@ -131,25 +132,20 @@ export class LogicComparisonFilter extends Filter {
 	public run(dataset: InsightDatasetExpanded): number[] {
 		let indices: number[] = [];
 		let indexSet = new Set<number>();
+
 		switch (this.kind) {
 			case "AND":
-				// indices = indices obtained "so far" (when going through past filters)
 				indices = this.filterList[0].run(dataset);
 				for (let i = 1; i < this.filterList.length; i++) {
-					// results = indices obtained when looking at this specific filter
 					let results = this.filterList[i].run(dataset);
-					// only take ones that are in both
 					results = results.filter((result) => {
 						return indices.includes(result);
 					});
 					indices = results;
 				}
 				return indices;
+
 			case "OR":
-				/*
-				sets basically work like OR, you can only have one copy of each item (duplicates will be ignored)
-				so we add every index that works with the filter to a set and then convert that set to a list
-				 */
 				for (let item of this.filterList) {
 					let results = item.run(dataset);
 					for (let result of results) {
@@ -167,7 +163,7 @@ export class LogicComparisonFilter extends Filter {
 
 // custom Filter object for negation
 export class NegationFilter extends Filter {
-	private filter: Filter; // only has one filter
+	private filter: Filter;
 	constructor(kind: string, filter: Filter) {
 		super(kind);
 		this.filter = filter;
@@ -179,32 +175,26 @@ export class NegationFilter extends Filter {
 	 */
 	public run(dataset: InsightDatasetExpanded): number[] {
 		let indices: number[] = [];
-		// results = all indices that work with any sub-filters
 		let results = this.filter.run(dataset);
-		try {
+		if (dataset.kind === "sections") {
 			if (results.length === 0) {
 				return dataset.sections.map((section, index) => {
 					return index;
 				});
 			}
-		} catch (e) {
+		} else if (dataset.kind === "rooms") {
 			if (results.length === 0) {
 				return dataset.rooms.map((section, index) => {
 					return index;
 				});
 			}
 		}
-		/*
-		sort the results, so we don't have to go searching through the whole array each time
-		and can instead just count through the array once
-		 */
 		results.sort((a, b) => {
 			return a - b;
 		});
-		// count through the possible indices, saving only indices that are NOT in results (sub-filters do not apply)
 		let end = results[0];
 		let currentResult = 0;
-		try {
+		if (dataset.kind === "sections") {
 			for (let i = 0; i < dataset.sections.length; i++) {
 				if (i < end) {
 					indices.push(i);
@@ -217,7 +207,7 @@ export class NegationFilter extends Filter {
 					}
 				}
 			}
-		} catch (e) {
+		} else if (dataset.kind === "rooms") {
 			for (let i = 0; i < dataset.rooms.length; i++) {
 				if (i < end) {
 					indices.push(i);
@@ -237,16 +227,16 @@ export class NegationFilter extends Filter {
 
 // top level query object (can only have one filter in it)
 export default class Query {
-	private filter: Filter;
-	private idString: string;
-	private columns: string[]; // only the fields, because you can only have one dataset
-	private anyKeyList: any;
-	private groupKeys: any;
-	private applyTokens: any;
-	private keyFields: any;
-	private direction: string | null; // only a field as above, null if order doesn't matter
+	private readonly filter: Filter;
+	private readonly idString: string;
+	private readonly columns: string[]; // only the fields, because you can only have one dataset
+	private readonly anyKeyList: any;
+	private readonly groupKeys: any;
+	private readonly applyTokens: any;
+	private readonly keyFields: any;
+	private readonly direction: string | null; // only a field as above, null if order doesn't matter
+	private readonly applyKeys: any;
 
-	private applyKeys: any;
 	constructor(idString: string, filter: Filter, columns: string[], anyKeyList: any[] | null, direction: string | null,
 		groupKeys: any[] | null, applyTokens: any[] | null, keyFields: any[] | null, applyKeys: string[] | null) {
 		this.idString = idString;
@@ -267,10 +257,10 @@ export default class Query {
 
 	// given a dataset, recurses through the query's filter and any sub-filters to find the entries that satisfy it
 	public run(dataset: InsightDatasetExpanded): InsightResult[] {
-		let outputResults = [];
+		let outputResults: any;
 		let transformedResults: any;
 		let results: any;
-		// recursive step, runs all sub-filters first to get a list of indices (numbers) in the dataset's list of sections that work
+
 		let indices = this.filter.run(dataset);
 
 		if (this.groupKeys.length !== 0) {
@@ -278,8 +268,8 @@ export default class Query {
 			transformedResults = TransformHelper.applyTransformations(groupedResults, this.applyTokens, this.keyFields);
 			results = FacadeHelper.getResults(this.idString, this.columns, this.applyKeys, transformedResults,
 				groupedResults);
+
 		} else {
-			// turn the list of indices into a list of InsightResult objects. each object contains only the mfields/sfields in columns
 			results = indices.map((index) => {
 				try {
 					return FacadeHelper.convertSectIndices(dataset,index,this.columns);
@@ -288,11 +278,13 @@ export default class Query {
 				}
 			});
 		}
+
 		if (this.anyKeyList !== null) {
 			outputResults = FacadeHelper.sortOptions(this.direction, this.anyKeyList, results);
 		} else {
 			outputResults = results;
 		}
+
 		return outputResults;
 	}
 }

@@ -1,0 +1,24 @@
+{
+	"title": "Invalid - anykey not in columns",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_pass",
+				"sections_fail"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sections_audit"
+				]
+			}
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

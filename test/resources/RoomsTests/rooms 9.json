@@ -1,0 +1,206 @@
+{
+	"title": "Greater than - building",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"building_seats": 150
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"building_fullname",
+				"building_name",
+				"building_seats"
+			],
+			"ORDER": "building_seats"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"building_fullname": "Irving K Barber Learning Centre",
+			"building_name": "IBLC_182",
+			"building_seats": 154
+		},
+		{
+			"building_fullname": "Hennings",
+			"building_name": "HENN_201",
+			"building_seats": 155
+		},
+		{
+			"building_fullname": "Friedman Building",
+			"building_name": "FRDM_153",
+			"building_seats": 160
+		},
+		{
+			"building_fullname": "Hugh Dempster Pavilion",
+			"building_name": "DMP_310",
+			"building_seats": 160
+		},
+		{
+			"building_fullname": "Pharmaceutical Sciences Building",
+			"building_name": "PHRM_1201",
+			"building_seats": 167
+		},
+		{
+			"building_fullname": "Buchanan",
+			"building_name": "BUCH_A201",
+			"building_seats": 181
+		},
+		{
+			"building_fullname": "Woodward (Instructional Resources Centre-IRC)",
+			"building_name": "WOOD_6",
+			"building_seats": 181
+		},
+		{
+			"building_fullname": "Leonard S. Klinck (also known as CSCI)",
+			"building_name": "LSK_201",
+			"building_seats": 183
+		},
+		{
+			"building_fullname": "West Mall Swing Space",
+			"building_name": "SWNG_121",
+			"building_seats": 187
+		},
+		{
+			"building_fullname": "West Mall Swing Space",
+			"building_name": "SWNG_122",
+			"building_seats": 188
+		},
+		{
+			"building_fullname": "West Mall Swing Space",
+			"building_name": "SWNG_221",
+			"building_seats": 190
+		},
+		{
+			"building_fullname": "West Mall Swing Space",
+			"building_name": "SWNG_222",
+			"building_seats": 190
+		},
+		{
+			"building_fullname": "Chemical and Biological Engineering Building",
+			"building_name": "CHBE_101",
+			"building_seats": 200
+		},
+		{
+			"building_fullname": "MacMillan",
+			"building_name": "MCML_166",
+			"building_seats": 200
+		},
+		{
+			"building_fullname": "Leonard S. Klinck (also known as CSCI)",
+			"building_name": "LSK_200",
+			"building_seats": 205
+		},
+		{
+			"building_fullname": "Mathematics",
+			"building_name": "MATH_100",
+			"building_seats": 224
+		},
+		{
+			"building_fullname": "Geography",
+			"building_name": "GEOG_100",
+			"building_seats": 225
+		},
+		{
+			"building_fullname": "Biological Sciences",
+			"building_name": "BIOL_2000",
+			"building_seats": 228
+		},
+		{
+			"building_fullname": "Pharmaceutical Sciences Building",
+			"building_name": "PHRM_1101",
+			"building_seats": 236
+		},
+		{
+			"building_fullname": "Chemistry",
+			"building_name": "CHEM_B250",
+			"building_seats": 240
+		},
+		{
+			"building_fullname": "Forest Sciences Centre",
+			"building_name": "FSC_1005",
+			"building_seats": 250
+		},
+		{
+			"building_fullname": "Hennings",
+			"building_name": "HENN_200",
+			"building_seats": 257
+		},
+		{
+			"building_fullname": "Henry Angus",
+			"building_name": "ANGU_098",
+			"building_seats": 260
+		},
+		{
+			"building_fullname": "Chemistry",
+			"building_name": "CHEM_B150",
+			"building_seats": 265
+		},
+		{
+			"building_fullname": "Buchanan",
+			"building_name": "BUCH_A101",
+			"building_seats": 275
+		},
+		{
+			"building_fullname": "Neville Scarfe",
+			"building_name": "SCRF_100",
+			"building_seats": 280
+		},
+		{
+			"building_fullname": "Student Recreation Centre",
+			"building_name": "SRC_220A",
+			"building_seats": 299
+		},
+		{
+			"building_fullname": "Student Recreation Centre",
+			"building_name": "SRC_220B",
+			"building_seats": 299
+		},
+		{
+			"building_fullname": "Student Recreation Centre",
+			"building_name": "SRC_220C",
+			"building_seats": 299
+		},
+		{
+			"building_fullname": "Wesbrook",
+			"building_name": "WESB_100",
+			"building_seats": 325
+		},
+		{
+			"building_fullname": "Earth Sciences Building",
+			"building_name": "ESB_1013",
+			"building_seats": 350
+		},
+		{
+			"building_fullname": "Life Sciences Centre",
+			"building_name": "LSC_1001",
+			"building_seats": 350
+		},
+		{
+			"building_fullname": "Life Sciences Centre",
+			"building_name": "LSC_1002",
+			"building_seats": 350
+		},
+		{
+			"building_fullname": "Hebb",
+			"building_name": "HEBB_100",
+			"building_seats": 375
+		},
+		{
+			"building_fullname": "Centre for Interactive  Research on Sustainability",
+			"building_name": "CIRS_1250",
+			"building_seats": 426
+		},
+		{
+			"building_fullname": "Robert F. Osborne Centre",
+			"building_name": "OSBO_A",
+			"building_seats": 442
+		},
+		{
+			"building_fullname": "Woodward (Instructional Resources Centre-IRC)",
+			"building_name": "WOOD_2",
+			"building_seats": 503
+		}
+	]
+}

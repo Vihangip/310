@@ -1,0 +1,139 @@
+{
+	"title": "transformations with three apply keys",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "fipr"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"overallAvg",
+				"Total Failed",
+				"Maximum passed"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"overallAvg"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_avg"
+					}
+				},
+				{
+					"Total Failed": {
+						"SUM": "sections_fail"
+					}
+				},
+				{
+					"Maximum passed": {
+						"MAX": "sections_pass"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_title": "intro screen act",
+			"overallAvg": 70.3,
+			"Total Failed": 16,
+			"Maximum passed": 68
+		},
+		{
+			"sections_title": "intr hst flm prd",
+			"overallAvg": 73.85,
+			"Total Failed": 4,
+			"Maximum passed": 52
+		},
+		{
+			"sections_title": "plan&prof practc",
+			"overallAvg": 78.41,
+			"Total Failed": 20,
+			"Maximum passed": 79
+		},
+		{
+			"sections_title": "int directing",
+			"overallAvg": 79.7,
+			"Total Failed": 0,
+			"Maximum passed": 25
+		},
+		{
+			"sections_title": "intr mtn pct dir",
+			"overallAvg": 79.79,
+			"Total Failed": 0,
+			"Maximum passed": 59
+		},
+		{
+			"sections_title": "cinmtgry&light i",
+			"overallAvg": 80.21,
+			"Total Failed": 2,
+			"Maximum passed": 25
+		},
+		{
+			"sections_title": "prodcing film&tv",
+			"overallAvg": 80.48,
+			"Total Failed": 2,
+			"Maximum passed": 24
+		},
+		{
+			"sections_title": "adv doc dev&prod",
+			"overallAvg": 81.11,
+			"Total Failed": 0,
+			"Maximum passed": 9
+		},
+		{
+			"sections_title": "cinematograph ii",
+			"overallAvg": 81.17,
+			"Total Failed": 0,
+			"Maximum passed": 22
+		},
+		{
+			"sections_title": "video prod i",
+			"overallAvg": 82.31,
+			"Total Failed": 0,
+			"Maximum passed": 94
+		},
+		{
+			"sections_title": "mo pict prod ii",
+			"overallAvg": 84.59,
+			"Total Failed": 0,
+			"Maximum passed": 23
+		},
+		{
+			"sections_title": "motn pictr sound",
+			"overallAvg": 84.9,
+			"Total Failed": 2,
+			"Maximum passed": 21
+		},
+		{
+			"sections_title": "post-prod tec i",
+			"overallAvg": 85.06,
+			"Total Failed": 0,
+			"Maximum passed": 24
+		},
+		{
+			"sections_title": "snd rec film&vid",
+			"overallAvg": 86.72,
+			"Total Failed": 0,
+			"Maximum passed": 22
+		},
+		{
+			"sections_title": "mo pict prod i",
+			"overallAvg": 87.02,
+			"Total Failed": 2,
+			"Maximum passed": 22
+		}
+	]
+}
