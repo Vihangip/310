@@ -211,32 +211,23 @@ export default abstract class RoomHelper {
 		let roomHrefs = RoomHelper.getRoomHrefs(validTable);
 		let rooms: RoomFacade[] = [];
 
-		// if lat/lon are bad then don't add ANY of this building's rooms to the overall dataset
-		GeolocationHelper.getGeolocationObj(building.address)
-			.then((res) => {
-				if (res.lat) {
-					// todo check if lengths are not good
-					for (let i = 0; i < roomNumbers.length; i++) {
-						let newRoom: RoomFacade = {
-							address: building.address,
-							fullname: building.fullname,
-							furniture: roomFurnitures[i],
-							href: roomHrefs[i],
-							lat: res.lat,
-							lon: res.lon,
-							name: building.shortname + "_" + roomNumbers[i],
-							number: roomNumbers[i],
-							seats: roomCapacities[i],
-							shortname: building.shortname,
-							type: roomTypes[i]
-						};
-						rooms.push(newRoom);
-					}
-				}
-			})
-			.catch((err) => {
-				console.error(err);
-			});
+		// todo check if lengths are not good
+		for (let i = 0; i < roomNumbers.length; i++) {
+			let newRoom: RoomFacade = {
+				address: building.address,
+				fullname: building.fullname,
+				furniture: roomFurnitures[i],
+				href: roomHrefs[i],
+				lat: 0,
+				lon: 0,
+				name: building.shortname + "_" + roomNumbers[i],
+				number: roomNumbers[i],
+				seats: roomCapacities[i],
+				shortname: building.shortname,
+				type: roomTypes[i]
+			};
+			rooms.push(newRoom);
+		}
 
 		return rooms;
 	}
