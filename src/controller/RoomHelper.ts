@@ -181,14 +181,13 @@ export default abstract class RoomHelper {
 					filteredFiles[i].async("string")
 						.then((str) => {
 							try {
-								let rooms = RoomHelper.fileStringToRoomArray(str, buildings[i]);
-								resolve(rooms);
+								resolve(RoomHelper.fileStringToRoomArray(str, buildings[i]));
 							} catch (err) {
-								reject(err);
+								reject(new InsightError("Can't convert file string to room array"));
 							}
 						})
 						.catch((err) => {
-							reject(err);
+							reject(new InsightError("Can't load room file"));
 						});
 				}));
 		}
@@ -196,40 +195,51 @@ export default abstract class RoomHelper {
 	}
 
 	public static fileStringToRoomArray(fileString: string, building: BuildingFacade) {
+		let rooms: RoomFacade[] = [];
+
 		if (fileString.trim().length === 0) {
-			return [];
+			return rooms;
 		}
 		let tables = RoomHelper.fileStringToTableArray(fileString);
 		let validTable = RoomHelper.findValidTable(tables);
 		if (!validTable) {
-			return [];
+			return rooms;
 		}
 		let roomNumbers = RoomHelper.getCellLinkTitles(validTable, "views-field-field-room-number");
 		let roomCapacities = RoomHelper.getRoomCapacities(validTable);
 		let roomFurnitures = RoomHelper.getCellStrings(validTable, "views-field-field-room-furniture");
 		let roomTypes = RoomHelper.getCellStrings(validTable, "views-field-field-room-type");
 		let roomHrefs = RoomHelper.getRoomHrefs(validTable);
-		let rooms: RoomFacade[] = [];
 
-		// todo check if lengths are not good
-		for (let i = 0; i < roomNumbers.length; i++) {
-			let newRoom: RoomFacade = {
-				address: building.address,
-				fullname: building.fullname,
-				furniture: roomFurnitures[i],
-				href: roomHrefs[i],
-				lat: 0,
-				lon: 0,
-				name: building.shortname + "_" + roomNumbers[i],
-				number: roomNumbers[i],
-				seats: roomCapacities[i],
-				shortname: building.shortname,
-				type: roomTypes[i]
-			};
-			rooms.push(newRoom);
-		}
-
-		return rooms;
+		// if lat/lon are bad then don't add ANY of this building's rooms to the overall dataset
+		return new Promise<RoomFacade[]> ((resolve, reject) => {
+			GeolocationHelper.getGeolocationObj(building.address)
+				.then((res) => {
+					if (res.lat) {
+						// todo check if lengths are not good
+						for (let i = 0; i < roomNumbers.length; i++) {
+							let newRoom: RoomFacade = {
+								address: building.address,
+								fullname: building.fullname,
+								furniture: roomFurnitures[i],
+								href: roomHrefs[i],
+								lat: res.lat,
+								lon: res.lon,
+								name: building.shortname + "_" + roomNumbers[i],
+								number: roomNumbers[i],
+								seats: roomCapacities[i],
+								shortname: building.shortname,
+								type: roomTypes[i]
+							};
+							rooms.push(newRoom);
+						}
+					}
+					resolve(rooms);
+				})
+				.catch((err) => {
+					reject(err);
+				});
+		});
 	}
 
 	public static roomArraysToDataset(roomArrays: RoomFacade[][], id: string, kind: InsightDatasetKind) {
