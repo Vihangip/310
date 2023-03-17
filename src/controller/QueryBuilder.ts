@@ -225,7 +225,7 @@ export default class QueryBuilder {
 					this.setId(idString);
 				} catch (err2) {
 					if (applyKeys.includes(key)) {
-						field = "applyKey";
+						field = key;
 					} else {
 						throw new Error("Invalid key: not an Apply Key");
 					}
