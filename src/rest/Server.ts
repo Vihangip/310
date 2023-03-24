@@ -1,11 +1,14 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
+import InsightFacade from "../controller/InsightFacade";
+import {InsightDatasetKind} from "../controller/IInsightFacade";
 
 export default class Server {
 	private readonly port: number;
 	private express: Application;
 	private server: http.Server | undefined;
+	private static facade: InsightFacade = new InsightFacade();
 
 	constructor(port: number) {
 		console.info(`Server::<init>( ${port} )`);
@@ -84,8 +87,7 @@ export default class Server {
 		// This is an example endpoint this you can invoke by accessing this URL in your browser:
 		// http://localhost:4321/echo/hello
 		this.express.get("/echo/:msg", Server.echo);
-
-		// TODO: your other endpoints should go here
+		this.express.put("/dataset/:id/:kind", Server.put);
 
 	}
 
@@ -109,6 +111,34 @@ export default class Server {
 			return `${msg}...${msg}`;
 		} else {
 			return "Message not provided";
+		}
+	}
+
+	private static put(req: Request, res: Response) {
+		try {
+			console.log(`Server::put(..) - params: ${JSON.stringify(req.params)}`);
+			let datasetID: string = req.params.id;
+			let content: string = (req.body).toString("base64");
+			let kind: InsightDatasetKind;
+			let datasetKind: string = req.params.kind;
+
+			if (datasetKind === "sections") {
+				kind = InsightDatasetKind.Sections;
+			} else if (datasetKind === "rooms") {
+				kind = InsightDatasetKind.Rooms;
+			} else {
+				res.status(400).json({error: "Invalid kind"});
+				return;
+			}
+
+			return Server.facade.addDataset(datasetID, content, kind).then((arr) => {
+				res.status(200).json({result: arr});
+			}).catch((err) => {
+				res.status(400).json({error: err});
+			});
+
+		} catch (err) {
+			res.status(400).json({error: err});
 		}
 	}
 }
