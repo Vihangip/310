@@ -88,6 +88,7 @@ export default class Server {
 		// http://localhost:4321/echo/hello
 		this.express.get("/echo/:msg", Server.echo);
 		this.express.put("/dataset/:id/:kind", Server.put);
+		this.express.get("/datasets", Server.get);
 
 	}
 
@@ -132,6 +133,22 @@ export default class Server {
 			}
 
 			return Server.facade.addDataset(datasetID, content, kind).then((arr) => {
+				res.status(200).json({result: arr});
+			}).catch((err) => {
+				res.status(400).json({error: err});
+			});
+
+		} catch (err) {
+			res.status(400).json({error: err});
+		}
+	}
+
+	private static get(req: Request, res: Response) {
+		try {
+			console.log(`Server::get(..) - params: ${JSON.stringify(req.params)}`);
+			let datasetID: string = req.params.id;
+
+			return Server.facade.listDatasets().then((arr) => {
 				res.status(200).json({result: arr});
 			}).catch((err) => {
 				res.status(400).json({error: err});
