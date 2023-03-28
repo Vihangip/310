@@ -137,7 +137,7 @@ export default class Server {
 			return Server.facade.addDataset(datasetID, content, kind).then((arr) => {
 				res.status(200).json({result: arr});
 			}).catch((err) => {
-				res.status(400).json({error: err.message});
+				res.status(400).json({error: err});
 			});
 
 		} catch (err) {
@@ -153,7 +153,7 @@ export default class Server {
 			return Server.facade.listDatasets().then((arr) => {
 				res.status(200).json({result: arr});
 			}).catch((err) => {
-				res.status(400).json({error: err.message});
+				res.status(400).json({error: err});
 			});
 
 		} catch (err) {
