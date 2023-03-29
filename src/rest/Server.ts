@@ -166,6 +166,8 @@ export default class Server {
 			console.log(`Server::post(..) - params: ${JSON.stringify(req.params)}`);
 			return Server.facade.performQuery(req.body).then((arr) => {
 				res.status(200).json({result: arr});
+			}).catch((err) => {
+				res.status(400).json({error: err});
 			});
 		} catch (err) {
 			res.status(400).json({error: err});
@@ -179,6 +181,8 @@ export default class Server {
 			let datasetID: string = req.params.id;
 			return Server.facade.removeDataset(datasetID).then((str) => {
 				res.status(200).json({result: str});
+			}).catch((err) => {
+				res.status(400).json({error: err});
 			});
 		} catch (err) {
 			if (err instanceof InsightError) {
