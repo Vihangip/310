@@ -89,8 +89,8 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 		this.express.put("/dataset/:id/:kind", Server.put);
 		this.express.get("/datasets", Server.get);
-		this.express.delete("/datasets", Server.delete);
-
+		this.express.delete("/dataset/:id", Server.delete);
+		this.express.post("/query", Server.post);
 	}
 
 	/**
@@ -166,6 +166,8 @@ export default class Server {
 			console.log(`Server::post(..) - params: ${JSON.stringify(req.params)}`);
 			return Server.facade.performQuery(req.body).then((arr) => {
 				res.status(200).json({result: arr});
+			}).catch((err) => {
+				res.status(400).json({error: err.message});
 			});
 		} catch (err) {
 			res.status(400).json({error: err});
@@ -179,6 +181,15 @@ export default class Server {
 			let datasetID: string = req.params.id;
 			return Server.facade.removeDataset(datasetID).then((str) => {
 				res.status(200).json({result: str});
+			}).catch((err) => {
+				if (err instanceof InsightError) {
+					res.status(400).json({error: err.message});
+				} else if (err instanceof NotFoundError) {
+					res.status(404).json({error: err.message});
+				} else {
+					// shouldn't get here. handle anyway
+					res.status(405).json({error: err.message});
+				}
 			});
 		} catch (err) {
 			if (err instanceof InsightError) {
