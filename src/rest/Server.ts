@@ -74,7 +74,7 @@ export default class Server {
 
 	// Registers middleware to parse request before passing them to request handlers
 	private registerMiddleware() {
-		// JSON parser must be place before raw parser because of wildcard matching done by raw parser below
+		// JSON parser must be placed before raw parser because of wildcard matching done by raw parser below
 		this.express.use(express.json());
 		this.express.use(express.raw({type: "application/*", limit: "10mb"}));
 
@@ -136,7 +136,7 @@ export default class Server {
 			return Server.facade.addDataset(datasetID, content, kind).then((arr) => {
 				res.status(200).json({result: arr});
 			}).catch((err) => {
-				res.status(400).json({error: err});
+				res.status(400).json({error: err.message});
 			});
 
 		} catch (err) {
@@ -152,7 +152,7 @@ export default class Server {
 			return Server.facade.listDatasets().then((arr) => {
 				res.status(200).json({result: arr});
 			}).catch((err) => {
-				res.status(400).json({error: err});
+				res.status(400).json({error: err.message});
 			});
 
 		} catch (err) {
