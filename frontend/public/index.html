@@ -11,57 +11,57 @@
 		<!-- at this point EVERYTHING is in one big filter and ANDed together -->
 		<!-- todo: figure out how to make sub-filters in this form -->
 		<!-- todo: convert form results to query object in frontend.js and make REST call -->
-		<form>
+		<form id="query-form">
 			<label for="uuid">Section ID:</label><br>
-			<input type="text" id="uuid"><br>
+			<input type="text" id="uuid" name="uuid"><br>
 			<label for="id">Course ID:</label><br>
-			<input type="text" id="id"><br>
+			<input type="text" id="id" name="id"><br>
 			<label for="title">Course Name:</label><br>
-			<input type="text" id="title"><br>
+			<input type="text" id="title" name="title"><br>
 			<label for="instructor">Instructor:</label><br>
-			<input type="text" id="instructor"><br>
+			<input type="text" id="instructor" name="instructor"><br>
 			<label for="dept">Department:</label><br>
-			<input type="text" id="dept"><br>
+			<input type="text" id="dept" name="dept"><br>
 			<label for="year">Year level:</label><br>
-			<select id="year_comparison">
+			<select id="year-comparison" name="year-comparison">
 				<option value="LT">less than</option>
 				<option value="EQ">equal to</option>
 				<option value="GT">more than</option>
 			</select>
-			<input type="number" id="year"> <br>
+			<input type="number" id="year" name="year"> <br>
 			<label for="avg">Average:</label><br>
-			<select id="avg_comparison">
+			<select id="avg-comparison" name="avg-comparison">
 				<option value="LT">less than</option>
 				<option value="EQ">equal to</option>
 				<option value="GT">more than</option>
 			</select>
-			<input type="number" id="avg"><br>
+			<input type="number" id="avg" name="avg"><br>
 			<label for="pass">Students passed:</label><br>
-			<select id="pass_comparison">
+			<select id="pass-comparison" name="pass-comparison">
 				<option value="LT">less than</option>
 				<option value="EQ">equal to</option>
 				<option value="GT">more than</option>
 			</select>
-			<input type="number" id="pass"><br>
+			<input type="number" id="pass" name="pass"><br>
 			<label for="fail">Students failed:</label><br>
-			<select id="fail_comparison">
+			<select id="fail-comparison" name="fail-comparison">
 				<option value="LT">less than</option>
 				<option value="EQ">equal to</option>
 				<option value="GT">more than</option>
 			</select>
-			<input type="number" id="fail"><br>
+			<input type="number" id="fail" name="fail"><br>
 			<label for="audit">Students audited:</label><br>
-			<select id="audit_comparison">
+			<select id="audit-comparison" name="audit-comparison">
 				<option value="LT">less than</option>
 				<option value="EQ">equal to</option>
 				<option value="GT">more than</option>
 			</select>
-			<input type="number" id="audit"><br>
+			<input type="number" id="audit" name="audit"><br>
 			<input type="submit">
 		</form>
 		<!-- the below will only appear once one query is done -->
 		<h2>Results:</h2>
 		<p>todo</p>
-		<script type="text/javascript" src="/frontend.js"></script>
+		<script type="text/javascript" src="frontend.js"></script>
 	</body>
 </html>
