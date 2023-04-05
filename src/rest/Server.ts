@@ -3,6 +3,7 @@ import * as http from "http";
 import cors from "cors";
 import InsightFacade from "../controller/InsightFacade";
 import {InsightDatasetKind, InsightError, NotFoundError} from "../controller/IInsightFacade";
+import * as fs from "fs-extra";
 
 export default class Server {
 	private readonly port: number;
@@ -41,7 +42,16 @@ export default class Server {
 			} else {
 				this.server = this.express.listen(this.port, () => {
 					console.info(`Server::start() - server listening on port: ${this.port}`);
-					resolve();
+					let content = fs.readFileSync("test/resources/archives/pair.zip").toString("base64");
+					console.log("read");
+					Server.facade.addDataset("sections", content, InsightDatasetKind.Sections)
+						.then((strArr) => {
+							console.log("added");
+							resolve();
+						}).catch((err) => {
+							console.error(`Server::start() - server ERROR while loading: ${err.message}`);
+							reject(err);
+						});
 				}).on("error", (err: Error) => {
 					// catches errors in server start
 					console.error(`Server::start() - server ERROR: ${err.message}`);
@@ -164,6 +174,7 @@ export default class Server {
 	private static post(req: Request, res: Response) {
 		try {
 			console.log(`Server::post(..) - params: ${JSON.stringify(req.params)}`);
+			console.log(req.body);
 			return Server.facade.performQuery(req.body).then((arr) => {
 				res.status(200).json({result: arr});
 			}).catch((err) => {
