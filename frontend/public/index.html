@@ -7,11 +7,11 @@
 	</head>
 	<body>
 		<h1>UBC Insight Query Tool</h1>
-		<h2>Search courses by:</h2>
 		<!-- at this point EVERYTHING is in one big filter and ANDed together -->
 		<!-- todo: figure out how to make sub-filters in this form -->
 		<!-- todo: convert form results to query object in frontend.js and make REST call -->
 		<form id="query-form">
+			<h2>Search courses by:</h2>
 			<label for="uuid">Section ID:</label><br>
 			<input type="text" id="uuid" name="uuid"><br>
 			<label for="id">Course ID:</label><br>
@@ -21,8 +21,8 @@
 			<label for="instructor">Instructor:</label><br>
 			<input type="text" id="instructor" name="instructor"><br>
 			<label for="dept">Department:</label><br>
-			<input type="text" id="dept" name="dept"><br>
-			<label for="year">Year level:</label><br>
+			<input type="text" id="dept" name="dept"><br><br>
+			<label for="year">Year:</label><br>
 			<select id="year-comparison" name="year-comparison">
 				<option value="LT">less than</option>
 				<option value="EQ">equal to</option>
@@ -57,11 +57,32 @@
 				<option value="GT">more than</option>
 			</select>
 			<input type="number" id="audit" name="audit"><br>
+			<h2>Display:</h2>
+			<input type="checkbox" id="uuid-column" name="uuid-column" checked="true">
+			<label for="uuid-column">Section ID</label><br>
+			<input type="checkbox" id="id-column" name="id-column" checked="true">
+			<label for="id-column">Course ID</label><br>
+			<input type="checkbox" id="title-column" name="title-column" checked="true">
+			<label for="title-column">Course Name</label><br>
+			<input type="checkbox" id="instructor-column" name="instructor-column" checked="true">
+			<label for="instructor-column">Instructor</label><br>
+			<input type="checkbox" id="dept-column" name="dept-column" checked="true">
+			<label for="dept-column">Department</label><br>
+			<input type="checkbox" id="year-column" name="year-column" checked="true">
+			<label for="year-column">Year</label><br>
+			<input type="checkbox" id="avg-column" name="avg-column" checked="true">
+			<label for="avg-column">Average</label><br>
+			<input type="checkbox" id="pass-column" name="pass-column" checked="true">
+			<label for="pass-column">Pass</label><br>
+			<input type="checkbox" id="fail-column" name="fail-column" checked="true">
+			<label for="fail-column">Fail</label><br>
+			<input type="checkbox" id="audit-column" name="audit-column" checked="true">
+			<label for="audit-column">Audit</label><br><br>
 			<input type="submit">
 		</form>
 		<!-- the below will only appear once one query is done -->
 		<h2>Results:</h2>
-		<p>todo</p>
+		<div id="results"></div>
 		<script type="text/javascript" src="frontend.js"></script>
 	</body>
 </html>
