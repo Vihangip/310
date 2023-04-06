@@ -41,6 +41,7 @@ function parseFormData(formData) {
 	return basicQuery;
 }
 
+
 function handleHttpRequest1() {
 	// this is where you deal with the response from the server, e.g. displaying results
 	// todo: display results
@@ -94,8 +95,6 @@ function handleHttpRequest2() {
 			// No problem with request, display here
 			const response = JSON.parse(httpRequest2.responseText);
 			document.getElementById('results').innerHTML = "user story 2 stuff";
-
-
 		} else {
 			// There was a problem with the request.
 			// For example, the response may have a 404 (Not Found)
