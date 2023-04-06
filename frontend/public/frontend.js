@@ -50,30 +50,35 @@ function handleHttpRequest1() {
 			// No problem with request, display here
 			const response = JSON.parse(httpRequest1.responseText);
 			let result = response.result;
-			let table = '<table><tr><th>Section ID</th><th>Course ID</th><th>Title</th><th>Instructor</th><th>Department</th><th>Year</th><th>Average</th><th>Pass</th><th>Fail</th><th>Audit</th></tr>';
-			for (let i = 0; i < result.length; i++) {
-				let course = result[i];
-				let uuid = course.sections_uuid;
-				let id = course.sections_id;
-				let title = course.sections_title;
-				let instructor = course.sections_instructor;
-				let dept = course.sections_dept;
-				let year = course.sections_year;
-				let avg = course.sections_avg;
-				let pass = course.sections_pass;
-				let fail = course.sections_fail;
-				let audit = course.sections_audit;
-				table += '<tr><td>' + uuid + '</td><td>' + id + '</td><td>' + title + '</td><td>' + instructor + '</td><td>' + dept + '</td><td>' + year + '</td><td>' + avg + '</td><td>' + pass + '</td><td>' + fail + '</td><td>' + audit + '</td></tr>';
+			if (result.length === 0) {
+				let error = "No such values exist. Please double check your input and try again. ";
+				document.getElementById('results').innerHTML = error;
+			} else {
+				let table = '<table><tr><th>Section ID</th><th>Course ID</th><th>Title</th><th>Instructor</th><th>Department</th><th>Year</th><th>Average</th><th>Pass</th><th>Fail</th><th>Audit</th></tr>';
+				for (let i = 0; i < result.length; i++) {
+					let course = result[i];
+					let uuid = course.sections_uuid;
+					let id = course.sections_id;
+					let title = course.sections_title;
+					let instructor = course.sections_instructor;
+					let dept = course.sections_dept;
+					let year = course.sections_year;
+					let avg = course.sections_avg;
+					let pass = course.sections_pass;
+					let fail = course.sections_fail;
+					let audit = course.sections_audit;
+					table += '<tr><td>' + uuid + '</td><td>' + id + '</td><td>' + title + '</td><td>' + instructor + '</td><td>' + dept + '</td><td>' + year + '</td><td>' + avg + '</td><td>' + pass + '</td><td>' + fail + '</td><td>' + audit + '</td></tr>';
+				}
+
+				table += '</table>';
+				document.getElementById('results').innerHTML = table;
 			}
 
-			table += '</table>';
-			document.getElementById('results').innerHTML = table;
 
 
 		} else {
-			// There was a problem with the request.
-			// For example, the response may have a 404 (Not Found)
-			// or 500 (Internal Server Error) response code.
+			let error = "Error in obtaining query results";
+			document.getElementById('results').innerHTML = error;
 		}
 	} else {
 		// Not ready yet.
