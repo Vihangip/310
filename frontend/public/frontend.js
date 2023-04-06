@@ -97,14 +97,14 @@ function handleHttpRequest() {
 			const response = JSON.parse(httpRequest.responseText);
 			let result = response.result;
 			if (result.length === 0) {
-				let error = "No such values exist. Please double check your input and try again. ";
-				document.getElementById('results').innerHTML = error;
+				let error = "ERROR: No such value exists. Please double check your input and try again.";
+				alert(error);
 			} else {
 				document.getElementById('results').innerHTML = makeTable(result);
 			}
 		} else {
-			let error = "Error in obtaining query results";
-			document.getElementById('results').innerHTML = error;
+			let error = "ERROR: Unable to obtain query results";
+			alert(error);
 		}
 	} else {
 		// Not ready yet.

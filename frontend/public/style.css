@@ -1,14 +1,151 @@
-.button {
-	background-color: #3f51b5;
-	border: none;
-	color: white;
-	padding: 15px 32px;
+
+h1 {
 	text-align: center;
-	text-decoration: none;
+	color: #3f51b5;
 	display: inline-block;
-	font-size: 16px;
+	font-size: 55px;
 }
 
-.button:hover {
+h2 {
+	margin-left: 100px;
+	margin-bottom: 30px;
+}
+
+img {
+	width: 150px;
+	height: 150px;
+	display: inline-block;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 50px;
+}
+.user-inputs {
+	display: flex;
+	margin-top: 20px;
+}
+.fields {
+	display: flex;
+}
+
+.labels {
+	margin-left: 250px;
+	display: block;
+}
+
+.labels label {
+	margin-bottom: 5px;
+	display: block;
+}
+
+.dropdowns {
+	display: flex;
+	flex-direction: column;
+	margin-top: 225px;
+	margin-left: 50px;
+}
+
+.dropdowns > * {
+	margin-bottom: 23px;
+}
+
+.inputs {
+	margin-left: 20px;
+	width: 75px;
+	height: 30px;
+}
+
+.inputs > * {
+	margin-bottom: 20px;
+}
+
+.display {
+	margin-left: 200px;
+}
+
+.columns {
+	margin-top: 50px;
+	margin-left: 150px;
+	font-size: 20px;
+}
+.columns label {
+	margin-left: 10px;
+}
+
+.columns input[type="checkbox"]:checked {
+	background-color: white;
+	color: black;
+}
+
+.columns input[type="checkbox"] {
+	margin-bottom: 10px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: 2px solid black;
+	height: 20px;
+	width: 20px;
+	line-height: 0;
+	vertical-align: middle;
+}
+
+.columns input[type="checkbox"]:checked::before {
+	content: '\2713';
+	text-align: center;
+	font-family: system-ui;
+	font-size: 17px;
+	position: absolute;
+	margin-top: 7px;
+	margin-left: 1px;
+}
+
+input[type="submit"] {
+	background-color: white;
+	border: 2px solid black;
+	color: black;
+	padding: 10px 20px;
+	font-size: 18px;
+	margin-left: 675px;
+	margin-top: 50px;
 	cursor: pointer;
 }
+
+input[type="submit"]:hover {
+	background-color: black;
+	color: white;
+}
+
+#results {
+	margin: 20px;
+	font-family: Arial, sans-serif;
+	font-size: 15px;
+	line-height: 1.5;
+	margin-bottom: 150px;
+	margin-left: 200px;
+}
+
+#results table {
+	border-collapse: collapse;
+	width: 85%;
+	/*margin-left: 150px;*/
+}
+
+#results th,
+#results td {
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+
+#results th {
+	background-color: #ccc;
+	font-weight: bold;
+}
+
+
+
+
+
